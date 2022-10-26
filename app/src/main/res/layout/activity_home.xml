@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeActivity">
+
+    <LinearLayout
+        android:id="@+id/home_main_layout"
+        android:layout_width="409dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="1dp"
+        android:background="@color/tertiary"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.gridlayout.widget.GridLayout
+            android:id="@+id/home_calendar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="18dp"
+            app:columnCount="1"
+            app:rowCount="3"
+            app:useDefaultMargins="true"
+
+            >
+
+            <LinearLayout
+                android:id="@+id/home_calendar_date"
+                android:layout_width="match_parent"
+                android:layout_height="254dp"
+                android:background="@drawable/home_date_background"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="vertical"
+                app:layout_column="0"
+                app:layout_row="0">
+
+                <TextView
+                    android:id="@+id/home_calendar_day_week"
+                    android:layout_width="329dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_day_calendar"
+                    android:textAlignment="center"
+                    android:textColor="@color/primary"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/home_calendar_custom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/date_custom"
+                    android:textAlignment="center"
+                    android:textColor="@color/primary"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    app:layout_column="0"
+                    app:layout_row="0" />
+
+                <Button
+                    android:id="@+id/bt_nueva_duda"
+                    android:layout_width="186dp"
+                    android:layout_height="61dp"
+                    android:background="@color/primary"
+                    android:text="@string/nueva_duda"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textDirection="ltr"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    app:cornerRadius="100dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_ultimas_dudas_publicadas"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txUltimasDudas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/roboto_bold"
+                    android:text="@string/ultimas_dudas_publicadas"
+                    android:textColor="@color/primary"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/btVerTodasDudas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:background="#00FFFFFF"
+                    android:elegantTextHeight="false"
+                    android:fontFamily="@font/roboto"
+                    android:freezesText="false"
+                    android:includeFontPadding="false"
+                    android:padding="0dp"
+                    android:text="@string/ver_todas"
+                    android:textAlignment="textEnd"
+                    android:textAllCaps="true"
+                    android:textColor="@color/text_gray"
+                    android:textColorHighlight="@color/primary"
+                    android:textIsSelectable="true"
+                    android:textStyle="normal"
+                    app:iconPadding="0dp" />
+            </LinearLayout>
+
+            <androidx.gridlayout.widget.GridLayout
+                android:id="@+id/layout_listado_dudas_home"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </androidx.gridlayout.widget.GridLayout>
+
+        </androidx.gridlayout.widget.GridLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">HelpMe</string>
+    <string name="home_day_calendar">Lunes</string>
+    <string name="date_custom">17 OCT 2022</string>
+    <string name="nueva_duda">Nueva duda</string>
+    <string name="ver_todas">Ver todas</string>
+    <string name="ultimas_dudas_publicadas">Últimas dudas publicadas</string>
 </resources>
