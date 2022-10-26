@@ -5,4 +5,6 @@
     <string name="nueva_duda">Nueva duda</string>
     <string name="ver_todas">Ver todas</string>
     <string name="ultimas_dudas_publicadas">Últimas dudas publicadas</string>
+    <string name="back_button_toolbar">Volver a la página anterior</string>
+    <string name="speech_text_back_button">Volver a la página anterior</string>
 </resources>

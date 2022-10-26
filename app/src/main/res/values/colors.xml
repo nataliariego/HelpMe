@@ -8,6 +8,7 @@
     <color name="icon_disabled">#D1D1D1</color>
     <color name="success">#8AC926</color>
     <color name="error">#FF595E</color>
+    <color name="transparent">#00000000</color>
 
 
     <!--    TODO: BORRAR ESTOS COLORES POR DEFECTO-->

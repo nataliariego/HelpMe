@@ -6,31 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
+
     <LinearLayout
         android:id="@+id/home_main_layout"
-        android:layout_width="409dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="1dp"
         android:layout_marginEnd="1dp"
         android:layout_marginBottom="1dp"
         android:background="@color/tertiary"
-        android:orientation="horizontal"
+        android:isScrollContainer="true"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <include
+            android:id="@+id/app_toolbar"
+            layout="@layout/toolbar" />
 
         <androidx.gridlayout.widget.GridLayout
             android:id="@+id/home_calendar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="18dp"
+            android:visibility="visible"
             app:columnCount="1"
             app:rowCount="3"
-            app:useDefaultMargins="true"
 
-            >
+            app:useDefaultMargins="true">
+
 
             <LinearLayout
                 android:id="@+id/home_calendar_date"
@@ -38,9 +45,8 @@
                 android:layout_height="254dp"
                 android:background="@drawable/home_date_background"
                 android:gravity="center_horizontal|center_vertical"
-                android:orientation="vertical"
-                app:layout_column="0"
-                app:layout_row="0">
+                android:orientation="vertical">
+
 
                 <TextView
                     android:id="@+id/home_calendar_day_week"
@@ -106,7 +112,6 @@
                     android:background="#00FFFFFF"
                     android:elegantTextHeight="false"
                     android:fontFamily="@font/roboto"
-                    android:freezesText="false"
                     android:includeFontPadding="false"
                     android:padding="0dp"
                     android:text="@string/ver_todas"

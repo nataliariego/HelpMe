@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+
+    <RelativeLayout
+        android:id="@+id/toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="5dp">
+
+
+        <ImageButton
+            android:id="@+id/bt_back_toolbar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
+            android:background="@color/tertiary"
+            android:contentDescription="@string/speech_text_back_button"
+            android:padding="5dp"
+            app:srcCompat="@drawable/ic_round_arrow_back_ios_20" />/
+            />
+
+        <ImageButton
+            android:id="@+id/bt_faq_toolbar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:background="@color/transparent"
+            android:minHeight="48dp"
+            app:srcCompat="@drawable/ic_baseline_help_outline_24" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
