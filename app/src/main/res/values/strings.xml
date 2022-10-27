@@ -7,4 +7,10 @@
     <string name="ultimas_dudas_publicadas">Últimas dudas publicadas</string>
     <string name="back_button_toolbar">Volver a la página anterior</string>
     <string name="speech_text_back_button">Volver a la página anterior</string>
+    <string name="resumen_ttitulo_duda">Algoritmo Quicksort Java</string>
+    <string name="resumen_img_perfil_alumno_descripcion">Imagen de perfil del alumno</string>
+    <string name="resumen_nombre_alumno_duda">Pedro Rodríguez</string>
+    <string name="txFechaSubidaDuda">Hace 2 horas</string>
+    <string name="avatar_placeholder_text">PR</string>
+    <string name="tx_asignatura_resumen_duda_abreviatura">ED</string>
 </resources>

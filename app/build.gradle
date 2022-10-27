@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace 'com.example.helpme'
-    compileSdk 32
+    compileSdk 25
 
     defaultConfig {
         applicationId "com.example.helpme"
         minSdk 21
-        targetSdk 32
+        targetSdk 25
         versionCode 1
         versionName "1.0"
 

@@ -59,7 +59,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/home_calendar_custom"
+                    android:id="@+id/home_calendar_custom_date_today"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/date_custom"
@@ -71,18 +71,15 @@
                     app:layout_row="0" />
 
                 <Button
-                    android:id="@+id/bt_nueva_duda"
-                    android:layout_width="186dp"
-                    android:layout_height="61dp"
-                    android:background="@color/primary"
+                    android:id="@+id/bt_nueva_duda_home"
+                    android:layout_width="151dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/primary"
+                    android:capitalize="none"
+                    android:fontFamily="@font/roboto"
                     android:text="@string/nueva_duda"
-                    android:textAlignment="center"
                     android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textDirection="ltr"
-                    android:textSize="14sp"
-                    android:textStyle="normal"
-                    app:cornerRadius="100dp" />
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
@@ -124,12 +121,19 @@
                     app:iconPadding="0dp" />
             </LinearLayout>
 
-            <androidx.gridlayout.widget.GridLayout
-                android:id="@+id/layout_listado_dudas_home"
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            </androidx.gridlayout.widget.GridLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <include layout="@layout/duda_resumen_card" />
+
+                </LinearLayout>
+            </ScrollView>
 
         </androidx.gridlayout.widget.GridLayout>
 
