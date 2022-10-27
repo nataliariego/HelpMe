@@ -12,14 +12,17 @@ public class Duda implements Parcelable {
     private String asignatura;
     private boolean resuelta;
     private String url_foto_persona;
+    private String descripcion;
 
-    public Duda(String titulo, String persona_duda, String fecha, String asignatura, boolean resuelta, String url_foto_persona) {
+    public Duda(String titulo, String persona_duda, String fecha, String asignatura, boolean resuelta, String url_foto_persona,
+                String descripcion) {
         this.titulo = titulo;
         this.persona_duda = persona_duda;
         this.fecha = fecha;
         this.asignatura = asignatura;
         this.resuelta = resuelta;
         this.url_foto_persona = url_foto_persona;
+        this.descripcion=descripcion;
     }
 
     @Override
