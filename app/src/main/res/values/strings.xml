@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">HelpMe</string>
+    <string name="titulo">Titulo</string>
+    <string name="persona_duda">Persona</string>
+    <string name="fecha">Fecha</string>
+    <string name="asignatura">Asignatura</string>
 </resources>
