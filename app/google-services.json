@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "391474446593",
+    "project_id": "helpme-app-435b7",
+    "storage_bucket": "helpme-app-435b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:391474446593:android:56bfad7a06a7dfa5ed1b00",
+        "android_client_info": {
+          "package_name": "com.example.helpme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "391474446593-695oj3b7qirdj81l129854pnlkbe4176.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD15I546uChHQl3Z8qm0SRW0vurERQ2hdU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "391474446593-695oj3b7qirdj81l129854pnlkbe4176.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:391474446593:android:3d4cba093ec7bceded1b00",
+        "android_client_info": {
+          "package_name": "es.uniovi.helpme_sdm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "391474446593-695oj3b7qirdj81l129854pnlkbe4176.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD15I546uChHQl3Z8qm0SRW0vurERQ2hdU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "391474446593-695oj3b7qirdj81l129854pnlkbe4176.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

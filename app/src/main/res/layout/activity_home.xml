@@ -75,8 +75,8 @@
                     android:layout_width="151dp"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/primary"
-                    android:capitalize="none"
                     android:fontFamily="@font/roboto"
+                    android:minHeight="48dp"
                     android:text="@string/nueva_duda"
                     android:textAllCaps="false"
                     android:textColor="@color/white" />
@@ -130,6 +130,10 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
 
+                    <include layout="@layout/duda_resumen_card" />
+                    <include layout="@layout/duda_resumen_card" />
+                    <include layout="@layout/duda_resumen_card" />
+                    <include layout="@layout/duda_resumen_card" />
                     <include layout="@layout/duda_resumen_card" />
 
                 </LinearLayout>
