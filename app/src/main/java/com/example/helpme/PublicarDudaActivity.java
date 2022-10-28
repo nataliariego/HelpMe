@@ -10,8 +10,5 @@ public class PublicarDudaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publicar_duda);
-
-
-
     }
 }
