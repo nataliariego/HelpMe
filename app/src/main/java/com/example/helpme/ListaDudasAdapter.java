@@ -1,5 +1,6 @@
 package com.example.helpme;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,8 @@ public class ListaDudasAdapter extends RecyclerView.Adapter<ListaDudasAdapter.Du
 
     @Override
     public void onBindViewHolder(@NonNull DudaViewHolder holder, int position) {
-
+        Duda duda = listaDudas.get(position);
+        holder.bindUser(duda,listener);
     }
 
 
@@ -77,7 +79,16 @@ public class ListaDudasAdapter extends RecyclerView.Adapter<ListaDudasAdapter.Du
 
         // asignar valores a los componentes
     public void bindUser(final Duda duda, final OnItemClickListener listener) {
-
+        titulo.setText(duda.getTitulo());
+        persona_duda.setText(duda.getPersona_duda());
+        fecha.setText(duda.getFecha());
+        asignatura.setText(duda.getAsignatura());
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(duda);
+            }
+        });
     }
 }
 }

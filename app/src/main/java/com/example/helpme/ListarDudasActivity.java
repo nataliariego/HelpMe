@@ -12,6 +12,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.helpme.datos.AlumnoDataSource;
+import com.example.helpme.datos.AsignaturaDataSource;
+import com.example.helpme.datos.DudaDataSource;
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Asignatura;
 import com.example.helpme.model.Duda;
@@ -41,12 +44,16 @@ public class ListarDudasActivity extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    private AsignaturaDataSource asignaturaDataSource = new AsignaturaDataSource();
+    private AlumnoDataSource alumnoDataSource = new AlumnoDataSource();
+    private DudaDataSource dudaDataSource = new DudaDataSource();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lilstardudas_main);
         //Rellenar lista de dudas
-        cargarDudas();
+        listaDuda = cargarDudas();
 
         // Recuperamos referencia y configuramos recyclerView con la lista de dudas
         listaDudaView = (RecyclerView)findViewById(R.id.reciclerView);
@@ -64,6 +71,7 @@ public class ListarDudasActivity extends AppCompatActivity {
         // Instanciamos el adapter con los datos de la petición y lo asignamos a RecyclerView
         // Generar el adaptador, le pasamos la lista de dudas
         // y el manejador para el evento click sobre un elemento
+
         ListaDudasAdapter lpAdapter= new ListaDudasAdapter(listaDuda,
                 new ListaDudasAdapter.OnItemClickListener() {
                     @Override
@@ -86,10 +94,10 @@ public class ListarDudasActivity extends AppCompatActivity {
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
 
-    private void cargarDudas() {
-        listaDuda.add(new Duda( "una duda", "manolo", "fecha",
+    private ArrayList<Duda> cargarDudas() {
+        ArrayList<Duda> listaDudaAux = new ArrayList<Duda>();
+        listaDudaAux.add(new Duda( "una duda", "manolo", "fecha",
                  "asignatura",  true,  "url_foto_persona", "descripcion"));
-        Log.w(TAG, "HOLAAA");
         db.collection("DUDA")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -99,12 +107,12 @@ public class ListarDudasActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Object[] campos_duda = document.getData().values().toArray();
                                 Duda d = new Duda( campos_duda[3].toString(),
-                                        getAlumnoById(campos_duda[4].toString()).getNombre(),
+                                        alumnoDataSource.getAlumnoById(campos_duda[4].toString()).getNombre(),
                                         getFechaByTimestamp(campos_duda[2].toString()),
-                                        getAsignaturaById(campos_duda[0].toString()).getNombre(),
+                                        asignaturaDataSource.getAsignaturaById(campos_duda[0].toString()).getNombre(),
                                         getBoolean(campos_duda[1].toString()),
-                                        getAlumnoById(campos_duda[4].toString()).getUrl_foto(), campos_duda[5].toString());
-                                listaDuda.add(d);
+                                        alumnoDataSource.getAlumnoById(campos_duda[4].toString()).getUrl_foto(), campos_duda[5].toString());
+                                listaDudaAux.add(d);
                                 System.out.println("TITULO" + " => " + campos_duda[3]);
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
@@ -113,6 +121,7 @@ public class ListarDudasActivity extends AppCompatActivity {
                         }
                     }
                 });
+        return listaDudaAux;
     }
 
     private boolean getBoolean(String toString) {
@@ -120,57 +129,9 @@ public class ListarDudasActivity extends AppCompatActivity {
         return false;
     }
 
-    private Asignatura getAsignaturaById(String toString) {
-        DocumentReference docRef = db.collection("ASIGNATURA").document(toString);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        asignatura_data = document.getData().values().toArray();
-                        Log.d(TAG, "--------->DocumentSnapshot data: " + document.getData());
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
-        System.out.println("*******"+asignatura_data);
-       /* String id_curso = asignatura_data[0][0].toString();
-        String id_materia = asignatura_data[0][1].toString();
-        String nombre = asignatura_data[0][2].toString();*/
-        return new Asignatura("d", "s", "s");
-    }
-
     private String getFechaByTimestamp(String toString) {
         return "hola";
     }
 
-    private Alumno getAlumnoById(String toString) {
-        final Object[][] alumno_data = new Object[1][1];
-        DocumentReference docRef = db.collection("ALUMNO").document(toString);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        alumno_data[0] = document.getData().values().toArray();
-                        Log.d(TAG, "---------DocumentSnapshot data: " + document.getData());
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
-        //String id_curso = alumno_data[0][0].toString();
-        //String id_materia = alumno_data[0][1].toString();
-        //String nombre = alumno_data[0][2].toString();
-        return new Alumno("DD", "JJ", "JJ");
-    }
+
 }
