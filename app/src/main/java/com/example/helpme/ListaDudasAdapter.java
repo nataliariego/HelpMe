@@ -81,7 +81,7 @@ public class ListaDudasAdapter extends RecyclerView.Adapter<ListaDudasAdapter.Du
     public void bindUser(final Duda duda, final OnItemClickListener listener) {
         titulo.setText(duda.getTitulo());
         persona_duda.setText(duda.getAlumno().getNombre());
-        fecha.setText(duda.getCreatedAt().toString());
+        fecha.setText(duda.getFecha().toString());
         asignatura.setText(duda.getAsignatura().getNombre());
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
