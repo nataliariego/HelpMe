@@ -1,8 +1,5 @@
 package com.example.helpme;
 
-import static android.content.ContentValues.TAG;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,20 +11,13 @@ import android.util.Log;
 
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Asignatura;
+import com.example.helpme.model.Curso;
 import com.example.helpme.model.Duda;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.example.helpme.model.Materia;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import controller.AlumnoController;
 import controller.AsignaturaController;
@@ -45,6 +35,7 @@ public class ListarDudasActivity extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+
     private AsignaturaController asignaturaController = new AsignaturaController();
     private AlumnoController alumnoController = new AlumnoController();
     private DudaController dudaController = new DudaController();
@@ -52,8 +43,9 @@ public class ListarDudasActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lilstardudas_main);
-        //Rellenar lista de dudas
+        setContentView(R.layout.activity_listar_dudas);
+
+        //Rellenar lista de dudas y en el adapter
         cargarDudas();
 
         // Recuperamos referencia y configuramos recyclerView con la lista de dudas
@@ -81,6 +73,9 @@ public class ListarDudasActivity extends AppCompatActivity {
                     }
                 });
         listaDudaView.setAdapter(lpAdapter);
+
+
+
     }
 
     //click del item del adapter
@@ -96,7 +91,37 @@ public class ListarDudasActivity extends AppCompatActivity {
     }
 
     private void cargarDudas() {
+        Duda d = new Duda("Algoritmo A*",
+                "Estoy intentando hacer experimentos para el algoritmo A* y me da este error:",
+                new Alumno("id", "Natalia Fernández Riego", "UO277516", "https://cdn.pixabay.com/photo/2015/10/29/08/23/girl-1011915_960_720.jpg", new ArrayList<Asignatura>()),
+                    new Asignatura("id", "Sistemas Inteligentes", new Curso("id", "Primero"), new Materia("id", "Inteligencia Artificial", "IA")),
+                new Materia("id", "Inteligencia Artificial", "IA"), true, "30/10/2022 12:35:24");
+        listaDuda.add(d);
+        Duda d2 = new Duda("Funciones Lambda",
+                "Estoy intentando hacer esta expresion",
+                new Alumno("id", "Juan Iglesias Pérez", "UO727027", "https://img.freepik.com/foto-gratis/retrato-hombre-caucasico-alegre_53876-13440.jpg?w=2000", new ArrayList<Asignatura>()),
+                new Asignatura("id", "Tecnologias y Paradigmas de la Programación", new Curso("id", "Segundo"), new Materia("id", "TPP", "TPP")),
+                new Materia("id", "TPP", "TPP"), false, "30/10/2022 12:35:24");
+        listaDuda.add(d2);
 
+        Duda d3 = new Duda("Conexión entre Activities",
+                "Estoy intentando hacer esta conexion",
+                new Alumno("id", "Marta Ramos Álvarez", "UO829920", "https://img.freepik.com/foto-gratis/retrato-mujer-caucasica-sonriendo_53876-24998.jpg?w=2000", new ArrayList<Asignatura>()),
+                new Asignatura("id", "Software de Dispositivos Móviles", new Curso("id", "Tercero"), new Materia("id", "SDM", "SDM")),
+                new Materia("id", "SDM", "SDM"), false, "30/10/2022 12:35:24");
+        listaDuda.add(d3);
+        Duda d4 = new Duda("Paso a casos de equivalencia",
+                "Estoy intentando hacer este paso",
+                new Alumno("id", "Manuel Carillo Gómez", "UO762878", "https://img.freepik.com/fotos-premium/retrato-hombre-maduro-chico-adulto-tiene-pelo-canoso-hombre-guapo-barba-canosa-moda-cabello-masculino-barberia-cara-chico-canoso-afeitar-cuidado-cabello-piel-cuidado-piel-masculino-belleza-hombres_545934-56.jpg?w=2000", new ArrayList<Asignatura>()),
+                new Asignatura("id", "Calidad y Validación del Software", new Curso("id", "Cuarto"), new Materia("id", "CVS", "CVS")),
+                new Materia("id", "CVS", "CVS"), true, "30/10/2022 12:35:24");
+        listaDuda.add(d4);
+        Duda d5 = new Duda("Hacer un Grid Layout",
+                "Estoy intentando hacer este layout",
+                new Alumno("id", "Estela García Antuña", "UO273928", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6aGDVV8G4834Zj3D4WaKjO3Aypf58H3te8jC0-uoFltjW2V5AD3NMebJi6L0-i7sZZY8&usqp=CAU", new ArrayList<Asignatura>()),
+                new Asignatura("id", "Comunicacion Persona-Maquina", new Curso("id", "Segundo"), new Materia("id", "CPM", "CPM")),
+                new Materia("id", "CPM", "CPM"), false, "30/10/2022 12:35:24");
+        listaDuda.add(d5);
     }
 
     private boolean getBoolean(String toString) {

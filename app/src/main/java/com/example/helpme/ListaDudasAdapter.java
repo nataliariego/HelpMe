@@ -1,6 +1,5 @@
 package com.example.helpme;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 //import com.squareup.picasso.Picasso;
 
 import com.example.helpme.model.Duda;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -66,6 +66,7 @@ public class ListaDudasAdapter extends RecyclerView.Adapter<ListaDudasAdapter.Du
     private ImageView img_persona_duda;
     private TextView fecha;
     private TextView asignatura;
+    private ImageView resuelta;
 
         public DudaViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -74,15 +75,23 @@ public class ListaDudasAdapter extends RecyclerView.Adapter<ListaDudasAdapter.Du
             fecha = (TextView) itemView.findViewById(R.id.fecha);
             asignatura = (TextView) itemView.findViewById(R.id.asignatura);
             img_persona_duda = (ImageView) itemView.findViewById(R.id.img_persona_duda);
+            resuelta = (ImageView) itemView.findViewById(R.id.resuelta);
         }
 
 
         // asignar valores a los componentes
     public void bindUser(final Duda duda, final OnItemClickListener listener) {
-        titulo.setText(duda.getTitulo());
+        titulo.setText(" "+duda.getTitulo());
         persona_duda.setText(duda.getAlumno().getNombre());
-        fecha.setText(duda.getCreatedAt().toString());
-        asignatura.setText(duda.getAsignatura().getNombre());
+        fecha.setText(duda.getFecha());
+        asignatura.setText(duda.getMateria().getAbreviatura());
+        if (duda.isResuelta()) {
+            resuelta.setImageResource(R.drawable.check);
+        }
+        else {
+            resuelta.setImageResource(R.drawable.cancel);
+        }
+        Picasso.get().load(duda.getAlumno().getUrl_foto()).into(img_persona_duda);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
