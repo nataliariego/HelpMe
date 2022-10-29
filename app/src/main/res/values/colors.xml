@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--  COLOR PALETTE -->
+    <color name="primary">#0C0C32</color>
+    <color name="secondary">#FFEFD3</color>
+    <color name="tertiary">#FCFCFC</color>
+    <color name="tertiary_light">#EFEFEF</color>
+    <color name="text_gray">#828181</color>
+    <color name="icon_disabled">#D1D1D1</color>
+    <color name="success">#8AC926</color>
+    <color name="error">#FF595E</color>
+    <color name="transparent">#00000000</color>
+
+
+    <!--    TODO: BORRAR ESTOS COLORES POR DEFECTO-->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>

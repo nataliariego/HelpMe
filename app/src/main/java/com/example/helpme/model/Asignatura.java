@@ -6,6 +6,15 @@ public class Asignatura {
     private String id_materia;
     private String nombre;
 
+
+    public Asignatura(){}
+
+    public Asignatura(String id_curso, String id_materia, String nombre) {
+        this.id_curso = id_curso;
+        this.id_materia = id_materia;
+        this.nombre = nombre;
+    }
+
     public String getId_curso() {
         return id_curso;
     }
@@ -30,9 +39,8 @@ public class Asignatura {
         this.nombre = nombre;
     }
 
-    public Asignatura(String id_curso, String id_materia, String nombre) {
-        this.id_curso = id_curso;
-        this.id_materia = id_materia;
-        this.nombre = nombre;
+    @Override
+    public String toString() {
+        return nombre;
     }
 }
