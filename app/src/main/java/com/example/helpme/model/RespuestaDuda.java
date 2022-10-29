@@ -9,5 +9,5 @@ public class RespuestaDuda {
     private Duda duda;
     private Alumno alumnoRespuesta;
 
-    private LocalDateTime createdAt;
+    private String createdAt;
 }

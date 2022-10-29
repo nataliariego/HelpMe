@@ -15,6 +15,15 @@ public class Duda implements Parcelable {
     private Asignatura asignatura;
     private Materia materia;
     private boolean isResuelta;
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
     private String fecha;
 
 
@@ -97,13 +106,8 @@ public class Duda implements Parcelable {
         this.alumno = alumno;
     }
 
-    public String getCreatedAt() {
-        return fecha;
-    }
 
-    public void setCreatedAt(String createdAt) {
-        this.fecha = createdAt;
-    }
+
 
     @Override
     public int describeContents() {
