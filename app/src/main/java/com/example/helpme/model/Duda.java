@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Duda implements Parcelable {
     private String titulo;
@@ -15,6 +16,8 @@ public class Duda implements Parcelable {
     private Materia materia;
     private boolean isResuelta;
     private LocalDateTime createdAt;
+
+
 
     public Duda(String titulo, String descripcion, Alumno alumno, Asignatura asignatura, Materia materia, boolean isResuelta, LocalDateTime createdAt) {
         this.titulo = titulo;
@@ -43,6 +46,8 @@ public class Duda implements Parcelable {
             return new Duda[size];
         }
     };
+
+
 
     public String getTitulo() {
         return titulo;

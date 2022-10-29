@@ -12,16 +12,17 @@ public class Alumno implements Parcelable {
     private String id;
     private String nombre;
     private String uo;
+    private String url_foto;
 
     private List<Asignatura> asignaturasDominadas = new ArrayList<>();
 
-    public Alumno(String id, String nombre, String uo) {
+    public Alumno(String id, String nombre, String uo, String url_foto, List<Asignatura> asignaturasDominadas) {
         this.id = id;
         this.nombre = nombre;
         this.uo = uo;
+        this.url_foto = url_foto;
+        this.asignaturasDominadas = asignaturasDominadas;
     }
-
-    public Alumno(){}
 
     public Alumno(Parcel in) {
         id = in.readString();
@@ -40,6 +41,8 @@ public class Alumno implements Parcelable {
             return new Alumno[size];
         }
     };
+
+
 
     public String getId() {
         return id;
@@ -83,5 +86,13 @@ public class Alumno implements Parcelable {
         parcel.writeString(id);
         parcel.writeString(nombre);
         parcel.writeString(uo);
+    }
+
+    public String getUrl_foto() {
+        return url_foto;
+    }
+
+    public void setUrl_foto(String url_foto) {
+        this.url_foto = url_foto;
     }
 }

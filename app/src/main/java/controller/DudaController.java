@@ -2,11 +2,9 @@ package controller;
 
 import static android.content.ContentValues.TAG;
 
-import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Asignatura;
@@ -32,7 +30,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import util.DateUtils;
@@ -54,7 +51,6 @@ public class DudaController {
 
         collection
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
@@ -67,22 +63,14 @@ public class DudaController {
                                 LocalDateTime fecha = DateUtils.convertTimeStampToLocalDateTime((Timestamp) dudaData.get("FECHA"));
                                 DocumentReference alumnoId = (DocumentReference) dudaData.get("PERSONA_DUDA");
 
-                                Optional<Alumno> a1 = alumnoController.findById(alumnoId,
-                                        new AlumnoController.AlumnoCallback() {
-                                            @Override
-                                            public void callback(Alumno alumno) {
-                                                Log.i("CONTROLLER ALUMNO", alumno.getNombre() + " " + alumno.getId());
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                                    Alumno a1 = alumnoController.findById(alumnoId).get();
+                                }
 
+                                //sTask<DocumentSnapshot> asigContent = db.collection("ALUMNO").get(asignaturaId.getId());
 
-                                            }
-                                        });
+                                Log.d(TAG,  titulo+ " ; " + descripcion + " ; " + fecha + " ; " + alumnoId);
 
-                                Log.i("DUDA CONTROLLER", a1.get().getNombre() + " " + a1.get().getId());
-
-//                                if (a1.isPresent()) {
-//                                    Log.d(TAG, a1.get().getNombre() + " " + a1.get().getUo());
-//                                    Log.d(TAG, titulo + " ; " + descripcion + " ; " + fecha + " ; " + alumnoId);
-//                                }
 
                             }
                         } else {

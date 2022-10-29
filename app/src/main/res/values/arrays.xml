@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="asiganturas_array">
+        <item>Sin definir</item>
+        <item>Sistemas inteligentes</item>
+        <item>SEW</item>
+    </string-array>
+</resources>
