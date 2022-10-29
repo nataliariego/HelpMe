@@ -10,7 +10,11 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,6 +43,8 @@ import controller.DudaController;
 
 public class HomeActivity extends AppCompatActivity {
 
+    public static final String TAG = "HOME_VIEW";
+
     private TextView txDayOfTheWeek;
     private TextView txDateFormatted;
 
@@ -48,6 +54,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private DudaController dudaController;
 
+    private List<Duda> dudas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,17 +65,12 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        dudaController = new DudaController();
-
 //        listadoDudasHomeRecycler.setHasFixedSize(true);
 //        listadoDudasHomeRecycler = (RecyclerView) findViewById(R.id.listado_dudas_home);
 //        listadoDudasHomeRecycler.setLayoutManager(new LinearLayoutManager(this));
 
-        List<Duda> dudas = dudaController.findAll();
 
-//        for(Duda d : dudas){
-//            System.out.println(d.getTitulo() + " " + d.getDescripcion());
-//        }
+
 
 //        dudaAdapter = new DudaAdapter(, new AdapterView.OnItemClickListener() {
 //            @Override
@@ -80,6 +82,16 @@ public class HomeActivity extends AppCompatActivity {
 //        listadoDudasHomeRecycler.setAdapter(dudaAdapter);
 
         initCalendarData();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        dudaController.findAll().getValue().forEach(d -> {
+            Log.i(TAG, d.getTitulo());
+        });
     }
 
     /**

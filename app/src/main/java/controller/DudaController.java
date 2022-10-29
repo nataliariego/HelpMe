@@ -1,94 +1,73 @@
 package controller;
 
-import static android.content.ContentValues.TAG;
-
-import android.os.Build;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
+import androidx.lifecycle.MutableLiveData;
 
-import com.example.helpme.model.Alumno;
-import com.example.helpme.model.Asignatura;
 import com.example.helpme.model.Duda;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import org.checkerframework.checker.units.qual.A;
-import org.w3c.dom.Document;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import util.DateUtils;
 
 public class DudaController {
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public static final String TAG = "DUDAS_CONTROLLER";
+
+    private static FirebaseFirestore db;
     private AlumnoController alumnoController = new AlumnoController();
+
+    //    Campos de la base de datos
+
+    private static DudaController instance;
+
+    public static synchronized DudaController getInstance() {
+        if (instance == null) {
+            instance = new DudaController();
+            db = FirebaseFirestore.getInstance();
+        }
+
+        return instance;
+    }
+
 
     /**
      * Listado de todas las dudas de la aplicación.
      *
      * @return
      */
-    public List<Duda> findAll() {
-        List<Duda> dudas = new ArrayList<>();
+    public MutableLiveData<List<Duda>> findAll() {
+        MutableLiveData<List<Duda>> liveDudas = new MutableLiveData<List<Duda>>();
 
-        Task<QuerySnapshot> collection = db.collection("DUDA").get();
+        db.collection(Duda.COLLECTION)
+                .addSnapshotListener((snapshot, e) -> {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
 
-        collection
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
+                    List<Duda> dudas = new ArrayList<>();
+                    if (snapshot != null && !snapshot.isEmpty()) {
+                        for (DocumentSnapshot documentSnapshot : snapshot.getDocuments()) {
+                            Duda duda = documentSnapshot.toObject(Duda.class);
 
-                                Map<String, Object> dudaData = document.getData();
+                            Log.i(TAG, String.valueOf(duda.isResuelta()));
+                            duda.setTitulo(documentSnapshot.getString(Duda.TITULO));
+                            duda.setDescripcion(documentSnapshot.getString(Duda.DESCRIPCION));
+                            duda.setFecha(documentSnapshot.getString(Duda.FECHA));
+                            duda.setResuelta(documentSnapshot.getBoolean(Duda.IS_RESUELTA));
+                            duda.setAsignaturaId(documentSnapshot.get(Duda.ASIGNATURA_REF).toString());
+                            duda.setAlumnoId(documentSnapshot.get(Duda.REF_ALUMNO).toString());
 
-                                String titulo = dudaData.get("TITULO").toString();
-                                String descripcion = dudaData.get("DESCRIPCION").toString();
-                                LocalDateTime fecha = DateUtils.convertTimeStampToLocalDateTime((Timestamp) dudaData.get("FECHA"));
-                                DocumentReference alumnoId = (DocumentReference) dudaData.get("PERSONA_DUDA");
-
-                                alumnoController.findById(alumnoId,
-                                        new AlumnoController.AlumnoCallback() {
-                                            @Override
-                                            public void callback(Alumno alumno) {
-                                                Log.i("CONTROLLER ALUMNO", alumno.getNombre() + " " + alumno.getId());
-
-
-                                            }
-                                        });
-
-//                                Log.i("DUDA CONTROLLER", a1.get().getNombre() + " " + a1.get().getId());
-
-                                Log.d(TAG, titulo + " ; " + descripcion + " ; " + fecha + " ; " + alumnoId);
-
-
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
+                            dudas.add(duda);
                         }
                     }
+                    liveDudas.postValue(dudas);
+
                 });
 
-        return dudas;
+
+        return liveDudas;
     }
 }

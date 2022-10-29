@@ -41,9 +41,9 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
        Duda duda = dudas.get(position);
 
         holder.titulo.setText(duda.getTitulo());
-        holder.abrevMateria.setText(duda.getMateria().getAbreviatura());
-        holder.fechaPublicacion.setText(duda.getCreatedAt().toString());
-        holder.nombreAlumno.setText(duda.getAlumno().getNombre());
+//        holder.abrevMateria.setText(duda.getMateria().getAbreviatura());
+        holder.fechaPublicacion.setText(duda.getFecha().toString());
+//        holder.nombreAlumno.setText(duda.getAlumno().getNombre());
     }
 
     @Override
@@ -69,9 +69,9 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
 
         public void bindDuda(final Duda duda, final AdapterView.OnItemClickListener listener) {
             titulo.setText(duda.getTitulo());
-            nombreAlumno.setText(duda.getAlumno().getNombre());
+//            nombreAlumno.setText(duda.getAlumno().getNombre());
 //            fechaPublicacion.setText(new PrettyTime().format((LocalDateTime) duda.getCreatedAt()));
-            abrevMateria.setText(duda.getMateria().getAbreviatura());
+//            abrevMateria.setText(duda.getMateria().getAbreviatura());
 
 //            itemView.setOnClickListener(new View.OnClickListener() {
 //                @Override

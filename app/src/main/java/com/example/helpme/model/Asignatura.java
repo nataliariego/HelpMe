@@ -1,6 +1,28 @@
 package com.example.helpme.model;
 
-public class Asignatura {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+public class Asignatura implements Parcelable {
+    protected Asignatura(Parcel in) {
+        id = in.readString();
+        nombre = in.readString();
+    }
+
+    public static final Creator<Asignatura> CREATOR = new Creator<Asignatura>() {
+        @Override
+        public Asignatura createFromParcel(Parcel in) {
+            return new Asignatura(in);
+        }
+
+        @Override
+        public Asignatura[] newArray(int size) {
+            return new Asignatura[size];
+        }
+    };
+
     public String getId() {
         return id;
     }
@@ -43,5 +65,16 @@ public class Asignatura {
         this.nombre = nombre;
         this.curso = curso;
         this.materia = materia;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeString(nombre);
+        parcel.writeString(materia.getId());
     }
 }

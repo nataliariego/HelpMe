@@ -31,7 +31,7 @@ public class AlumnoController {
                 if (task.isSuccessful()) {
                     DocumentSnapshot doc = document.getResult();
 
-                    Alumno alumno = getPayload(doc.getId(), doc.getString("UO"), doc.getString("NOMBRE"));
+                    Alumno alumno = getPayload(doc.getId(), doc.getString(Alumno.UO), doc.getString(Alumno.NOMBRE));
 
                     callback.callback(alumno);
                 }

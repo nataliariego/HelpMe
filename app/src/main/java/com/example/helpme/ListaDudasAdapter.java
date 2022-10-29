@@ -80,9 +80,9 @@ public class ListaDudasAdapter extends RecyclerView.Adapter<ListaDudasAdapter.Du
         // asignar valores a los componentes
     public void bindUser(final Duda duda, final OnItemClickListener listener) {
         titulo.setText(duda.getTitulo());
-        persona_duda.setText(duda.getAlumno().getNombre());
-        fecha.setText(duda.getCreatedAt().toString());
-        asignatura.setText(duda.getAsignatura().getNombre());
+//        persona_duda.setText(duda.getAlumno().getNombre());
+        fecha.setText(duda.getFecha().toString());
+//        asignatura.setText(duda.getAsignatura().getNombre());
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
