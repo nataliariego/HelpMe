@@ -10,5 +10,5 @@ public class Adjunto {
     private String nombreCorto;
     private String mime;
 
-    private LocalDateTime createdAt;
+    private String fecha;
 }

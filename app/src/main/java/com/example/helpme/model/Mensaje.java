@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class Mensaje {
     private String id;
-    private String contenido;
+    private String msg;
     private Alumno alumno;
-    private LocalDateTime createdAt;
+    private String createdAt;
 }
