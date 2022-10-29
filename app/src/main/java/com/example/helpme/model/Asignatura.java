@@ -44,4 +44,9 @@ public class Asignatura {
         this.curso = curso;
         this.materia = materia;
     }
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
 }
