@@ -25,11 +25,4 @@ public class Curso {
         this.numero = numero;
     }
 
-    @Override
-    public String toString() {
-        return "Curso{" +
-                "id='" + id + '\'' +
-                ", numero='" + numero + '\'' +
-                '}';
-    }
 }
