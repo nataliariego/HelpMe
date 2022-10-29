@@ -12,4 +12,6 @@
     <string name="adjuntar">Adjuntar archivos</string>
     <string name="publicar">Publicar</string>
     <string name="tituloAsignatura">Asignatura</string>
+    <string name="dudaPublicada">Duda publicada</string>
+    <string name="camposRellenados">Error: Campos incorrectos</string>
 </resources>
