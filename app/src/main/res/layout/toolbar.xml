@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="55dp"
+    android:gravity="center_vertical"
+    android:paddingLeft="18dp"
+    android:paddingRight="18dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bt_back_toolbat"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/button_rounded_gray_light">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.466"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.466"
+            app:srcCompat="@drawable/ic_round_arrow_back_ios_20" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageButton
+        android:id="@+id/bt_faq_toolbar"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentRight="true"
+        android:background="@color/transparent"
+        android:minHeight="48dp"
+        app:srcCompat="@drawable/ic_baseline_help_outline_24" />
+
+</RelativeLayout>

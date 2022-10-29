@@ -1,34 +1,12 @@
 package com.example.helpme.model;
 
 public class Asignatura {
-
-    private String id_curso;
-    private String id_materia;
-    private String nombre;
-
-
-    public Asignatura(){}
-
-    public Asignatura(String id_curso, String id_materia, String nombre) {
-        this.id_curso = id_curso;
-        this.id_materia = id_materia;
-        this.nombre = nombre;
+    public String getId() {
+        return id;
     }
 
-    public String getId_curso() {
-        return id_curso;
-    }
-
-    public void setId_curso(String id_curso) {
-        this.id_curso = id_curso;
-    }
-
-    public String getId_materia() {
-        return id_materia;
-    }
-
-    public void setId_materia(String id_materia) {
-        this.id_materia = id_materia;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -39,8 +17,31 @@ public class Asignatura {
         this.nombre = nombre;
     }
 
-    @Override
-    public String toString() {
-        return nombre;
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
+    }
+
+    public Materia getMateria() {
+        return materia;
+    }
+
+    public void setMateria(Materia materia) {
+        this.materia = materia;
+    }
+
+    private String id;
+    private String nombre;
+    private Curso curso;
+    private Materia materia;
+
+    public Asignatura(String id, String nombre, Curso curso, Materia materia) {
+        this.id = id;
+        this.nombre = nombre;
+        this.curso = curso;
+        this.materia = materia;
     }
 }

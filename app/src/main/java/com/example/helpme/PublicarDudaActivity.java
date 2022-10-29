@@ -70,8 +70,11 @@ public class PublicarDudaActivity extends AppCompatActivity {
 
     private void crearDuda() {
         String fecha = sacarFecha();
-        Duda duda = new Duda(titulo.getText()
-                .toString(),"1og4xCsZnHff8T0NvQ4X",fecha,spinner.getSelectedItem().toString(),descripcion.getText().toString(),false);
+        //CAmbiar porqeue cambio constructor duda
+        //Duda duda = new Duda(titulo.getText()
+            //    .toString(),"1og4xCsZnHff8T0NvQ4X",fecha,spinner.getSelectedItem().toString(),descripcion.getText().toString(),false);
+
+        Duda duda = null;
         myFirebase.collection("DUDA")
                 .add(duda)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -107,7 +110,8 @@ public class PublicarDudaActivity extends AppCompatActivity {
 
     public void loadAsignaturas(){
         List<Asignatura> asignaturas = new ArrayList<Asignatura>();
-        asignaturas.add(new Asignatura("a","b","Sin definir"));
+        //Cambiar xq cabio constructor asignatura
+        //asignaturas.add(new Asignatura("a","b","Sin definir"));
         myFirebase.collection("ASIGNATURA")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -118,7 +122,8 @@ public class PublicarDudaActivity extends AppCompatActivity {
                                 String id_materia = document.getData().get("ID_MATERIA").toString();
                                 String id_curso = document.getData().get("ID_CURSO").toString();
                                 String nombre = document.getData().get("NOMBRE").toString();
-                                asignaturas.add(new Asignatura(id_curso,id_materia,nombre));
+                                //Cambiat cambio constrcutor asignatura
+                                //asignaturas.add(new Asignatura(id_curso,id_materia,nombre));
                                 Log.d("Hola debug", document.getId() + " => " + document.getData());
                             }
                             ArrayAdapter<Asignatura> arrayAdapter =  new ArrayAdapter<Asignatura>(PublicarDudaActivity.this

@@ -12,10 +12,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.helpme.model.Alumno;
+import com.example.helpme.model.Asignatura;
 import com.example.helpme.model.Duda;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -23,23 +27,32 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import controller.AlumnoController;
+import controller.AsignaturaController;
+import controller.DudaController;
 
 public class ListarDudasActivity extends AppCompatActivity {
 
     private static final String DUDA_SELECCIONADA = "duda_seleccionada";
 
     //Modelo de datos
-    private List<Duda> listaDuda;
+    private List<Duda> listaDuda = new ArrayList<Duda>();;
     private Duda duda;
     private RecyclerView listaDudaView;
+    private Object[] asignatura_data;
 
-    private FirebaseFirestore myFirebase;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private AsignaturaController asignaturaController = new AsignaturaController();
+    private AlumnoController alumnoController = new AlumnoController();
+    private DudaController dudaController = new DudaController();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lilstardudas_main);
-        myFirebase = FirebaseFirestore.getInstance();
         //Rellenar lista de dudas
         cargarDudas();
 
@@ -59,6 +72,7 @@ public class ListarDudasActivity extends AppCompatActivity {
         // Instanciamos el adapter con los datos de la petición y lo asignamos a RecyclerView
         // Generar el adaptador, le pasamos la lista de dudas
         // y el manejador para el evento click sobre un elemento
+
         ListaDudasAdapter lpAdapter= new ListaDudasAdapter(listaDuda,
                 new ListaDudasAdapter.OnItemClickListener() {
                     @Override
@@ -82,25 +96,15 @@ public class ListarDudasActivity extends AppCompatActivity {
     }
 
     private void cargarDudas() {
-        listaDuda = new ArrayList<Duda>();
-        listaDuda.add(new Duda( "una duda", "manolo", "fecha",
-                 "asignatura",  true,  "url_foto_persona"));
-        Log.w(TAG, "HOLAAA");
-        myFirebase.collection("DUDA")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
-
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
     }
+
+    private boolean getBoolean(String toString) {
+        if (toString.equals("true")) return true;
+        return false;
+    }
+
+
+
+
 }

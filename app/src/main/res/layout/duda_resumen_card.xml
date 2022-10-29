@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_duda_resumen"
+    android:layout_width="match_parent"
+    android:layout_height="123dp">
+
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/layout_main_resumen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:foregroundGravity="center"
+        app:flow_verticalAlign="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:id="@+id/layout_resumen_avatar"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/img_perfil_alumno_duda"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerInParent="true"
+                android:baselineAlignBottom="false"
+                android:contentDescription="@string/resumen_img_perfil_alumno_descripcion"
+                android:foregroundGravity="center"
+                app:srcCompat="@drawable/profile_placeholcer_primary_48" />
+
+            <TextView
+                android:id="@+id/tx_siglas_alumno_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:text="@string/avatar_placeholder_text"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="25sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/resumen_duda_detalles"
+            android:layout_width="310dp"
+            android:layout_height="123dp"
+            android:gravity="clip_vertical|center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txTituloDuda"
+                android:layout_width="228dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="@string/resumen_ttitulo_duda"
+                android:textColor="@color/primary"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:id="@+id/layout_resumen_datos_alumno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/layout_resumen_duda_datos_alumno_nombre_fecha"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txNombreAlumnoDudaResumen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
+                        android:text="@string/resumen_nombre_alumno_duda"
+                        android:textColor="@color/primary"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/txResumenFechaPublicacionDuda"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
+                        android:text="@string/txFechaSubidaDuda"
+                        android:textColor="#546E7A"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txResumenDudaAbrevMateria"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:background="@color/secondary"
+                    android:fontFamily="@font/roboto_bold"
+                    android:gravity="center"
+                    android:text="@string/tx_asignatura_resumen_duda_abreviatura"
+                    android:textColor="@color/primary" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.gridlayout.widget.GridLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
