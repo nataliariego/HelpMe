@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.helpme.R;
 import com.example.helpme.model.Duda;
 
-import org.ocpsoft.prettytime.PrettyTime;
+
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

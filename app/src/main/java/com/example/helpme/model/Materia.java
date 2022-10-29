@@ -34,4 +34,13 @@ public class Materia {
     public void setDenominacion(String denominacion) {
         this.denominacion = denominacion;
     }
+
+    @Override
+    public String toString() {
+        return "Materia{" +
+                "id='" + id + '\'' +
+                ", denominacion='" + denominacion + '\'' +
+                ", abreviatura='" + abreviatura + '\'' +
+                '}';
+    }
 }

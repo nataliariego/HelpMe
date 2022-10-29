@@ -24,4 +24,5 @@ public class Curso {
     public void setNumero(String numero) {
         this.numero = numero;
     }
+
 }
