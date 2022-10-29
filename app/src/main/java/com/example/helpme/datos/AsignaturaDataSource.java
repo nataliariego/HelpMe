@@ -46,7 +46,9 @@ public class AsignaturaDataSource {
        /* String id_curso = asignatura_data[0][0].toString();
         String id_materia = asignatura_data[0][1].toString();
         String nombre = asignatura_data[0][2].toString();*/
-        return new Asignatura("d", "s", "s");
+        //cambio constructor Asignatura
+        //return new Asignatura("d", "s", "s");ç
+        return null;
     }
 
 
