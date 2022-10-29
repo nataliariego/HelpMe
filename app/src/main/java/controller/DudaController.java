@@ -63,7 +63,9 @@ public class DudaController {
                                 LocalDateTime fecha = DateUtils.convertTimeStampToLocalDateTime((Timestamp) dudaData.get("FECHA"));
                                 DocumentReference alumnoId = (DocumentReference) dudaData.get("PERSONA_DUDA");
 
-                                Alumno a1 = alumnoController.findById(alumnoId);
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                                    Alumno a1 = alumnoController.findById(alumnoId).get();
+                                }
 
                                 //sTask<DocumentSnapshot> asigContent = db.collection("ALUMNO").get(asignaturaId.getId());
 

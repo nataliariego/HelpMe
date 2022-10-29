@@ -12,9 +12,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.helpme.datos.AlumnoDataSource;
-import com.example.helpme.datos.AsignaturaDataSource;
-import com.example.helpme.datos.DudaDataSource;
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Asignatura;
 import com.example.helpme.model.Duda;
@@ -32,6 +29,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import controller.AlumnoController;
+import controller.AsignaturaController;
+import controller.DudaController;
+
 public class ListarDudasActivity extends AppCompatActivity {
 
     private static final String DUDA_SELECCIONADA = "duda_seleccionada";
@@ -44,16 +45,16 @@ public class ListarDudasActivity extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private AsignaturaDataSource asignaturaDataSource = new AsignaturaDataSource();
-    private AlumnoDataSource alumnoDataSource = new AlumnoDataSource();
-    private DudaDataSource dudaDataSource = new DudaDataSource();
+    private AsignaturaController asignaturaController = new AsignaturaController();
+    private AlumnoController alumnoController = new AlumnoController();
+    private DudaController dudaController = new DudaController();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lilstardudas_main);
         //Rellenar lista de dudas
-        listaDuda = cargarDudas();
+        cargarDudas();
 
         // Recuperamos referencia y configuramos recyclerView con la lista de dudas
         listaDudaView = (RecyclerView)findViewById(R.id.reciclerView);
@@ -94,27 +95,8 @@ public class ListarDudasActivity extends AppCompatActivity {
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
 
-    private ArrayList<Duda> cargarDudas() {
-        ArrayList<Duda> listaDudaAux = new ArrayList<Duda>();
-        db.collection("DUDA")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Object[] campos_duda = document.getData().values().toArray();
-                                //Duda d = new Duda( );
-                                //listaDudaAux.add(d);
-                                System.out.println("TITULO" + " => " + campos_duda[3]);
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
-        return listaDudaAux;
+    private void cargarDudas() {
+
     }
 
     private boolean getBoolean(String toString) {
@@ -122,9 +104,7 @@ public class ListarDudasActivity extends AppCompatActivity {
         return false;
     }
 
-    private String getFechaByTimestamp(String toString) {
-        return "hola";
-    }
+
 
 
 }
