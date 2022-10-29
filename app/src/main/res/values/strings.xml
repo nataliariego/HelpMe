@@ -13,4 +13,19 @@
     <string name="txFechaSubidaDuda">Hace 2 horas</string>
     <string name="avatar_placeholder_text">PR</string>
     <string name="tx_asignatura_resumen_duda_abreviatura">ED</string>
+    <string name="background_calendario_home">Fecha actual, añadir una nueva duda</string>
+    <string name="titulo">Titulo</string>
+    <string name="persona_duda">Persona</string>
+    <string name="fecha">Fecha</string>
+    <string name="asignatura">Asignatura</string>
+    <string name="tituloPublicarDuda">Publicar una Duda</string>
+    <string name="Título">Titulo</string>
+    <string name="textoExplicativoPublicarPrueba">Recuerda que una duda ha de ser muy concreta y fácil de entender. Puedes aportar imágenes o código si lo necesitas.</string>
+    <string name="tituloDudaNueva">Titulo</string>
+    <string name="descripción">Descripción</string>
+    <string name="adjuntar">Adjuntar archivos</string>
+    <string name="publicar">Publicar</string>
+    <string name="tituloAsignatura">Asignatura</string>
+    <string name="dudaPublicada">Duda publicada</string>
+    <string name="camposRellenados">Error: Campos incorrectos</string>
 </resources>

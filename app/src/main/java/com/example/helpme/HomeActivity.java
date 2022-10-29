@@ -5,13 +5,20 @@ import static android.content.ContentValues.TAG;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.R;
+import com.example.helpme.model.Duda;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -20,15 +27,26 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.w3c.dom.Text;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.TextStyle;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
+import adapter.DudaAdapter;
+import controller.DudaController;
 
 public class HomeActivity extends AppCompatActivity {
 
     private TextView txDayOfTheWeek;
     private TextView txDateFormatted;
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private RecyclerView listadoDudasHomeRecycler;
+
+    private DudaAdapter dudaAdapter;
+
+    private DudaController dudaController;
 
 
     @Override
@@ -40,9 +58,28 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        initCalendarData();
+        dudaController = new DudaController();
 
-        readData();
+//        listadoDudasHomeRecycler.setHasFixedSize(true);
+//        listadoDudasHomeRecycler = (RecyclerView) findViewById(R.id.listado_dudas_home);
+//        listadoDudasHomeRecycler.setLayoutManager(new LinearLayoutManager(this));
+
+        List<Duda> dudas = dudaController.findAll();
+
+//        for(Duda d : dudas){
+//            System.out.println(d.getTitulo() + " " + d.getDescripcion());
+//        }
+
+//        dudaAdapter = new DudaAdapter(, new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                // TODO: Mostrar pantalla detalle de duda
+//            }
+//        });
+//
+//        listadoDudasHomeRecycler.setAdapter(dudaAdapter);
+
+        initCalendarData();
     }
 
     /**
@@ -58,22 +95,5 @@ public class HomeActivity extends AppCompatActivity {
                     + LocalDate.now().getMonth().getDisplayName(TextStyle.SHORT, new Locale("es")).replace(".", "").toUpperCase()
                     + " " + LocalDate.now().getYear());
         }
-    }
-
-    private void readData() {
-        db.collection("DUDA")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
     }
 }

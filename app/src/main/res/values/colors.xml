@@ -4,6 +4,7 @@
     <color name="primary">#0C0C32</color>
     <color name="secondary">#FFEFD3</color>
     <color name="tertiary">#FCFCFC</color>
+    <color name="tertiary_light">#EFEFEF</color>
     <color name="text_gray">#828181</color>
     <color name="icon_disabled">#D1D1D1</color>
     <color name="success">#8AC926</color>

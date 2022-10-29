@@ -95,13 +95,12 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tx_resument_duda_asignatura"
+                    android:id="@+id/txResumenDudaAbrevMateria"
                     android:layout_width="38dp"
                     android:layout_height="38dp"
                     android:background="@color/secondary"
                     android:fontFamily="@font/roboto_bold"
                     android:gravity="center"
-                    android:src="@drawable/rounded_corners"
                     android:text="@string/tx_asignatura_resumen_duda_abreviatura"
                     android:textColor="@color/primary" />
 

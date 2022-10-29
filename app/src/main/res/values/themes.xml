@@ -27,4 +27,9 @@
     <style name="SpashScreen" parent="Theme.HelpMe">
         <item name="android:windowBackground">@drawable/spashscreen</item>
     </style>
+
+    <!-- Esquinas redondeadas -->
+    <style name="RoundedSquare">
+        <item name="cornerSize">10%</item>
+    </style>
 </resources>
