@@ -70,7 +70,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
         public void bindDuda(final Duda duda, final AdapterView.OnItemClickListener listener) {
             titulo.setText(duda.getTitulo());
             nombreAlumno.setText(duda.getAlumno().getNombre());
-            fechaPublicacion.setText(new PrettyTime().format((LocalDateTime) duda.getCreatedAt()));
+//            fechaPublicacion.setText(new PrettyTime().format((LocalDateTime) duda.getCreatedAt()));
             abrevMateria.setText(duda.getMateria().getAbreviatura());
 
 //            itemView.setOnClickListener(new View.OnClickListener() {

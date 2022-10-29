@@ -24,6 +24,10 @@ public class Alumno implements Parcelable {
         this.asignaturasDominadas = asignaturasDominadas;
     }
 
+    public Alumno(String id, String nombre, String uo){
+        this(id, nombre, uo, null, null);
+    }
+
     public Alumno(Parcel in) {
         id = in.readString();
         nombre = in.readString();

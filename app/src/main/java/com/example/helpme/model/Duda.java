@@ -15,18 +15,18 @@ public class Duda implements Parcelable {
     private Asignatura asignatura;
     private Materia materia;
     private boolean isResuelta;
-    private LocalDateTime createdAt;
+    private String fecha;
 
 
 
-    public Duda(String titulo, String descripcion, Alumno alumno, Asignatura asignatura, Materia materia, boolean isResuelta, LocalDateTime createdAt) {
+    public Duda(String titulo, String descripcion, Alumno alumno, Asignatura asignatura, Materia materia, boolean isResuelta, String createdAt) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.alumno = alumno;
         this.asignatura = asignatura;
         this.materia = materia;
         this.isResuelta = isResuelta;
-        this.createdAt = createdAt;
+        this.fecha = createdAt;
     }
 
     protected Duda(Parcel in) {
@@ -97,12 +97,12 @@ public class Duda implements Parcelable {
         this.alumno = alumno;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public String getCreatedAt() {
+        return fecha;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setCreatedAt(String createdAt) {
+        this.fecha = createdAt;
     }
 
     @Override
