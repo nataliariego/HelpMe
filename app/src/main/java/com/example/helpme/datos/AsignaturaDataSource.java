@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.*;
 
 public class AsignaturaDataSource {
 
@@ -19,7 +20,11 @@ public class AsignaturaDataSource {
     private Object[] asignatura_data;
 
 
+
+
+
     public Asignatura getAsignaturaById(String toString) {
+
         DocumentReference docRef = db.collection("ASIGNATURA").document(toString);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
