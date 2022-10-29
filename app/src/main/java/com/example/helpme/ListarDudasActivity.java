@@ -96,8 +96,6 @@ public class ListarDudasActivity extends AppCompatActivity {
 
     private ArrayList<Duda> cargarDudas() {
         ArrayList<Duda> listaDudaAux = new ArrayList<Duda>();
-        listaDudaAux.add(new Duda( "una duda", "manolo", "fecha",
-                 "asignatura",  true,  "url_foto_persona", "descripcion"));
         db.collection("DUDA")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -106,13 +104,8 @@ public class ListarDudasActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Object[] campos_duda = document.getData().values().toArray();
-                                Duda d = new Duda( campos_duda[3].toString(),
-                                        alumnoDataSource.getAlumnoById(campos_duda[4].toString()).getNombre(),
-                                        getFechaByTimestamp(campos_duda[2].toString()),
-                                        asignaturaDataSource.getAsignaturaById(campos_duda[0].toString()).getNombre(),
-                                        getBoolean(campos_duda[1].toString()),
-                                        alumnoDataSource.getAlumnoById(campos_duda[4].toString()).getUrl_foto(), campos_duda[5].toString());
-                                listaDudaAux.add(d);
+                                //Duda d = new Duda( );
+                                //listaDudaAux.add(d);
                                 System.out.println("TITULO" + " => " + campos_duda[3]);
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
