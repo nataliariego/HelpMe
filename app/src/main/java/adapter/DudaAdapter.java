@@ -1,5 +1,6 @@
 package adapter;
 
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.R;
@@ -16,8 +18,9 @@ import org.ocpsoft.prettytime.PrettyTime;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import util.DateUtils;
 
 public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder> {
 
@@ -38,7 +41,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull DudaViewHolder holder, int position) {
-       Duda duda = dudas.get(position);
+        Duda duda = dudas.get(position);
 
         holder.titulo.setText(duda.getTitulo());
 //        holder.abrevMateria.setText(duda.getMateria().getAbreviatura());
@@ -67,10 +70,11 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
             abrevMateria = itemView.findViewById(R.id.txResumenDudaAbrevMateria);
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.O)
         public void bindDuda(final Duda duda, final AdapterView.OnItemClickListener listener) {
             titulo.setText(duda.getTitulo());
 //            nombreAlumno.setText(duda.getAlumno().getNombre());
-//            fechaPublicacion.setText(new PrettyTime().format((LocalDateTime) duda.getCreatedAt()));
+            fechaPublicacion.setText(new PrettyTime().format((LocalDateTime) DateUtils.convertStringToLocalDateTime(duda.getFecha())));
 //            abrevMateria.setText(duda.getMateria().getAbreviatura());
 
 //            itemView.setOnClickListener(new View.OnClickListener() {

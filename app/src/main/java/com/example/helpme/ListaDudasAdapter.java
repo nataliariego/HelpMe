@@ -1,6 +1,5 @@
 package com.example.helpme;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +8,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-//import com.squareup.picasso.Picasso;
 
 import com.example.helpme.model.Duda;
 
@@ -29,9 +26,13 @@ public class ListaDudasAdapter extends RecyclerView.Adapter<ListaDudasAdapter.Du
     private List<Duda> listaDudas;
     private final OnItemClickListener listener;
 
-    public ListaDudasAdapter(List<Duda> listaPeliculas, OnItemClickListener listener) {
-        this.listaDudas = listaPeliculas;
+    public ListaDudasAdapter(List<Duda> listaDudas, OnItemClickListener listener) {
+        this.listaDudas = listaDudas;
         this.listener = listener;
+    }
+
+    public ListaDudasAdapter(List<Duda> listaDudas) {
+        this(listaDudas, null);
     }
 
 
@@ -39,7 +40,7 @@ public class ListaDudasAdapter extends RecyclerView.Adapter<ListaDudasAdapter.Du
     @Override
     public DudaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.linea_recycler_view_duda,parent,false);
+                .inflate(R.layout.linea_recycler_view_duda, parent, false);
         return new DudaViewHolder(itemView);
         //este metodo va poniendo los layouts uno detras del otro
     }
@@ -47,11 +48,8 @@ public class ListaDudasAdapter extends RecyclerView.Adapter<ListaDudasAdapter.Du
     @Override
     public void onBindViewHolder(@NonNull DudaViewHolder holder, int position) {
         Duda duda = listaDudas.get(position);
-        holder.bindUser(duda,listener);
+        holder.bindUser(duda, listener);
     }
-
-
-
 
 
     @Override
@@ -61,11 +59,11 @@ public class ListaDudasAdapter extends RecyclerView.Adapter<ListaDudasAdapter.Du
 
 
     protected class DudaViewHolder extends RecyclerView.ViewHolder {
-    private TextView titulo;
-    private TextView persona_duda;
-    private ImageView img_persona_duda;
-    private TextView fecha;
-    private TextView asignatura;
+        private TextView titulo;
+        private TextView persona_duda;
+        private ImageView img_persona_duda;
+        private TextView fecha;
+        private TextView asignatura;
 
         public DudaViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -78,17 +76,17 @@ public class ListaDudasAdapter extends RecyclerView.Adapter<ListaDudasAdapter.Du
 
 
         // asignar valores a los componentes
-    public void bindUser(final Duda duda, final OnItemClickListener listener) {
-        titulo.setText(duda.getTitulo());
+        public void bindUser(final Duda duda, final OnItemClickListener listener) {
+            titulo.setText(duda.getTitulo());
 //        persona_duda.setText(duda.getAlumno().getNombre());
-        fecha.setText(duda.getFecha().toString());
+            fecha.setText(duda.getFecha().toString());
 //        asignatura.setText(duda.getAsignatura().getNombre());
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onItemClick(duda);
-            }
-        });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(duda);
+                }
+            });
+        }
     }
-}
 }

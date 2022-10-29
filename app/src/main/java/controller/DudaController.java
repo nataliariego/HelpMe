@@ -52,7 +52,7 @@ public class DudaController {
                         for (DocumentSnapshot documentSnapshot : snapshot.getDocuments()) {
                             Duda duda = documentSnapshot.toObject(Duda.class);
 
-                            Log.i(TAG, String.valueOf(duda.isResuelta()));
+
                             duda.setTitulo(documentSnapshot.getString(Duda.TITULO));
                             duda.setDescripcion(documentSnapshot.getString(Duda.DESCRIPCION));
                             duda.setFecha(documentSnapshot.getString(Duda.FECHA));

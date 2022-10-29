@@ -1,58 +1,43 @@
 package com.example.helpme;
 
-import static android.content.ContentValues.TAG;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.helpme.R;
 import com.example.helpme.model.Duda;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import org.w3c.dom.Text;
-
+import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.TextStyle;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import adapter.DudaAdapter;
 import controller.DudaController;
+import viewmodel.DudaViewModel;
 
 public class HomeActivity extends AppCompatActivity {
 
-    public static final String TAG = "HOME_VIEW";
+    public static final String TAG = "HOME_ACTIVITY";
 
     private TextView txDayOfTheWeek;
     private TextView txDateFormatted;
+
+    private RecyclerView listaDudasRecycler;
 
     private RecyclerView listadoDudasHomeRecycler;
 
     private DudaAdapter dudaAdapter;
 
     private DudaController dudaController;
+
+    private DudaViewModel dudaViewModel = new DudaViewModel();
 
     private List<Duda> dudas;
 
@@ -65,11 +50,13 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        listaDudasRecycler = findViewById(R.id.listado_dudas_home_recycler);
+
+        //dudaViewModel = ViewModelProviders.of(this).get(DudaViewModel.class);
+
 //        listadoDudasHomeRecycler.setHasFixedSize(true);
 //        listadoDudasHomeRecycler = (RecyclerView) findViewById(R.id.listado_dudas_home);
 //        listadoDudasHomeRecycler.setLayoutManager(new LinearLayoutManager(this));
-
-
 
 
 //        dudaAdapter = new DudaAdapter(, new AdapterView.OnItemClickListener() {
@@ -79,7 +66,7 @@ public class HomeActivity extends AppCompatActivity {
 //            }
 //        });
 //
-//        listadoDudasHomeRecycler.setAdapter(dudaAdapter);
+//        listadoDudasHomeRecycler.setAdapter(dudaAdapter)
 
         initCalendarData();
     }
@@ -89,8 +76,20 @@ public class HomeActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        dudaController.findAll().getValue().forEach(d -> {
-            Log.i(TAG, d.getTitulo());
+        dudaViewModel.getAllDudas().observe(this, dudas -> {
+            this.dudas = dudas;
+
+            Log.i(TAG, "pasando por el observer");
+
+            if(dudas != null){
+                dudas.forEach(d -> {
+                    Log.i(TAG, d.getTitulo() + " " + d.getAlumnoId());
+                });
+
+                listaDudasRecycler.setAdapter(new ListaDudasAdapter(dudas));
+
+            }
+
         });
     }
 
