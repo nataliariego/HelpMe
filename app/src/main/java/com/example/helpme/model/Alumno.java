@@ -15,12 +15,13 @@ public class Alumno implements Parcelable {
 
     private List<Asignatura> asignaturasDominadas = new ArrayList<>();
 
-    public Alumno(String id, String nombre, String uo, List<Asignatura> asignaturasDominadas) {
+    public Alumno(String id, String nombre, String uo) {
         this.id = id;
         this.nombre = nombre;
         this.uo = uo;
-        this.asignaturasDominadas = asignaturasDominadas;
     }
+
+    public Alumno(){}
 
     public Alumno(Parcel in) {
         id = in.readString();
