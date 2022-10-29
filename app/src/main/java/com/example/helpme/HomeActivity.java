@@ -7,19 +7,24 @@ import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.helpme.model.Alumno;
+import com.example.helpme.model.Asignatura;
 import com.example.helpme.model.Duda;
+import com.example.helpme.model.Materia;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import adapter.DudaAdapter;
 import controller.DudaController;
+import dto.DudaDto;
 import viewmodel.DudaViewModel;
 
 public class HomeActivity extends AppCompatActivity {
@@ -29,8 +34,6 @@ public class HomeActivity extends AppCompatActivity {
     private TextView txDayOfTheWeek;
     private TextView txDateFormatted;
 
-    private RecyclerView listaDudasRecycler;
-
     private RecyclerView listadoDudasHomeRecycler;
 
     private DudaAdapter dudaAdapter;
@@ -39,8 +42,9 @@ public class HomeActivity extends AppCompatActivity {
 
     private DudaViewModel dudaViewModel = new DudaViewModel();
 
-    private List<Duda> dudas;
+    private List<Duda> dudas = new ArrayList<>();
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -50,47 +54,56 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        listaDudasRecycler = findViewById(R.id.listado_dudas_home_recycler);
+        cargarDudasInit();
 
-        //dudaViewModel = ViewModelProviders.of(this).get(DudaViewModel.class);
+        listadoDudasHomeRecycler = (RecyclerView) findViewById(R.id.listado_dudas_home_recycler);
+        listadoDudasHomeRecycler.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        listadoDudasHomeRecycler.setLayoutManager(layoutManager);
 
-//        listadoDudasHomeRecycler.setHasFixedSize(true);
-//        listadoDudasHomeRecycler = (RecyclerView) findViewById(R.id.listado_dudas_home);
-//        listadoDudasHomeRecycler.setLayoutManager(new LinearLayoutManager(this));
-
-
-//        dudaAdapter = new DudaAdapter(, new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                // TODO: Mostrar pantalla detalle de duda
-//            }
-//        });
-//
-//        listadoDudasHomeRecycler.setAdapter(dudaAdapter)
+//        dudaAdapter = new DudaAdapter(dudas);
+//        listadoDudasHomeRecycler.setAdapter(dudaAdapter);
 
         initCalendarData();
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onResume() {
         super.onResume();
+        cargarDudas();
 
-        dudaViewModel.getAllDudas().observe(this, dudas -> {
-            this.dudas = dudas;
+    }
 
-            Log.i(TAG, "pasando por el observer");
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void cargarDudas() {
+        dudas.clear();
 
-            if(dudas != null){
-                dudas.forEach(d -> {
+        dudaViewModel.getAllDudas().observe(this, dudasResult -> {
+            //this.dudas = dudas;
+
+            Log.i(TAG, "pasando por el observer" + dudasResult.get(0).getAlumnoId() + " " + dudasResult.get(0).getAsignaturaId());
+
+            if (dudasResult != null) {
+                dudasResult.forEach(d -> {
                     Log.i(TAG, d.getTitulo() + " " + d.getAlumnoId());
+                    DudaDto newDuda = new DudaDto();
+                    newDuda.titulo = d.getTitulo();
+                    newDuda.alumno = d.getAlumnoId();
+                    newDuda.asignatura = d.getAsignaturaId();
+                    newDuda.fecha = d.getFecha();
+
+                    dudas.add(d);
                 });
-
-                listaDudasRecycler.setAdapter(new ListaDudasAdapter(dudas));
-
             }
-
         });
+
+        dudaAdapter = new DudaAdapter(dudas);
+        listadoDudasHomeRecycler.setAdapter(dudaAdapter);
+        dudaAdapter.notifyDataSetChanged();
+
+        Log.i(TAG, "LISTADO CARGAR: " + dudas.size());
     }
 
     /**
@@ -106,5 +119,10 @@ public class HomeActivity extends AppCompatActivity {
                     + LocalDate.now().getMonth().getDisplayName(TextStyle.SHORT, new Locale("es")).replace(".", "").toUpperCase()
                     + " " + LocalDate.now().getYear());
         }
+    }
+
+    private void cargarDudasInit() {
+        Duda d1 = new Duda("Duda 1", "asdfasfd", "asdfasdf", "000", "999", false, "20/10/2022 12:00:01");
+        dudas.add(d1);
     }
 }

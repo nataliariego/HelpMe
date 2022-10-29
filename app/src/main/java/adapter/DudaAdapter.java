@@ -25,11 +25,10 @@ import util.DateUtils;
 public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder> {
 
     private List<Duda> dudas = new ArrayList<>();
-    private final AdapterView.OnItemClickListener listener;
+//    private final AdapterView.OnItemClickListener listener;
 
-    public DudaAdapter(List<Duda> dudas, AdapterView.OnItemClickListener listener) {
+    public DudaAdapter(List<Duda> dudas) {
         this.dudas = dudas;
-        this.listener = listener;
     }
 
     @NonNull
@@ -39,6 +38,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
         return new DudaViewHolder(view);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull DudaViewHolder holder, int position) {
         Duda duda = dudas.get(position);
@@ -47,6 +47,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
 //        holder.abrevMateria.setText(duda.getMateria().getAbreviatura());
         holder.fechaPublicacion.setText(duda.getFecha().toString());
 //        holder.nombreAlumno.setText(duda.getAlumno().getNombre());
+        holder.bindDuda(duda);
     }
 
     @Override
@@ -71,7 +72,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
-        public void bindDuda(final Duda duda, final AdapterView.OnItemClickListener listener) {
+        public void bindDuda(final Duda duda) {
             titulo.setText(duda.getTitulo());
 //            nombreAlumno.setText(duda.getAlumno().getNombre());
             fechaPublicacion.setText(new PrettyTime().format((LocalDateTime) DateUtils.convertStringToLocalDateTime(duda.getFecha())));
