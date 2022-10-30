@@ -1,9 +1,11 @@
 package controller;
 
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Asignatura;
@@ -13,11 +15,62 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class AsignaturaController {
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public static final String TAG = "ASIGNATURA-CONTROLLER";
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private static AsignaturaController instance;
+
+    public static synchronized AsignaturaController getInstance() {
+        if (instance == null) {
+            instance = new AsignaturaController();
+            db = FirebaseFirestore.getInstance();
+        }
+
+        return instance;
+    }
+
+    /**
+     * Listado de todas las dudas de la aplicación.
+     *
+     * @return
+     */
+    public MutableLiveData<List<Asignatura>> findAll() {
+        MutableLiveData<List<Asignatura>> liveAsign = new MutableLiveData<List<Asignatura>>();
+
+        db.collection("ASIGNATURA")
+                .addSnapshotListener((snapshot, e) -> {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+                    List<Asignatura> asignasturas = new ArrayList<>();
+                    if (snapshot != null && !snapshot.isEmpty()) {
+                        for (DocumentSnapshot documentSnapshot : snapshot.getDocuments()) {
+                            Asignatura asig = documentSnapshot.toObject(Asignatura.class);
+
+                            asig.setId(documentSnapshot.getId());
+                            asig.setNombre(documentSnapshot.getString(Asignatura.NOMBRE));
+                            //asig.setCurso(documentSnapshot.get(Asignatura.CURSO).toString());
+                            //asig.setMateria(documentSnapshot.get(Asignatura.MATERIA).toString());
+
+                            asignasturas.add(asig);
+                            
+                            System.out.println(asig.toString());
+                        }
+                    }
+                    liveAsign.postValue(asignasturas);
+
+                });
+
+
+        return liveAsign;
+    }
 
     /**
      * Obtiene un alumno por su referencia.
