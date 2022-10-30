@@ -1,6 +1,7 @@
-package viewModel;
+package viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.example.helpme.model.Asignatura;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 import controller.AsignaturaController;
 
-public class AsignaturaViewModel {
+public class AsignaturaViewModel extends ViewModel {
 
     private MutableLiveData<Asignatura> duda;
     private MutableLiveData<List<Asignatura>> dudas;
@@ -23,5 +24,4 @@ public class AsignaturaViewModel {
 
         return dudas;
     }
-
 }
