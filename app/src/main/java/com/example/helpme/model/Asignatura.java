@@ -3,6 +3,8 @@ package com.example.helpme.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 public class Asignatura implements Parcelable {
 
     public static final String COLLECTION = "ASIGNATURA";

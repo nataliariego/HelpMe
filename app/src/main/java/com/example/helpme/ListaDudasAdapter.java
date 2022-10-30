@@ -97,9 +97,11 @@ public class ListaDudasAdapter extends RecyclerView.Adapter<ListaDudasAdapter.Du
             }
 
             Map<String, String> images = new HashMap<>();
-            images.put("alumno1", "https://img.freepik.com/foto-gratis/retrato-hombre-caucasico-alegre_53876-13440.jpg?w=2000");
-            images.put("alumno2", "https://img.freepik.com/foto-gratis/retrato-mujer-caucasica-sonriendo_53876-24998.jpg?w=2000");
-            images.put("alumno3", "https://img.freepik.com/fotos-premium/retrato-hombre-maduro-chico-adulto-tiene-pelo-canoso-hombre-guapo-barba-canosa-moda-cabello-masculino-barberia-cara-chico-canoso-afeitar-cuidado-cabello-piel-cuidado-piel-masculino-belleza-hombres_545934-56.jpg?w=2000");
+            images.put("Natalia Fernández Riego", "https://cdn.pixabay.com/photo/2015/10/29/08/23/girl-1011915_960_720.jpg");
+            images.put("Juan Iglesias Pérez", "https://img.freepik.com/foto-gratis/retrato-hombre-caucasico-alegre_53876-13440.jpg?w=2000");
+            images.put("Marta Ramos Álvarez", "https://img.freepik.com/foto-gratis/retrato-mujer-caucasica-sonriendo_53876-24998.jpg?w=2000");
+            images.put("Manuel Carillo Gómez", "https://img.freepik.com/fotos-premium/retrato-hombre-maduro-chico-adulto-tiene-pelo-canoso-hombre-guapo-barba-canosa-moda-cabello-masculino-barberia-cara-chico-canoso-afeitar-cuidado-cabello-piel-cuidado-piel-masculino-belleza-hombres_545934-56.jpg?w=2000");
+            images.put("Estela García Antuña", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6aGDVV8G4834Zj3D4WaKjO3Aypf58H3te8jC0-uoFltjW2V5AD3NMebJi6L0-i7sZZY8&usqp=CAU");
 
             Picasso.get().load(images.get(duda.getAlumnoId())).into(img_persona_duda);
             itemView.setOnClickListener(new View.OnClickListener() {

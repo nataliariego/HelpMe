@@ -87,15 +87,17 @@ public class ListarDudasActivity extends AppCompatActivity {
     }
 
     private void cargarDudas() {
-        Duda d1 = new Duda("Duda 1", "Descripcion duda 1", "alumno1", "asignatura1", "materia1", false, "30/10/2022 12:35:24");
-        Duda d2 = new Duda("Duda 2", "Descripcion duda 2", "alumno2", "asignatura2", "materia2", false, "03/01/2022 12:40:24");
-        Duda d3 = new Duda("Duda 3", "Descripcion duda 3", "alumno3", "asignatura3", "materia3", false, "28/10/2022 14:35:24");
-        Duda d4 = new Duda("Duda 4", "Descripcion duda 4", "alumno3", "asignatura4", "materia4", false, "31/10/2022 12:35:24");
+        Duda d1 = new Duda("Algoritmo A*", "Estoy intentando hacer experimentos para el algoritmo A* y me da este error:", "Natalia Fernández Riego", "Sistemas Inteligentes", "IA", true, "30/10/2022 12:35:24");
+        Duda d2 = new Duda("Funciones Lambda", "Tecnologias y Paradigmas de la Programación", "Juan Iglesias Pérez", "Tecnologias y Paradigmas de la Programación", "TPP", false, "30/10/2022 12:35:24");
+        Duda d3 = new Duda("Conexión entre Activities", "Estoy intentando hacer esta conexion", "Marta Ramos Álvarez", "Software de Dispositivos Móviles", "SDM", false, "30/10/2022 14:35:24");
+        Duda d4 = new Duda("Paso a casos de equivalencia", "Estoy intentando hacer este paso", "Manuel Carillo Gómez", "Calidad y Validación del Software", "CVS", false, "31/10/2022 12:35:24");
+        Duda d5 = new Duda("Hacer un Grid Layout", "Estoy intentando hacer este layout", "Estela García Antuña", "Comunicacion Persona-Maquina", "materia4", false, "12/09/2022 10:35:24");
 
         listaDuda.add(d1);
         listaDuda.add(d2);
         listaDuda.add(d3);
         listaDuda.add(d4);
+        listaDuda.add(d5);
     }
 
     private boolean getBoolean(String toString) {
