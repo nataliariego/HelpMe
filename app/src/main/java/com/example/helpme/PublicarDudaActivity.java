@@ -1,7 +1,5 @@
 package com.example.helpme;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,38 +13,41 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Asignatura;
 import com.example.helpme.model.Curso;
-import com.example.helpme.model.Duda;
 import com.example.helpme.model.Materia;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 
+import controller.AsignaturaController;
 import controller.CursoController;
+import dto.AsignaturaDto;
+import viewmodel.AsignaturaViewModel;
+
 
 public class PublicarDudaActivity extends AppCompatActivity {
+
+    public static final String TAG = "PUBLICAR_ACTIVITY";
 
     private Spinner spinner;
     private EditText titulo;
     private EditText descripcion;
     private FirebaseFirestore myFirebase;
+
+    private AsignaturaController asignaturaController;
+    private AsignaturaViewModel asignaturaViewModel = new AsignaturaViewModel();
+    private List<Asignatura> asignaturas = new ArrayList<>();
 
     private CursoController cursoController = new CursoController();
     @Override
@@ -58,6 +59,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
         descripcion = (EditText)findViewById(R.id.editTextDuda);
         myFirebase = FirebaseFirestore.getInstance();
         loadAsignaturas();
+
         Button btnPublicar = (Button) findViewById(R.id.buttonpublicar);
 
         btnPublicar.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +79,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
     }
 
     private void crearDuda() {
+        /*
         List<Asignatura> list = new ArrayList<>();
         String fecha = sacarFecha();
         Alumno a = new Alumno("","","","",list);
@@ -101,6 +104,8 @@ public class PublicarDudaActivity extends AppCompatActivity {
                 });
         titulo.setText("");
         descripcion.setText("");
+
+         */
     }
 
     private String sacarFecha() {
@@ -118,6 +123,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
         }
         return true;
     }
+
 
     public void loadAsignaturas(){
         List<Asignatura> asignaturas = new ArrayList<Asignatura>();
@@ -177,7 +183,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
                                                             }
                                                         });
                                             }
-                               });
+                                        });
 
 
                             }
@@ -189,4 +195,38 @@ public class PublicarDudaActivity extends AppCompatActivity {
                 });
 
     }
+
+
+/*
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void loadAsignaturas() {
+        asignaturas.clear();
+
+        asignaturaViewModel.getAllDudas().observe(this, asignaturasResult -> {
+            //this.dudas = dudas;
+
+            Log.i(TAG, "pasando por el observer" + asignaturasResult.get(0).getCurso() + " "
+                    + asignaturasResult.get(0).getMateria());
+
+            if (asignaturasResult != null) {
+                asignaturasResult.forEach(d -> {
+
+                    AsignaturaDto newDuda = new AsignaturaDto();
+                    newDuda.id = d.getId();
+                    newDuda.nombre = d.getNombre();
+                    newDuda.curso = d.getCurso();
+                    newDuda.materia = d.getMateria();
+
+                    asignaturas.add(d);
+                });
+            }
+
+        });
+        ArrayAdapter<Asignatura> arrayAdapter =  new ArrayAdapter<Asignatura>(PublicarDudaActivity.this
+                , android.R.layout.simple_dropdown_item_1line,asignaturas);
+        spinner.setAdapter(arrayAdapter);
+        
+    }
+
+*/
 }
