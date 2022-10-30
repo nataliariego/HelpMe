@@ -8,8 +8,8 @@ public class AsignaturaDto {
 
     public String id;
     public String nombre;
-    public Curso curso;
-    public Materia materia;
+    public String curso;
+    public String materia;
 
 
 }

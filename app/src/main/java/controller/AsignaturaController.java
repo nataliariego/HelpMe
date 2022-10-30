@@ -41,7 +41,7 @@ public class AsignaturaController {
      * @return
      */
     public MutableLiveData<List<Asignatura>> findAll() {
-        MutableLiveData<List<Asignatura>> liveDudas = new MutableLiveData<List<Asignatura>>();
+        MutableLiveData<List<Asignatura>> liveAsign = new MutableLiveData<List<Asignatura>>();
 
         db.collection("ASIGNATURA")
                 .addSnapshotListener((snapshot, e) -> {
@@ -50,30 +50,27 @@ public class AsignaturaController {
                         return;
                     }
 
-                    List<Asignatura> dudas = new ArrayList<>();
+                    List<Asignatura> asignasturas = new ArrayList<>();
                     if (snapshot != null && !snapshot.isEmpty()) {
                         for (DocumentSnapshot documentSnapshot : snapshot.getDocuments()) {
                             Asignatura asig = documentSnapshot.toObject(Asignatura.class);
 
-/*
+                            asig.setId(documentSnapshot.getId());
                             asig.setNombre(documentSnapshot.getString(Asignatura.NOMBRE));
-                            duda.setDescripcion(documentSnapshot.getString(Duda.DESCRIPCION));
-                            duda.setFecha(documentSnapshot.getString(Duda.FECHA));
-                            duda.setResuelta(documentSnapshot.getBoolean(Duda.IS_RESUELTA));
-                            duda.setAsignaturaId(documentSnapshot.get(Duda.ASIGNATURA_REF).toString());
-                            duda.setAlumnoId(documentSnapshot.get(Duda.REF_ALUMNO).toString());
+                            asig.setMateria(documentSnapshot.get(Asignatura.MATERIA).toString());
+                            asig.setCurso(documentSnapshot.get(Asignatura.CURSO).toString());
 
-                            dudas.add(duda);
+                            asignasturas.add(asig);
                             
- */
+
                         }
                     }
-                    liveDudas.postValue(dudas);
+                    liveAsign.postValue(asignasturas);
 
                 });
 
 
-        return liveDudas;
+        return liveAsign;
     }
 
     /**

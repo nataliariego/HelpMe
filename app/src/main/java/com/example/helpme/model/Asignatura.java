@@ -24,28 +24,28 @@ public class Asignatura {
         this.nombre = nombre;
     }
 
-    public Curso getCurso() {
+    public String getCurso() {
         return curso;
     }
 
-    public void setCurso(Curso curso) {
+    public void setCurso(String curso) {
         this.curso = curso;
     }
 
-    public Materia getMateria() {
+    public String getMateria() {
         return materia;
     }
 
-    public void setMateria(Materia materia) {
+    public void setMateria(String materia) {
         this.materia = materia;
     }
 
     private String id;
     private String nombre;
-    private Curso curso;
-    private Materia materia;
+    private String curso;
+    private String materia;
 
-    public Asignatura(String id, String nombre, Curso curso, Materia materia) {
+    public Asignatura(String id, String nombre, String curso, String materia) {
         this.id = id;
         this.nombre = nombre;
         this.curso = curso;
