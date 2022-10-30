@@ -2,9 +2,11 @@ package com.example.helpme;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,13 +20,19 @@ import java.util.List;
 import controller.AlumnoController;
 import controller.AsignaturaController;
 import controller.DudaController;
+import dto.DudaDto;
+import viewmodel.DudaViewModel;
 
 public class ListarDudasActivity extends AppCompatActivity {
+
+    public static final String TAG = "LISTAR_DUDAS_ACTIVITY";
 
     private static final String DUDA_SELECCIONADA = "duda_seleccionada";
 
     //Modelo de datos
     private List<Duda> listaDuda = new ArrayList<Duda>();
+
+    private DudaViewModel dudaViewModel = new DudaViewModel();
     ;
     private Duda duda;
     private RecyclerView listaDudaView;
@@ -70,8 +78,6 @@ public class ListarDudasActivity extends AppCompatActivity {
                     }
                 });
         listaDudaView.setAdapter(lpAdapter);
-
-
     }
 
     //click del item del adapter
