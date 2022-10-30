@@ -17,6 +17,8 @@ import java.util.List;
 
 import assembler.AlumnoAssembler;
 import dto.DudaDto;
+import util.DateUtils;
+import util.StringUtils;
 
 public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder> {
 
@@ -41,9 +43,9 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
         DudaDto duda = dudas.get(position);
 
         holder.titulo.setText(duda.titulo);
-//        holder.abrevMateria.setText(duda.getMateria().getAbreviatura());
-        holder.fechaPublicacion.setText(duda.fecha);
+        holder.fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha));
         holder.nombreAlumno.setText(AlumnoAssembler.toDto(duda.alumno).nombre);
+
         holder.bindDuda(duda);
     }
 
@@ -58,6 +60,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
         private TextView nombreAlumno;
         private TextView fechaPublicacion;
         private TextView abrevMateria;
+        private TextView siglasAlumno;
 
         public DudaViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -66,23 +69,14 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
             nombreAlumno = itemView.findViewById(R.id.txNombreAlumnoDudaResumen);
             fechaPublicacion = itemView.findViewById(R.id.txResumenFechaPublicacionDuda);
             abrevMateria = itemView.findViewById(R.id.txResumenDudaAbrevMateria);
+            siglasAlumno = itemView.findViewById(R.id.tx_siglas_alumno_avatar);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
         public void bindDuda(final DudaDto duda) {
             titulo.setText(duda.titulo);
-//            nombreAlumno.setText(duda.getAlumno().getNombre());
-//            fechaPublicacion.setText(new PrettyTime().format((LocalDateTime) DateUtils.convertStringToLocalDateTime(duda.fecha
-//            )));
-            fechaPublicacion.setText(duda.fecha);
-//            abrevMateria.setText(duda.getMateria().getAbreviatura())
-
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    listener.onItemClick(duda);
-//                }
-//            });
+            fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha));
+            siglasAlumno.setText(StringUtils.getAcronymName(AlumnoAssembler.toDto(duda.alumno).nombre));
         }
     }
 }
