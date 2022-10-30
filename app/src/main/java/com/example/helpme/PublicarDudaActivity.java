@@ -164,60 +164,24 @@ public class PublicarDudaActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                DocumentReference curso = (DocumentReference) document.get("curso");
-                                DocumentReference materia = (DocumentReference) document.get("materia");
+                                String id = document.getId();
+                                String curso = document.getData().get("curso").toString();
+                                String materia = document.getData().get("materia").toString();
                                 String nombre = document.getData().get("nombre").toString();
-                                myFirebase.collection("CURSO")
-                                        .get()
-                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                if (task.isSuccessful()) {
-                                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                                        if (document.getId().equals(curso.getId())) {
-                                                            String numero = document.get("numero").toString();
-                                                            cursoAsi[0] = new Curso(document.getId(), numero);
-                                                        }
-                                                    }
-                                                } else {
-                                                    Log.w(TAG, "Error getting documents.", task.getException());
-                                                }
-                                                myFirebase.collection("MATERIA")
-                                                        .get()
-                                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                if (task.isSuccessful()) {
-                                                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                                                        if (document.getId().equals(materia.getId())) {
-                                                                            String denomiancion = document.get("denominacion").toString();
-                                                                            String abreviatura = document.get("abreviatura").toString();
-                                                                            materiaAsi[0] = new Materia(document.getId(), denomiancion, abreviatura);
-                                                                        }
-                                                                    }
-                                                                    //Cambiat cambio constrcutor asignatura
-
-                                                                    //asignaturas.add(new Asignatura("1",nombre, (Curso)cursoAsi[0], (Materia)materiaAsi[0]));
-                                                                    Log.d("Hola debug", document.getId() + " => " + document.getData());
-                                                                    ArrayAdapter<Asignatura> arrayAdapter = new ArrayAdapter<Asignatura>(PublicarDudaActivity.this
-                                                                            , android.R.layout.simple_dropdown_item_1line, asignaturas);
-                                                                    spinner.setAdapter(arrayAdapter);
-                                                                } else {
-                                                                    Log.w(TAG, "Error getting documents.", task.getException());
-                                                                }
-                                                            }
-                                                        });
-                                            }
-                                        });
-
-
+                                System.out.println("holaaaaaa"+curso);
+                                asignaturas.add(new Asignatura(id,nombre, curso, materia));
                             }
-
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
+                        ArrayAdapter<Asignatura> arrayAdapter = new ArrayAdapter<Asignatura>(PublicarDudaActivity.this
+                                , android.R.layout.simple_dropdown_item_1line, asignaturas);
+                        spinner.setAdapter(arrayAdapter);
                     }
                 });
+
+
+
 
     }
 }
