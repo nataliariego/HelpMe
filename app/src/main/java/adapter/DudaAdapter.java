@@ -12,14 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.R;
 
-import org.ocpsoft.prettytime.PrettyTime;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import dto.DudaDto;
-import util.DateUtils;
 
 public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder> {
 
@@ -78,7 +74,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
 //            fechaPublicacion.setText(new PrettyTime().format((LocalDateTime) DateUtils.convertStringToLocalDateTime(duda.fecha
 //            )));
             fechaPublicacion.setText(duda.fecha);
-//            abrevMateria.setText(duda.getMateria().getAbreviatura());
+//            abrevMateria.setText(duda.getMateria().getAbreviatura())
 
 //            itemView.setOnClickListener(new View.OnClickListener() {
 //                @Override

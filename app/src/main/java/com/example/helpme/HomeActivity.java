@@ -1,17 +1,17 @@
 package com.example.helpme;
 
-import android.content.Context;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Locale;
 
 import adapter.DudaAdapter;
-import controller.DudaController;
 import dto.DudaDto;
 import viewmodel.DudaViewModel;
 
@@ -34,13 +33,11 @@ public class HomeActivity extends AppCompatActivity {
 
     private TextView txDayOfTheWeek;
     private TextView txDateFormatted;
-
+    private Button btVerTodasDudas;
     private RecyclerView listadoDudasHomeRecycler;
+    private ConstraintLayout btNuevaDuda;
 
     private DudaAdapter dudaAdapter;
-
-    private DudaController dudaController;
-
     private DudaViewModel dudaViewModel = new DudaViewModel();
 
     private List<DudaDto> dudas = new ArrayList<>();
@@ -57,7 +54,10 @@ public class HomeActivity extends AppCompatActivity {
 
         initCalendarData();
 
+        btVerTodasDudas = (Button) findViewById(R.id.btVerTodasDudas);
+        btNuevaDuda = (ConstraintLayout) findViewById(R.id.bt_nueva_duda_home); // Es un layout no un boton
         listadoDudasHomeRecycler = (RecyclerView) findViewById(R.id.listado_dudas_home_recycler);
+
         listadoDudasHomeRecycler.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         listadoDudasHomeRecycler.setLayoutManager(layoutManager);
@@ -66,8 +66,40 @@ public class HomeActivity extends AppCompatActivity {
 
         dudaAdapter = new DudaAdapter(dudas);
         listadoDudasHomeRecycler.setAdapter(dudaAdapter);
-
         dudaAdapter.notifyDataSetChanged();
+
+
+        /* Redirecciones a otras pantallas */
+
+        btVerTodasDudas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                redirectPantallaListadoDudas();
+            }
+        });
+
+        btNuevaDuda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                redirectPantallaPublicarNuevaDuda();
+            }
+        });
+    }
+
+    /**
+     * Redirecciona al Activity ListarDudasActivity.
+     */
+    private void redirectPantallaListadoDudas() {
+        Intent listadoDudasIntent = new Intent(HomeActivity.this, ListarDudasActivity.class);
+        startActivity(listadoDudasIntent);
+    }
+
+    /**
+     * Redirecciona al Activity PublicarDudasActivity.
+     */
+    private void redirectPantallaPublicarNuevaDuda() {
+        Intent publicarDudasIntent = new Intent(HomeActivity.this, PublicarDudaActivity.class);
+        startActivity(publicarDudasIntent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

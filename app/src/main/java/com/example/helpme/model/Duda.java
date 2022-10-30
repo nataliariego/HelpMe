@@ -5,6 +5,10 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.IgnoreExtraProperties;
+
+@IgnoreExtraProperties
 public class Duda implements Parcelable {
     public static final String COLLECTION = "DUDA";
 
@@ -15,21 +19,18 @@ public class Duda implements Parcelable {
     public static final String ASIGNATURA_REF = "asignatura";
     public static final String IS_RESUELTA = "resuelta";
 
+    private String id;
     private String titulo;
     private String descripcion;
     private String alumnoId;
     private String asignaturaId;
     private String materiaId;
 
-    //    private Alumno alumno;
-//    private Asignatura asignatura;
-//    private Materia materia;
     private boolean isResuelta;
 
     private String fecha;
 
-    public Duda() {
-    }
+    public Duda(){}
 
     public Duda(String titulo, String descripcion, String alumnoId, String asignaturaId, String materiaId, boolean isResuelta, String fecha) {
         this.titulo = titulo;
@@ -41,20 +42,43 @@ public class Duda implements Parcelable {
         this.fecha = fecha;
     }
 
-//    public Duda(String titulo, String descripcion, Alumno alumno, Asignatura asignatura, Materia materia, boolean isResuelta, String createdAt) {
-//        this.titulo = titulo;
-//        this.descripcion = descripcion;
-//        this.alumno = alumno;
-//        this.asignatura = asignatura;
-//        this.materia = materia;
-//        this.isResuelta = isResuelta;
-//        this.fecha = createdAt;
-//    }
-
     protected Duda(Parcel in) {
         titulo = in.readString();
         descripcion = in.readString();
         isResuelta = in.readByte() != 0;
+    }
+
+    public static final Creator<Duda> CREATOR = new Creator<Duda>() {
+        @Override
+        public Duda createFromParcel(Parcel in) {
+            return new Duda(in);
+        }
+
+        @Override
+        public Duda[] newArray(int size) {
+            return new Duda[size];
+        }
+    };
+
+    @Exclude
+    public String getId() {
+        return id;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public String getAlumnoId() {
@@ -81,43 +105,6 @@ public class Duda implements Parcelable {
         this.materiaId = materiaId;
     }
 
-
-    public static final Creator<Duda> CREATOR = new Creator<Duda>() {
-        @Override
-        public Duda createFromParcel(Parcel in) {
-            return new Duda(in);
-        }
-
-        @Override
-        public Duda[] newArray(int size) {
-            return new Duda[size];
-        }
-    };
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-//    public Asignatura getAsignatura() {
-//        return asignatura;
-//    }
-//
-//    public void setAsignatura(Asignatura asignatura) {
-//        this.asignatura = asignatura;
-//    }
-
     public boolean isResuelta() {
         return isResuelta;
     }
@@ -125,22 +112,6 @@ public class Duda implements Parcelable {
     public void setResuelta(boolean resuelta) {
         isResuelta = resuelta;
     }
-
-//    public Materia getMateria() {
-//        return materia;
-//    }
-//
-//    public void setMateria(Materia materia) {
-//        this.materia = materia;
-//    }
-//
-//    public Alumno getAlumno() {
-//        return alumno;
-//    }
-//
-//    public void setAlumno(Alumno alumno) {
-//        this.alumno = alumno;
-//    }
 
     public String getFecha() {
         return fecha;

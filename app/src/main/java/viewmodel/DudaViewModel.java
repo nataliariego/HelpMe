@@ -23,4 +23,8 @@ public class DudaViewModel extends ViewModel {
 
         return dudas;
     }
+
+    public void addDuda(){
+
+    }
 }

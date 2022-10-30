@@ -11,11 +11,9 @@ import java.util.Map;
 public class DudaDto {
     public String titulo;
     public String descripcion;
-//    public Map<String, Object> alumno = new HashMap<>();
-//    public Map<String, Object> asignatura = new HashMap<>();
     public String alumno;
     public String asignatura;
-    public Materia materia;
+    public String materia;
     public boolean isResuelta;
     public String fecha;
 }

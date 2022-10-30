@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.helpme.model.Duda;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -31,6 +32,24 @@ public class DudaController {
         return instance;
     }
 
+    /**
+     * Publicar una nueva duda
+     *
+     * @param duda
+     * @return
+     */
+    public String saveDuda(Duda duda) {
+        DocumentReference document;
+        if (duda.getId() != null) {
+            document = db.collection(Duda.COLLECTION).document(duda.getId());
+        } else {
+            document = db.collection(Duda.COLLECTION).document();
+        }
+        document.set(duda);
+
+        return document.getId();
+    }
+
 
     /**
      * Listado de todas las dudas de la aplicación.
@@ -52,6 +71,7 @@ public class DudaController {
                         for (DocumentSnapshot documentSnapshot : snapshot.getDocuments()) {
                             Duda duda = documentSnapshot.toObject(Duda.class);
 
+                            // TODO:  AlumnoAssembler.toDto(documentSnapshot.get(Duda.REF_ALUMNO).toString());
 
                             duda.setTitulo(documentSnapshot.getString(Duda.TITULO));
                             duda.setDescripcion(documentSnapshot.getString(Duda.DESCRIPCION));

@@ -1,48 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="@dimen/spacing_xlarge">
-    <ImageView
-        android:id="@+id/img_persona_duda"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:contentDescription="@string/app_name"
-        app:srcCompat="@mipmap/ic_launcher" />
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/spacing_xlarge"
-        android:layout_marginRight="@dimen/spacing_xlarge"
-        android:layout_weight="1"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/tituloDuda"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/titulo"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-        <TextView
-        android:id="@+id/persona_duda"
+    android:padding="@dimen/spacing_xlarge"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/persona_duda"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
-        <TextView
-            android:id="@+id/fecha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/fecha"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+        android:layout_height="114dp"
+        android:background="@drawable/constraintlayout_rounded_courners">
+
+
+
         <TextView
             android:id="@+id/asignatura"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="44dp"
+            android:layout_height="36dp"
+            android:background="@drawable/textview_rounded_courners"
+            android:gravity="center"
             android:text="@string/asignatura"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
-    </LinearLayout>
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.988"
+            app:layout_constraintStart_toStartOf="parent"
+            android:color="@color/primary"
+            app:layout_constraintVertical_bias="0.805" />
+
+        <TextView
+            android:id="@+id/fecha"
+            android:layout_width="162dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="29dp"
+            android:color="#546E7A"
+            android:text="@string/fecha"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/persona_duda"
+            app:layout_constraintHorizontal_bias="0.951"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/persona_duda"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/persona_duda"
+            android:layout_width="166dp"
+            android:layout_height="22dp"
+            android:color="@color/primary"
+            android:text="@string/persona_duda"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.408"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tituloDuda"
+            app:layout_constraintVertical_bias="0.486" />
+
+        <TextView
+            android:id="@+id/tituloDuda"
+            android:layout_width="225dp"
+            android:layout_height="26dp"
+            android:color="@color/primary"
+            android:text="@string/titulo"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.564"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.181" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_persona_duda"
+            android:layout_width="56dp"
+            android:layout_height="62dp"
+            android:contentDescription="@string/app_name"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.018"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/ic_launcher" />
+
+        <ImageView
+            android:id="@+id/resuelta"
+            android:color="@color/primary"
+            android:layout_width="48dp"
+            android:layout_height="39dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.04"
+            app:srcCompat="@drawable/check" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </LinearLayout>

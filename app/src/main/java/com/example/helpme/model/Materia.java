@@ -1,6 +1,11 @@
 package com.example.helpme.model;
 
 public class Materia {
+    /* Campos de la base de datos */
+    public static final String COLLECTION = "MATERIA";
+    public static final String ABREVIATURA = "abreviatura";
+    public static final String DENOMINACION = "denominacion";
+
     private String id;
     private String denominacion;
     private String abreviatura;
@@ -33,5 +38,14 @@ public class Materia {
 
     public void setDenominacion(String denominacion) {
         this.denominacion = denominacion;
+    }
+
+    @Override
+    public String toString() {
+        return "Materia{" +
+                "id='" + id + '\'' +
+                ", denominacion='" + denominacion + '\'' +
+                ", abreviatura='" + abreviatura + '\'' +
+                '}';
     }
 }

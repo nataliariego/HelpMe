@@ -24,12 +24,14 @@ public class ListarDudasActivity extends AppCompatActivity {
     private static final String DUDA_SELECCIONADA = "duda_seleccionada";
 
     //Modelo de datos
-    private List<Duda> listaDuda = new ArrayList<Duda>();;
+    private List<Duda> listaDuda = new ArrayList<Duda>();
+    ;
     private Duda duda;
     private RecyclerView listaDudaView;
     private Object[] asignatura_data;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
     private AsignaturaController asignaturaController = new AsignaturaController();
     private AlumnoController alumnoController = new AlumnoController();
@@ -38,12 +40,13 @@ public class ListarDudasActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lilstardudas_main);
-        //Rellenar lista de dudas
+        setContentView(R.layout.activity_listar_dudas);
+
+        //Rellenar lista de dudas y en el adapter
         cargarDudas();
 
         // Recuperamos referencia y configuramos recyclerView con la lista de dudas
-        listaDudaView = (RecyclerView)findViewById(R.id.reciclerView);
+        listaDudaView = (RecyclerView) findViewById(R.id.reciclerView);
         listaDudaView.setHasFixedSize(true);
 
         /* Un RecyclerView necesita un Layout Manager para manejar el posicionamiento de los
@@ -59,7 +62,7 @@ public class ListarDudasActivity extends AppCompatActivity {
         // Generar el adaptador, le pasamos la lista de dudas
         // y el manejador para el evento click sobre un elemento
 
-        ListaDudasAdapter lpAdapter= new ListaDudasAdapter(listaDuda,
+        ListaDudasAdapter lpAdapter = new ListaDudasAdapter(listaDuda,
                 new ListaDudasAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(Duda duda) {
@@ -67,30 +70,38 @@ public class ListarDudasActivity extends AppCompatActivity {
                     }
                 });
         listaDudaView.setAdapter(lpAdapter);
+
+
     }
 
     //click del item del adapter
     private void clikonIntem(Duda duda) {
-        Log.i("Click adapter","Item Clicked "+duda.getTitulo());
+        Log.i("Click adapter", "Item Clicked " + duda.getTitulo());
 
 
         //Le paso la duda al MainActivity para que la muestre al picnchar en la duda
-        Intent intent=new Intent (ListarDudasActivity.this, ActivityShowDuda.class);
+        Intent intent = new Intent(ListarDudasActivity.this, ActivityShowDuda.class);
         intent.putExtra(DUDA_SELECCIONADA, duda);
 
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
 
     private void cargarDudas() {
+        Duda d1 = new Duda("Duda 1", "Descripcion duda 1", "alumno1", "asignatura1", "materia1", false, "30/10/2022 12:35:24");
+        Duda d2 = new Duda("Duda 2", "Descripcion duda 2", "alumno2", "asignatura2", "materia2", false, "03/01/2022 12:40:24");
+        Duda d3 = new Duda("Duda 3", "Descripcion duda 3", "alumno3", "asignatura3", "materia3", false, "28/10/2022 14:35:24");
+        Duda d4 = new Duda("Duda 4", "Descripcion duda 4", "alumno3", "asignatura4", "materia4", false, "31/10/2022 12:35:24");
 
+        listaDuda.add(d1);
+        listaDuda.add(d2);
+        listaDuda.add(d3);
+        listaDuda.add(d4);
     }
 
     private boolean getBoolean(String toString) {
         if (toString.equals("true")) return true;
         return false;
     }
-
-
 
 
 }
