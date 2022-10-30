@@ -34,11 +34,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import controller.CursoController;
-import controller.DudaController;
 
 public class PublicarDudaActivity extends AppCompatActivity {
 
@@ -58,17 +59,27 @@ public class PublicarDudaActivity extends AppCompatActivity {
         titulo = (EditText) findViewById(R.id.editTextTituloDudaNueva);
         descripcion = (EditText) findViewById(R.id.editTextDuda);
         myFirebase = FirebaseFirestore.getInstance();
-        loadAsignaturas();
+        //TODO: loadAsignaturas();
+        List<String> asignaturas1 = new ArrayList<>();
+        asignaturas1.add("Estructuras de datos");
+        asignaturas1.add("Bases de datos");
+        asignaturas1.add("Comunicación Persona-Máquina");
+
+        ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter<String>(PublicarDudaActivity.this
+                , android.R.layout.simple_dropdown_item_1line, asignaturas1);
+        spinner.setAdapter(arrayAdapter1);
+
         btnPublicar = (Button) findViewById(R.id.buttonpublicar);
 
         btnPublicar.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                if (validarCampos()){
+                if (validarCampos()) {
                     crearDuda();
-                    Snackbar.make(findViewById(R.id.layaoutPublicarDuda),R.string.dudaPublicada, Snackbar.LENGTH_LONG).show();
-                }else {
-                    Snackbar.make(findViewById(R.id.layaoutPublicarDuda),R.string.camposRellenados, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(R.id.layaoutPublicarDuda), R.string.dudaPublicada, Snackbar.LENGTH_LONG).show();
+                } else {
+                    Snackbar.make(findViewById(R.id.layaoutPublicarDuda), R.string.camposRellenados, Snackbar.LENGTH_LONG).show();
                 }
 
             }
@@ -107,29 +118,77 @@ public class PublicarDudaActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void crearDuda() {
         List<Asignatura> list = new ArrayList<>();
         String fecha = sacarFecha();
         Alumno a = new Alumno("", "", "", "", list);
         //CAmbiar porqeue cambio constructor duda
-        Asignatura asig = (Asignatura) spinner.getSelectedItem();
-        Duda duda = new Duda(titulo.getText().toString(), descripcion.getText().toString(), "ALUMNO/1og4xCsZnHff8T0NvQ4X"
-                , "ASIGNATURA/Pu86h2KJes5iydRSNEGl", asig.getMateria(), false, fecha);
+        // TODO: Asignatura asig = (Asignatura) spinner.getSelectedItem();
+        Map<String, Object> alumno = new HashMap<>();
+        alumno.put("nombre", "Pepe");
+        alumno.put("id", "");
+        alumno.put("uo", "Pepe");
+        alumno.put("url_foto", "aldsfasldfjasdf");
+        alumno.put("asignaturasDominadas", new ArrayList<>());
 
-        myFirebase.collection("DUDA")
-                .add(duda)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        Map<String, Object> asignaturaMap = new HashMap<>();
+        asignaturaMap.put("nombre", spinner.getSelectedItem().toString());
+        asignaturaMap.put("curso", new HashMap<>());
+        asignaturaMap.put("id", "2");
+        asignaturaMap.put("materia", new HashMap<>());
+
+        Map<String, Object> materia = new HashMap<>();
+        materia.put("abreviatura", "");
+        materia.put("denominacion", "");
+        materia.put("id", "");
+
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("titulo", titulo.getText().toString());
+        docData.put("descripcion", descripcion.getText().toString());
+        docData.put("alumno", alumno);
+        docData.put("asignatura", asignaturaMap);
+        docData.put("materia", materia);
+        docData.put("resuelta", false);
+        docData.put("fecha", fecha);
+
+
+// todo:       Duda duda = new Duda(titulo.getText().toString(), descripcion.getText().toString(), alumno.toString()
+//                , "ASIGNATURA/Pu86h2KJes5iydRSNEGl", asig.getMateria(), false, fecha);
+
+//        Duda duda = new Duda(titulo.getText().toString(), descripcion.getText().toString(), alumno.toString()
+//                , asignaturaMap.toString(), "", false, fecha);
+
+//        myFirebase.collection("DUDA")
+//                .add(duda)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w(TAG, "Error adding document", e);
+//                    }
+//                });
+
+        myFirebase.collection(Duda.COLLECTION).document("one")
+                .set(docData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
+                        Log.w(TAG, "Error writing document", e);
                     }
                 });
+
         titulo.setText("");
         descripcion.setText("");
     }
@@ -137,8 +196,8 @@ public class PublicarDudaActivity extends AppCompatActivity {
     private String sacarFecha() {
         String fecha;
         Calendar c = new GregorianCalendar();
-        fecha = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR) +
-                "/ " + c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
+        fecha = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR)
+                + " " + c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":00";
         return fecha;
     }
 
