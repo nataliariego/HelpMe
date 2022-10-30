@@ -1,6 +1,13 @@
 package com.example.helpme.model;
 
 public class Asignatura {
+
+    public static final String COLLECTION = "ASIGNATURA";
+
+    public static final String NOMBRE = "nombre";
+    public static final String MATERIA = "materia";
+    public static final String CURSO = "curso";
+
     public String getId() {
         return id;
     }
