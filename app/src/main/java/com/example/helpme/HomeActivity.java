@@ -1,24 +1,25 @@
 package com.example.helpme;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.helpme.model.Alumno;
-import com.example.helpme.model.Asignatura;
 import com.example.helpme.model.Duda;
-import com.example.helpme.model.Materia;
 
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -42,7 +43,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private DudaViewModel dudaViewModel = new DudaViewModel();
 
-    private List<Duda> dudas = new ArrayList<>();
+    private List<DudaDto> dudas = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -54,26 +55,32 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        cargarDudasInit();
+        initCalendarData();
 
         listadoDudasHomeRecycler = (RecyclerView) findViewById(R.id.listado_dudas_home_recycler);
         listadoDudasHomeRecycler.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         listadoDudasHomeRecycler.setLayoutManager(layoutManager);
 
-//        dudaAdapter = new DudaAdapter(dudas);
-//        listadoDudasHomeRecycler.setAdapter(dudaAdapter);
+        cargarDudas();
 
-        initCalendarData();
+        dudaAdapter = new DudaAdapter(dudas);
+        listadoDudasHomeRecycler.setAdapter(dudaAdapter);
+
+        dudaAdapter.notifyDataSetChanged();
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onResume() {
         super.onResume();
+
         cargarDudas();
 
+        dudaAdapter = new DudaAdapter(dudas);
+        listadoDudasHomeRecycler.setAdapter(dudaAdapter);
+
+        dudaAdapter.notifyDataSetChanged();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -94,16 +101,14 @@ public class HomeActivity extends AppCompatActivity {
                     newDuda.asignatura = d.getAsignaturaId();
                     newDuda.fecha = d.getFecha();
 
-                    dudas.add(d);
+                    dudas.add(newDuda);
                 });
             }
         });
+    }
 
-        dudaAdapter = new DudaAdapter(dudas);
-        listadoDudasHomeRecycler.setAdapter(dudaAdapter);
-        dudaAdapter.notifyDataSetChanged();
+    private void printDudas() {
 
-        Log.i(TAG, "LISTADO CARGAR: " + dudas.size());
     }
 
     /**
@@ -123,6 +128,6 @@ public class HomeActivity extends AppCompatActivity {
 
     private void cargarDudasInit() {
         Duda d1 = new Duda("Duda 1", "asdfasfd", "asdfasdf", "000", "999", false, "20/10/2022 12:00:01");
-        dudas.add(d1);
+//        dudas.add(d1);
     }
 }

@@ -4,7 +4,6 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,7 +11,6 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.R;
-import com.example.helpme.model.Duda;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
@@ -20,32 +18,34 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import dto.DudaDto;
 import util.DateUtils;
 
 public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder> {
 
-    private List<Duda> dudas = new ArrayList<>();
+    private List<DudaDto> dudas = new ArrayList<>();
 //    private final AdapterView.OnItemClickListener listener;
 
-    public DudaAdapter(List<Duda> dudas) {
+    public DudaAdapter(List<DudaDto> dudas) {
         this.dudas = dudas;
     }
 
     @NonNull
     @Override
     public DudaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.duda_resumen_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.duda_resumen_card, parent, false);
         return new DudaViewHolder(view);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull DudaViewHolder holder, int position) {
-        Duda duda = dudas.get(position);
+        DudaDto duda = dudas.get(position);
 
-        holder.titulo.setText(duda.getTitulo());
+        holder.titulo.setText(duda.titulo);
 //        holder.abrevMateria.setText(duda.getMateria().getAbreviatura());
-        holder.fechaPublicacion.setText(duda.getFecha().toString());
+        holder.fechaPublicacion.setText(duda.fecha);
 //        holder.nombreAlumno.setText(duda.getAlumno().getNombre());
         holder.bindDuda(duda);
     }
@@ -72,10 +72,12 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
-        public void bindDuda(final Duda duda) {
-            titulo.setText(duda.getTitulo());
+        public void bindDuda(final DudaDto duda) {
+            titulo.setText(duda.titulo);
 //            nombreAlumno.setText(duda.getAlumno().getNombre());
-            fechaPublicacion.setText(new PrettyTime().format((LocalDateTime) DateUtils.convertStringToLocalDateTime(duda.getFecha())));
+//            fechaPublicacion.setText(new PrettyTime().format((LocalDateTime) DateUtils.convertStringToLocalDateTime(duda.fecha
+//            )));
+            fechaPublicacion.setText(duda.fecha);
 //            abrevMateria.setText(duda.getMateria().getAbreviatura());
 
 //            itemView.setOnClickListener(new View.OnClickListener() {
