@@ -66,9 +66,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
         titulo = (EditText)findViewById(R.id.editTextTituloDudaNueva);
         descripcion = (EditText)findViewById(R.id.editTextDuda);
         myFirebase = FirebaseFirestore.getInstance();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            loadAsignaturas();
-        }
+        loadAsignaturas();
         Button btnPublicar = (Button) findViewById(R.id.buttonpublicar);
 
         btnPublicar.setOnClickListener(new View.OnClickListener() {
@@ -133,6 +131,77 @@ public class PublicarDudaActivity extends AppCompatActivity {
         return true;
     }
 
+    public void loadAsignaturas(){
+        List<Asignatura> asignaturas = new ArrayList<Asignatura>();
+        final Curso[] cursoAsi = new Curso[1];
+        final Materia[] materiaAsi = new Materia[1];
+        Optional<Curso> curso2;
+        //Cambiar xq cabio constructor asignatura
+        //asignaturas.add(new Asignatura("a","b","Sin definir"));
+        myFirebase.collection("ASIGNATURA")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                DocumentReference curso = (DocumentReference) document.get("curso");
+                                DocumentReference materia = (DocumentReference) document.get("materia");
+                                String nombre = document.getData().get("nombre").toString();
+                                myFirebase.collection("CURSO")
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                        if (document.getId().equals(curso.getId())) {
+                                                            String numero = document.get("numero").toString();
+                                                            cursoAsi[0] = new Curso(document.getId(), numero);
+                                                        }
+                                                    }
+                                                } else {
+                                                    Log.w(TAG, "Error getting documents.", task.getException());
+                                                }
+                                                myFirebase.collection("MATERIA")
+                                                        .get()
+                                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                                        if (document.getId().equals(materia.getId())) {
+                                                                            String denomiancion = document.get("denominacion").toString();
+                                                                            String abreviatura = document.get("abreviatura").toString();
+                                                                            materiaAsi[0] = new Materia(document.getId(), denomiancion,abreviatura);
+                                                                        }
+                                                                    }
+                                                                    //Cambiat cambio constrcutor asignatura
+
+                                                                    asignaturas.add(new Asignatura("1",nombre, (Curso)cursoAsi[0], (Materia)materiaAsi[0]));
+                                                                    Log.d("Hola debug", document.getId() + " => " + document.getData());
+                                                                    ArrayAdapter<Asignatura> arrayAdapter =  new ArrayAdapter<Asignatura>(PublicarDudaActivity.this
+                                                                            , android.R.layout.simple_dropdown_item_1line,asignaturas);
+                                                                    spinner.setAdapter(arrayAdapter);
+                                                                } else {
+                                                                    Log.w(TAG, "Error getting documents.", task.getException());
+                                                                }
+                                                            }
+                                                        });
+                                            }
+                                        });
+
+
+                            }
+
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+
+    }
+    /*
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void loadAsignaturas() {
         asignaturas.clear();
@@ -162,4 +231,6 @@ public class PublicarDudaActivity extends AppCompatActivity {
         spinner.setAdapter(arrayAdapter);
         
     }
+
+     */
 }

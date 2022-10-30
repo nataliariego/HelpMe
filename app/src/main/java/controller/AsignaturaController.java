@@ -49,7 +49,6 @@ public class AsignaturaController {
                         Log.w(TAG, "Listen failed.", e);
                         return;
                     }
-
                     List<Asignatura> asignasturas = new ArrayList<>();
                     if (snapshot != null && !snapshot.isEmpty()) {
                         for (DocumentSnapshot documentSnapshot : snapshot.getDocuments()) {
@@ -57,12 +56,12 @@ public class AsignaturaController {
 
                             asig.setId(documentSnapshot.getId());
                             asig.setNombre(documentSnapshot.getString(Asignatura.NOMBRE));
-                            asig.setMateria(documentSnapshot.get(Asignatura.MATERIA).toString());
-                            asig.setCurso(documentSnapshot.get(Asignatura.CURSO).toString());
+                            //asig.setCurso(documentSnapshot.get(Asignatura.CURSO).toString());
+                            //asig.setMateria(documentSnapshot.get(Asignatura.MATERIA).toString());
 
                             asignasturas.add(asig);
                             
-
+                            System.out.println(asig.toString());
                         }
                     }
                     liveAsign.postValue(asignasturas);

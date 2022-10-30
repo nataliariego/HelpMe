@@ -1,5 +1,8 @@
 package com.example.helpme.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 public class Asignatura {
 
     public static final String COLLECTION = "ASIGNATURA";
@@ -8,7 +11,6 @@ public class Asignatura {
     public static final String MATERIA = "materia";
     public static final String CURSO = "curso";
 
-    public Asignatura(){};
     public String getId() {
         return id;
     }
@@ -25,28 +27,28 @@ public class Asignatura {
         this.nombre = nombre;
     }
 
-    public String getCurso() {
+    public Curso getCurso() {
         return curso;
     }
 
-    public void setCurso(String curso) {
+    public void setCurso(Curso curso) {
         this.curso = curso;
     }
 
-    public String getMateria() {
+    public Materia getMateria() {
         return materia;
     }
 
-    public void setMateria(String materia) {
+    public void setMateria(Materia materia) {
         this.materia = materia;
     }
 
     private String id;
     private String nombre;
-    private String curso;
-    private String materia;
+    private Curso curso;
+    private Materia materia;
 
-    public Asignatura(String id, String nombre, String curso, String materia) {
+    public Asignatura(String id, String nombre, Curso curso, Materia materia) {
         this.id = id;
         this.nombre = nombre;
         this.curso = curso;
