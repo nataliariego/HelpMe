@@ -74,16 +74,15 @@ public class DudaController {
                         for (DocumentSnapshot documentSnapshot : snapshot.getDocuments()) {
                             Duda duda = documentSnapshot.toObject(Duda.class);
 
-                            AlumnoDto aRes = AlumnoAssembler.toDto(documentSnapshot.get(Duda.REF_ALUMNO).toString());
-
-                            Log.i(TAG, "ALUMNO CONTROLLER: " + aRes.nombre + " " + aRes.uo);
+//                            AlumnoDto aRes = AlumnoAssembler.toDto(documentSnapshot.get(Duda.REF_ALUMNO).toString());
+//                            Log.i(TAG, "ALUMNO CONTROLLER: " + aRes.nombre + " " + aRes.uo);
 
                             duda.setTitulo(documentSnapshot.getString(Duda.TITULO));
                             duda.setDescripcion(documentSnapshot.getString(Duda.DESCRIPCION));
                             duda.setFecha(documentSnapshot.getString(Duda.FECHA));
                             duda.setResuelta(documentSnapshot.getBoolean(Duda.IS_RESUELTA));
                             duda.setAsignaturaId(documentSnapshot.get(Duda.ASIGNATURA_REF).toString());
-                            duda.setAlumnoId(documentSnapshot.get(Duda.REF_ALUMNO).toString());
+                            duda.setAlumnoId(AlumnoAssembler.toHashMap(documentSnapshot.get(Duda.REF_ALUMNO).toString()).toString());
 
                             dudas.add(duda);
                         }

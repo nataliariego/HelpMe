@@ -15,6 +15,7 @@ import com.example.helpme.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import assembler.AlumnoAssembler;
 import dto.DudaDto;
 
 public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder> {
@@ -42,7 +43,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
         holder.titulo.setText(duda.titulo);
 //        holder.abrevMateria.setText(duda.getMateria().getAbreviatura());
         holder.fechaPublicacion.setText(duda.fecha);
-//        holder.nombreAlumno.setText(duda.getAlumno().getNombre());
+        holder.nombreAlumno.setText(AlumnoAssembler.toDto(duda.alumno).nombre);
         holder.bindDuda(duda);
     }
 

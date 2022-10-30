@@ -122,7 +122,7 @@ public class HomeActivity extends AppCompatActivity {
         dudaViewModel.getAllDudas().observe(this, dudasResult -> {
             //this.dudas = dudas;
 
-            Log.i(TAG, "pasando por el observer" + dudasResult.get(0).getAlumnoId() + " " + dudasResult.get(0).getAsignaturaId());
+            Log.i(TAG, "pasando por el observer... " + dudasResult.get(0).getAlumnoId() + " " + dudasResult.get(0).getAsignaturaId());
 
             if (dudasResult != null) {
                 dudasResult.forEach(d -> {
