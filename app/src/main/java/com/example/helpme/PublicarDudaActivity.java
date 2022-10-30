@@ -157,6 +157,9 @@ public class PublicarDudaActivity extends AppCompatActivity {
             }
 
         });
+        ArrayAdapter<Asignatura> arrayAdapter =  new ArrayAdapter<Asignatura>(PublicarDudaActivity.this
+                , android.R.layout.simple_dropdown_item_1line,asignaturas);
+        spinner.setAdapter(arrayAdapter);
         
     }
 }

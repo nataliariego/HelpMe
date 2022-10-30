@@ -8,6 +8,7 @@ public class Asignatura {
     public static final String MATERIA = "materia";
     public static final String CURSO = "curso";
 
+    public Asignatura(){};
     public String getId() {
         return id;
     }
