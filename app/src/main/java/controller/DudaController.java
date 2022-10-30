@@ -12,6 +12,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
+import assembler.AlumnoAssembler;
+import dto.AlumnoDto;
+
 public class DudaController {
 
     public static final String TAG = "DUDAS_CONTROLLER";
@@ -71,7 +74,9 @@ public class DudaController {
                         for (DocumentSnapshot documentSnapshot : snapshot.getDocuments()) {
                             Duda duda = documentSnapshot.toObject(Duda.class);
 
-                            // TODO:  AlumnoAssembler.toDto(documentSnapshot.get(Duda.REF_ALUMNO).toString());
+                            AlumnoDto aRes = AlumnoAssembler.toDto(documentSnapshot.get(Duda.REF_ALUMNO).toString());
+
+                            Log.i(TAG, "ALUMNO CONTROLLER: " + aRes.nombre + " " + aRes.uo);
 
                             duda.setTitulo(documentSnapshot.getString(Duda.TITULO));
                             duda.setDescripcion(documentSnapshot.getString(Duda.DESCRIPCION));
