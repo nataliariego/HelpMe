@@ -58,7 +58,7 @@ public class HomeActivity extends AppCompatActivity {
         btNuevaDuda = (ConstraintLayout) findViewById(R.id.bt_nueva_duda_home); // Es un layout no un boton
         listadoDudasHomeRecycler = (RecyclerView) findViewById(R.id.listado_dudas_home_recycler);
 
-        //listadoDudasHomeRecycler.setHasFixedSize(true);
+        listadoDudasHomeRecycler.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         listadoDudasHomeRecycler.setLayoutManager(layoutManager);
 

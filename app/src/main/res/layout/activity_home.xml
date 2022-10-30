@@ -173,7 +173,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/listado_dudas_home_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="340dp" />
 
         </androidx.gridlayout.widget.GridLayout>
 
