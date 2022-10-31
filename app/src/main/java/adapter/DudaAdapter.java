@@ -1,49 +1,52 @@
 package adapter;
 
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.R;
-import com.example.helpme.model.Duda;
 
-
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import assembler.AlumnoAssembler;
+import dto.DudaDto;
+import util.DateUtils;
+import util.StringUtils;
 
 public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder> {
 
-    private List<Duda> dudas = new ArrayList<>();
-    private final AdapterView.OnItemClickListener listener;
+    private List<DudaDto> dudas = new ArrayList<>();
+//    private final AdapterView.OnItemClickListener listener;
 
-    public DudaAdapter(List<Duda> dudas, AdapterView.OnItemClickListener listener) {
+    public DudaAdapter(List<DudaDto> dudas) {
         this.dudas = dudas;
-        this.listener = listener;
     }
 
     @NonNull
     @Override
     public DudaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.duda_resumen_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.duda_resumen_card, parent, false);
         return new DudaViewHolder(view);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull DudaViewHolder holder, int position) {
-       Duda duda = dudas.get(position);
+        DudaDto duda = dudas.get(position);
 
-        holder.titulo.setText(duda.getTitulo());
-        holder.abrevMateria.setText(duda.getMateria().getAbreviatura());
-        holder.fechaPublicacion.setText(duda.getFecha().toString());
-        holder.nombreAlumno.setText(duda.getAlumno().getNombre());
+        holder.titulo.setText(duda.titulo);
+        holder.fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha));
+        holder.nombreAlumno.setText(AlumnoAssembler.toDto(duda.alumno).nombre);
+
+        holder.bindDuda(duda);
     }
 
     @Override
@@ -57,6 +60,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
         private TextView nombreAlumno;
         private TextView fechaPublicacion;
         private TextView abrevMateria;
+        private TextView siglasAlumno;
 
         public DudaViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,20 +69,14 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
             nombreAlumno = itemView.findViewById(R.id.txNombreAlumnoDudaResumen);
             fechaPublicacion = itemView.findViewById(R.id.txResumenFechaPublicacionDuda);
             abrevMateria = itemView.findViewById(R.id.txResumenDudaAbrevMateria);
+            siglasAlumno = itemView.findViewById(R.id.tx_siglas_alumno_avatar);
         }
 
-        public void bindDuda(final Duda duda, final AdapterView.OnItemClickListener listener) {
-            titulo.setText(duda.getTitulo());
-            nombreAlumno.setText(duda.getAlumno().getNombre());
-            //fechaPublicacion.setText(new PrettyTime().format((LocalDateTime) duda.getCreatedAt()));
-            abrevMateria.setText(duda.getMateria().getAbreviatura());
-
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    listener.onItemClick(duda);
-//                }
-//            });
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        public void bindDuda(final DudaDto duda) {
+            titulo.setText(duda.titulo);
+            fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha));
+            siglasAlumno.setText(StringUtils.getAcronymName(AlumnoAssembler.toDto(duda.alumno).nombre));
         }
     }
 }

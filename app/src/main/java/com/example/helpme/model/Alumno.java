@@ -9,6 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Alumno implements Parcelable {
+    //    Nombre de los campos de la base de datos
+    public static final String COLLECTION = "ALUMNO";
+    public static final String NOMBRE = "nombre";
+    public static final String UO = "uo";
+    public static final String URL_FOTO = "url_foto";
+
+
     private String id;
     private String nombre;
     private String uo;
@@ -22,6 +29,10 @@ public class Alumno implements Parcelable {
         this.uo = uo;
         this.url_foto = url_foto;
         this.asignaturasDominadas = asignaturasDominadas;
+    }
+
+    public Alumno(String id, String nombre, String uo){
+        this(id, nombre, uo, null, null);
     }
 
     public Alumno(Parcel in) {

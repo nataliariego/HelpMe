@@ -1,6 +1,11 @@
 package com.example.helpme.model;
 
 public class Materia {
+    /* Campos de la base de datos */
+    public static final String COLLECTION = "MATERIA";
+    public static final String ABREVIATURA = "abreviatura";
+    public static final String DENOMINACION = "denominacion";
+
     private String id;
     private String denominacion;
     private String abreviatura;

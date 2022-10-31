@@ -1,49 +1,45 @@
 package com.example.helpme;
 
-import static android.content.ContentValues.TAG;
+import android.app.ActivityOptions;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.ActivityOptions;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-
-import com.example.helpme.model.Alumno;
-import com.example.helpme.model.Asignatura;
 import com.example.helpme.model.Duda;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import controller.AlumnoController;
 import controller.AsignaturaController;
 import controller.DudaController;
+import dto.DudaDto;
+import viewmodel.DudaViewModel;
 
 public class ListarDudasActivity extends AppCompatActivity {
+
+    public static final String TAG = "LISTAR_DUDAS_ACTIVITY";
 
     private static final String DUDA_SELECCIONADA = "duda_seleccionada";
 
     //Modelo de datos
-    private List<Duda> listaDuda = new ArrayList<Duda>();;
+    private List<Duda> listaDuda = new ArrayList<Duda>();
+
+    private DudaViewModel dudaViewModel = new DudaViewModel();
+    ;
     private Duda duda;
     private RecyclerView listaDudaView;
     private Object[] asignatura_data;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
     private AsignaturaController asignaturaController = new AsignaturaController();
     private AlumnoController alumnoController = new AlumnoController();
@@ -52,12 +48,13 @@ public class ListarDudasActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lilstardudas_main);
-        //Rellenar lista de dudas
+        setContentView(R.layout.activity_listar_dudas);
+
+        //Rellenar lista de dudas y en el adapter
         cargarDudas();
 
         // Recuperamos referencia y configuramos recyclerView con la lista de dudas
-        listaDudaView = (RecyclerView)findViewById(R.id.reciclerView);
+        listaDudaView = (RecyclerView) findViewById(R.id.reciclerView);
         listaDudaView.setHasFixedSize(true);
 
         /* Un RecyclerView necesita un Layout Manager para manejar el posicionamiento de los
@@ -73,7 +70,7 @@ public class ListarDudasActivity extends AppCompatActivity {
         // Generar el adaptador, le pasamos la lista de dudas
         // y el manejador para el evento click sobre un elemento
 
-        ListaDudasAdapter lpAdapter= new ListaDudasAdapter(listaDuda,
+        ListaDudasAdapter lpAdapter = new ListaDudasAdapter(listaDuda,
                 new ListaDudasAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(Duda duda) {
@@ -85,26 +82,34 @@ public class ListarDudasActivity extends AppCompatActivity {
 
     //click del item del adapter
     private void clikonIntem(Duda duda) {
-        Log.i("Click adapter","Item Clicked "+duda.getTitulo());
+        Log.i("Click adapter", "Item Clicked " + duda.getTitulo());
 
 
         //Le paso la duda al MainActivity para que la muestre al picnchar en la duda
-        Intent intent=new Intent (ListarDudasActivity.this, ActivityShowDuda.class);
+        Intent intent = new Intent(ListarDudasActivity.this, ActivityShowDuda.class);
         intent.putExtra(DUDA_SELECCIONADA, duda);
 
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
 
     private void cargarDudas() {
+        Duda d1 = new Duda("Algoritmo A*", "Estoy intentando hacer experimentos para el algoritmo A* y me da este error:", "Natalia Fernández Riego", "Sistemas Inteligentes", "IA", true, "30/10/2022 12:35:24");
+        Duda d2 = new Duda("Funciones Lambda", "Tecnologias y Paradigmas de la Programación", "Juan Iglesias Pérez", "Tecnologias y Paradigmas de la Programación", "TPP", false, "30/10/2022 12:35:24");
+        Duda d3 = new Duda("Conexión entre Activities", "Estoy intentando hacer esta conexion", "Marta Ramos Álvarez", "Software de Dispositivos Móviles", "SDM", false, "30/10/2022 14:35:24");
+        Duda d4 = new Duda("Paso a casos de equivalencia", "Estoy intentando hacer este paso", "Manuel Carillo Gómez", "Calidad y Validación del Software", "CVS", false, "31/10/2022 12:35:24");
+        Duda d5 = new Duda("Hacer un Grid Layout", "Estoy intentando hacer este layout", "Estela García Antuña", "Comunicacion Persona-Maquina", "CPM", false, "12/09/2022 10:35:24");
 
+        listaDuda.add(d1);
+        listaDuda.add(d2);
+        listaDuda.add(d3);
+        listaDuda.add(d4);
+        listaDuda.add(d5);
     }
 
     private boolean getBoolean(String toString) {
         if (toString.equals("true")) return true;
         return false;
     }
-
-
 
 
 }

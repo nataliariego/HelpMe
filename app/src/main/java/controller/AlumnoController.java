@@ -1,9 +1,6 @@
 package controller;
 
-import static android.content.ContentValues.TAG;
-
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -14,10 +11,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.Optional;
 
 public class AlumnoController {
 
@@ -27,25 +20,30 @@ public class AlumnoController {
      * Obtiene un alumno por su referencia.
      *
      * @param ref
-     * @return
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public Optional<Alumno> findById(DocumentReference ref) {
+    public void findById(DocumentReference ref, AlumnoCallback callback) {
         Task<DocumentSnapshot> document = db.document(ref.getPath()).get();
 
         document.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot a = task.getResult();
+                if (task.isSuccessful()) {
+                    DocumentSnapshot doc = document.getResult();
 
-                String nombre = a.get("NOMBRE").toString();
-                String uo = a.get("UO").toString();
-                String id = a.getId();
+                    Alumno alumno = getPayload(doc.getId(), doc.getString(Alumno.UO), doc.getString(Alumno.NOMBRE));
 
-                // CREAR ALUMNO
+                    callback.callback(alumno);
+                }
             }
         });
+    }
 
-        return Optional.ofNullable(null);
+    private Alumno getPayload(String id, String uo, String nombre) {
+        return new Alumno(id, uo, nombre);
+    }
+
+    interface AlumnoCallback {
+        void callback(Alumno alumno);
     }
 }
