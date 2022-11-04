@@ -47,10 +47,10 @@ public class DateUtils {
         return LocalDateTime.parse(date, formatter);
     }
 
-    public static String prettyDate(String dateTimeInStampFormat) {
-        prettyTime.setLocale(new Locale("es"));
-        String resPrettyDate = prettyTime.format(convertStringToLocalDateTime(dateTimeInStampFormat), DEFAULT_ZONE_ID);
-        return resPrettyDate.substring(0, 1).toUpperCase()
-                .concat(resPrettyDate.substring(1));
-    }
+//    public static String prettyDate(String dateTimeInStampFormat) {
+//        prettyTime.setLocale(new Locale("es"));
+//        String resPrettyDate = prettyTime.format(convertStringToLocalDateTime(dateTimeInStampFormat), DEFAULT_ZONE_ID);
+//        return resPrettyDate.substring(0, 1).toUpperCase()
+//                .concat(resPrettyDate.substring(1));
+//    }
 }

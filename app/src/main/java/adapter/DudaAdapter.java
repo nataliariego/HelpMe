@@ -43,7 +43,8 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
         DudaDto duda = dudas.get(position);
 
         holder.titulo.setText(duda.titulo);
-        holder.fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha));
+        //holder.fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha));
+        holder.fechaPublicacion.setText(duda.fecha);
         holder.nombreAlumno.setText(AlumnoAssembler.toDto(duda.alumno).nombre);
 
         holder.bindDuda(duda);
@@ -75,7 +76,8 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
         @RequiresApi(api = Build.VERSION_CODES.O)
         public void bindDuda(final DudaDto duda) {
             titulo.setText(duda.titulo);
-            fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha));
+            //fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha));
+            fechaPublicacion.setText(duda.fecha);
             siglasAlumno.setText(StringUtils.getAcronymName(AlumnoAssembler.toDto(duda.alumno).nombre));
         }
     }

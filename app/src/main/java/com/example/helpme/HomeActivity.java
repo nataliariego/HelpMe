@@ -52,7 +52,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        initCalendarData();
+        //initCalendarData();
 
         btVerTodasDudas = (Button) findViewById(R.id.btVerTodasDudas);
         btNuevaDuda = (ConstraintLayout) findViewById(R.id.bt_nueva_duda_home); // Es un layout no un boton
@@ -120,10 +120,6 @@ public class HomeActivity extends AppCompatActivity {
         dudas.clear();
 
         dudaViewModel.getAllDudas().observe(this, dudasResult -> {
-            //this.dudas = dudas;
-
-            Log.i(TAG, "pasando por el observer... " + dudasResult.get(0).getAlumnoId() + " " + dudasResult.get(0).getAsignaturaId());
-
             if (dudasResult != null) {
                 dudasResult.forEach(d -> {
                     Log.i(TAG, d.getTitulo() + " " + d.getAlumnoId());
@@ -137,10 +133,6 @@ public class HomeActivity extends AppCompatActivity {
                 });
             }
         });
-    }
-
-    private void printDudas() {
-
     }
 
     /**

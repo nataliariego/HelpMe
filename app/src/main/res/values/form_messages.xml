@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="email_empty">El email es obligatorio</string>
+    <string name="password_empty">La contraseña es obligatoria</string>
+
+    <string name="email_invalid">El email no es válido</string>
+    <string name="password_invalid">La contraseña no es segura</string>
+</resources>
