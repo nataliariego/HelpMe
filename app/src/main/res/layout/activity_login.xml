@@ -74,7 +74,7 @@
                 android:textColorHint="@color/text_color_hint" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_login"
+                android:id="@+id/button_login_login"
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
@@ -87,7 +87,7 @@
                 app:strokeColor="@color/primary" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_login_register"
+                android:id="@+id/button_create_account_login"
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"

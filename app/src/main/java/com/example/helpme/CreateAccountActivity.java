@@ -2,6 +2,7 @@ package com.example.helpme;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     private EditText txRepeatPassword;
 
     private Button btCreateAccount;
+    private Button btRedirectToLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +34,14 @@ public class CreateAccountActivity extends AppCompatActivity {
         btCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                login();
+                signUp();
+            }
+        });
+
+        btRedirectToLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                redirectToLogin();
             }
         });
 
@@ -44,10 +53,19 @@ public class CreateAccountActivity extends AppCompatActivity {
         txCompleteName = (EditText) findViewById(R.id.text_nombre_completo_create_account);
         txPassword = (EditText) findViewById(R.id.text_password_create_account);
         txRepeatPassword = (EditText) findViewById(R.id.text_repeat_password_create_account);
-        btCreateAccount = (Button) findViewById(R.id.button_create_account);
+        btCreateAccount = (Button) findViewById(R.id.button_signup_create_account);
+        btRedirectToLogin = (Button) findViewById(R.id.button_login_create_account);
     }
 
-    private void login() {
+    /**
+     * Redirecciona a la vista de Inicio de sesión.
+     */
+    private void redirectToLogin(){
+        Intent intent = new Intent(CreateAccountActivity.this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+    private void signUp() {
         if (validateFields()) {
             Authentication.getInstance().signUp(txEmail.getText().toString(), txPassword.getText().toString());
         }

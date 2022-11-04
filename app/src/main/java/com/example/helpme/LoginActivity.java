@@ -8,6 +8,9 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import auth.Authentication;
 import util.FormValidator;
 
@@ -33,6 +36,25 @@ public class LoginActivity extends AppCompatActivity {
                 redirectToCreateAnAccountView();
             }
         });
+
+        btLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (validateFields()) {
+                    signIn();
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    private void signIn() {
+        Authentication.getInstance().signIn(txEmail.getText().toString(), txPassword.getText().toString());
     }
 
     private boolean validateFields() {
@@ -43,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
             isValid = false;
         }
 
-        if (!FormValidator.isPasswordValid(txPassword.getText().toString())) {
+        if (!FormValidator.isNotEmpty(txPassword.getText().toString())) {
             txPassword.setError(getText(R.string.password_empty));
             isValid = false;
         }
@@ -53,10 +75,10 @@ public class LoginActivity extends AppCompatActivity {
             isValid = false;
         }
 
-        if (!FormValidator.isPasswordValid(txPassword.getText().toString())) {
+/*        if (!FormValidator.isPasswordValid(txPassword.getText().toString())) {
             txPassword.setError(getText(R.string.password_invalid));
             isValid = false;
-        }
+        }*/
 
         return isValid;
     }
@@ -73,9 +95,9 @@ public class LoginActivity extends AppCompatActivity {
      * Inicialización de los campos del formulario de login.
      */
     private void initFields() {
-        btLogin = (Button) findViewById(R.id.button_login);
+        btLogin = (Button) findViewById(R.id.button_login_login);
         txEmail = (EditText) findViewById(R.id.text_email_login);
         txPassword = (EditText) findViewById(R.id.text_password_login);
-        btCreateAnAccount = (Button) findViewById(R.id.button_login_register);
+        btCreateAnAccount = (Button) findViewById(R.id.button_create_account_login);
     }
 }

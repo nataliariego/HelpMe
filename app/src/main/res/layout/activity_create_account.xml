@@ -7,7 +7,7 @@
     tools:context=".CreateAccountActivity">
 
     <ScrollView
-        android:id="@+id/scrollView2"
+        android:id="@+id/scroll_signup"
         android:layout_width="match_parent"
         android:layout_height="731dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -118,7 +118,7 @@
                 android:textColorHint="@color/text_color_hint" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_create_account"
+                android:id="@+id/button_signup_create_account"
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
@@ -131,7 +131,7 @@
                 app:strokeColor="@color/primary" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_goto_login"
+                android:id="@+id/button_login_create_account"
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
