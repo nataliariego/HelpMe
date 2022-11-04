@@ -8,7 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import auth.Authentication;
+import dto.AlumnoDto;
 import util.FormValidator;
 
 public class CreateAccountActivity extends AppCompatActivity {
@@ -67,7 +71,13 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private void signUp() {
         if (validateFields()) {
-            Authentication.getInstance().signUp(txEmail.getText().toString(), txPassword.getText().toString());
+            AlumnoDto alumno = new AlumnoDto();
+            alumno.nombre = txCompleteName.getText().toString();
+            alumno.uo = txCompleteName.getText().toString();
+            alumno.email = txEmail.getText().toString();
+            alumno.password = txPassword.getText().toString();
+
+            Authentication.getInstance().signUp(alumno);
         }
     }
 

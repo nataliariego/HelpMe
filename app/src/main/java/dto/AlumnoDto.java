@@ -7,4 +7,6 @@ public class AlumnoDto {
     public String uo;
     public String urlFoto;
     public List<String> asignaturasDominadas;
+    public String email;
+    public String password;
 }

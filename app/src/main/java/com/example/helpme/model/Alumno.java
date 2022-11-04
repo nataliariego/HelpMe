@@ -14,12 +14,16 @@ public class Alumno implements Parcelable {
     public static final String NOMBRE = "nombre";
     public static final String UO = "uo";
     public static final String URL_FOTO = "url_foto";
+    public static final String EMAIL = "email";
+    public static final String USER_ID = "user_id";
 
 
     private String id;
     private String nombre;
     private String uo;
     private String url_foto;
+    private String email;
+    private String userId; // For Firebase Auth purposes
 
     private List<Asignatura> asignaturasDominadas = new ArrayList<>();
 
@@ -31,7 +35,16 @@ public class Alumno implements Parcelable {
         this.asignaturasDominadas = asignaturasDominadas;
     }
 
-    public Alumno(String id, String nombre, String uo){
+    public Alumno(String nombre, String uo, String url_foto, String email, String userId, List<Asignatura> asignaturasDominadas) {
+        this.nombre = nombre;
+        this.uo = uo;
+        this.url_foto = url_foto;
+        this.email = email;
+        this.userId = userId;
+        this.asignaturasDominadas = asignaturasDominadas;
+    }
+
+    public Alumno(String id, String nombre, String uo) {
         this(id, nombre, uo, null, null);
     }
 
@@ -52,7 +65,6 @@ public class Alumno implements Parcelable {
             return new Alumno[size];
         }
     };
-
 
 
     public String getId() {
