@@ -35,4 +35,9 @@
     <string name="login">Iniciar Sesión</string>
     <string name="crear_cuenta_login">Crear una cuenta</string>
     <string name="login_titulo">Inicio sesión</string>
+    <string name="button_create_account">Crear una cuenta</string>
+    <string name="create_account_login">¿Ya tienes una cuenta?</string>
+    <string name="hint_uo">UOXXXXXX</string>
+    <string name="hint_nombre_completo">Nombre Completo</string>
+    <string name="hint_repetir_password">Repetir contraseña</string>
 </resources>
