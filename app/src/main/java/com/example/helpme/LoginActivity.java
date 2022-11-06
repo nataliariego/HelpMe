@@ -1,5 +1,6 @@
 package com.example.helpme;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,16 +9,17 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import auth.Authentication;
 import util.FormValidator;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText txEmail;
-    private EditText txPassword;
+    private TextInputEditText txEmail;
+    private TextInputEditText txPassword;
     private Button btLogin;
     private Button btCreateAnAccount;
 
@@ -88,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void redirectToCreateAnAccountView() {
         Intent intent = new Intent(LoginActivity.this, CreateAccountActivity.class);
+
         startActivity(intent);
     }
 
@@ -96,8 +99,8 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void initFields() {
         btLogin = (Button) findViewById(R.id.button_login_login);
-        txEmail = (EditText) findViewById(R.id.text_email_login);
-        txPassword = (EditText) findViewById(R.id.text_password_login);
+        txEmail = (TextInputEditText) findViewById(R.id.text_email_login);
+        txPassword = (TextInputEditText) findViewById(R.id.text_password_login);
         btCreateAnAccount = (Button) findViewById(R.id.button_create_account_login);
     }
 }
