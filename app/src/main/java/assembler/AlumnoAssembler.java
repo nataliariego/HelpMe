@@ -1,5 +1,7 @@
 package assembler;
 
+import com.example.helpme.model.Alumno;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,6 +31,16 @@ public class AlumnoAssembler {
                 hashMapAlumnoResult.put(entry[0].trim(), null);
             }
         }
+
+        return hashMapAlumnoResult;
+    }
+
+    public static Map<String, Object> toHashMap(AlumnoDto alumno) {
+        Map<String, Object> hashMapAlumnoResult = new HashMap<>();
+
+        hashMapAlumnoResult.put(Alumno.NOMBRE, alumno.nombre);
+        hashMapAlumnoResult.put(Alumno.UO, alumno.uo);
+        hashMapAlumnoResult.put(Alumno.EMAIL, alumno.email);
 
         return hashMapAlumnoResult;
     }

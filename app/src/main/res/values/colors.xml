@@ -6,6 +6,7 @@
     <color name="tertiary">#FCFCFC</color>
     <color name="tertiary_light">#EFEFEF</color>
     <color name="text_gray">#828181</color>
+    <color name="text_color_hint">#343C40</color>
     <color name="icon_disabled">#D1D1D1</color>
     <color name="success">#8AC926</color>
     <color name="error">#FF595E</color>

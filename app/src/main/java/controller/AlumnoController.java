@@ -1,6 +1,7 @@
 package controller;
 
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -12,7 +13,16 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import assembler.AlumnoAssembler;
+import dto.AlumnoDto;
+
 public class AlumnoController {
+
+    public static final String TAG = "ALUMNO_CONTROLLER";
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -34,6 +44,20 @@ public class AlumnoController {
                     Alumno alumno = getPayload(doc.getId(), doc.getString(Alumno.UO), doc.getString(Alumno.NOMBRE));
 
                     callback.callback(alumno);
+                }
+            }
+        });
+    }
+
+    public void update(AlumnoDto alumno){
+
+        String id = UUID.randomUUID().toString();
+        Map<String, Object> alHash = AlumnoAssembler.toHashMap(alumno);
+        db.collection(Alumno.COLLECTION).document(id).set(alHash).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Log.d(TAG, "Alumno creado");
                 }
             }
         });

@@ -31,7 +31,6 @@ public class DateUtils {
      * @param timestamp
      * @return
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public static LocalDateTime convertTimeStampToLocalDateTime(Timestamp timestamp) {
         ZoneId zone = ZoneOffset.systemDefault();
         return LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp.getSeconds() * 1000 + timestamp.getNanoseconds() / 1000000), zone);
@@ -43,17 +42,15 @@ public class DateUtils {
      * @param date
      * @return
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public static LocalDateTime convertStringToLocalDateTime(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DEFAULT_DATETIME_PATTERN);
         return LocalDateTime.parse(date, formatter);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public static String prettyDate(String dateTimeInStampFormat) {
-        prettyTime.setLocale(new Locale("es"));
-        String resPrettyDate = prettyTime.format(convertStringToLocalDateTime(dateTimeInStampFormat), DEFAULT_ZONE_ID);
-        return resPrettyDate.substring(0, 1).toUpperCase()
-                .concat(resPrettyDate.substring(1));
-    }
+//    public static String prettyDate(String dateTimeInStampFormat) {
+//        prettyTime.setLocale(new Locale("es"));
+//        String resPrettyDate = prettyTime.format(convertStringToLocalDateTime(dateTimeInStampFormat), DEFAULT_ZONE_ID);
+//        return resPrettyDate.substring(0, 1).toUpperCase()
+//                .concat(resPrettyDate.substring(1));
+//    }
 }
