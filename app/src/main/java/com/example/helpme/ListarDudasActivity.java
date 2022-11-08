@@ -45,13 +45,13 @@ public class ListarDudasActivity extends AppCompatActivity {
     private AlumnoController alumnoController = new AlumnoController();
     private DudaController dudaController = new DudaController();
 
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listar_dudas);
 
-        //Rellenar lista de dudas y en el adapter
-        cargarDudas();
 
         // Recuperamos referencia y configuramos recyclerView con la lista de dudas
         listaDudaView = (RecyclerView) findViewById(R.id.reciclerView);
@@ -64,6 +64,9 @@ public class ListarDudasActivity extends AppCompatActivity {
         StaggeredGridLayoutManager*/
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         listaDudaView.setLayoutManager(layoutManager);
+
+        //Rellenar lista de dudas y en el adapter
+        cargarDudas();
 
         //Pasamos la lista de dudas al RecyclerView con el ListaDudaAdapter
         // Instanciamos el adapter con los datos de la petición y lo asignamos a RecyclerView
@@ -78,6 +81,7 @@ public class ListarDudasActivity extends AppCompatActivity {
                     }
                 });
         listaDudaView.setAdapter(lpAdapter);
+        lpAdapter.notifyDataSetChanged();
     }
 
     //click del item del adapter
@@ -92,8 +96,9 @@ public class ListarDudasActivity extends AppCompatActivity {
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void cargarDudas() {
-        Duda d1 = new Duda("Algoritmo A*", "Estoy intentando hacer experimentos para el algoritmo A* y me da este error:", "Natalia Fernández Riego", "Sistemas Inteligentes", "IA", true, "30/10/2022 12:35:24");
+        /*Duda d1 = new Duda("Algoritmo A*", "Estoy intentando hacer experimentos para el algoritmo A* y me da este error:", "Natalia Fernández Riego", "Sistemas Inteligentes", "IA", true, "30/10/2022 12:35:24");
         Duda d2 = new Duda("Funciones Lambda", "Tecnologias y Paradigmas de la Programación", "Juan Iglesias Pérez", "Tecnologias y Paradigmas de la Programación", "TPP", false, "30/10/2022 12:35:24");
         Duda d3 = new Duda("Conexión entre Activities", "Estoy intentando hacer esta conexion", "Marta Ramos Álvarez", "Software de Dispositivos Móviles", "SDM", false, "30/10/2022 14:35:24");
         Duda d4 = new Duda("Paso a casos de equivalencia", "Estoy intentando hacer este paso", "Manuel Carillo Gómez", "Calidad y Validación del Software", "CVS", false, "31/10/2022 12:35:24");
@@ -104,12 +109,34 @@ public class ListarDudasActivity extends AppCompatActivity {
         listaDuda.add(d3);
         listaDuda.add(d4);
         listaDuda.add(d5);
+         */
+
+        listaDuda.clear();
+
+        Log.i(TAG, "----------->"+dudaViewModel.getAllDudas());
+
+        dudaViewModel.getAllDudas().observe(this, dudasResult -> {
+            if (dudasResult != null) {
+
+                dudasResult.forEach(d -> {
+                    Log.i(TAG, "---->" + d.getTitulo() + " " + d.getAlumnoId());
+                    Duda newDuda = new Duda();
+                    newDuda.setTitulo(d.getTitulo());
+                    newDuda.setAlumnoId(d.getAlumnoId());
+                    newDuda.setAsignaturaId(d.getAsignaturaId());
+                    newDuda.setFecha(d.getFecha());
+                    newDuda.setDescripcion(d.getDescripcion());
+                    newDuda.setResuelta(d.isResuelta());
+                    newDuda.setMateriaId(d.getMateriaId());
+
+                    listaDuda.add(newDuda);
+                });
+            }
+
+        });
     }
 
-    private boolean getBoolean(String toString) {
-        if (toString.equals("true")) return true;
-        return false;
-    }
+
 
 
 }
