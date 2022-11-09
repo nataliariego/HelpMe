@@ -40,4 +40,8 @@
     <string name="hint_uo">UOXXXXXX</string>
     <string name="hint_nombre_completo">Nombre Completo</string>
     <string name="hint_repetir_password">Repetir contraseña</string>
+    <string name="tituloMenuHome">Home</string>
+    <string name="tituloMenuChat">Chat</string>
+    <string name="tituloMenuDudas">Dudas</string>
+    <string name="tituloMenuCuenta">Cuenta</string>
 </resources>

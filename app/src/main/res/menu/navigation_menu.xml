@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/nav_home"
+        android:title=""
+        android:icon="@drawable/inicio_nav"
+        />
+
+    <item android:id="@+id/nav_chat"
+        android:title=""
+        android:icon="@drawable/caht_nav"
+        />
+
+    <item android:id="@+id/nav_dudas"
+        android:title=""
+        android:icon="@drawable/dudas_nav"
+        />
+
+    <item android:id="@+id/nav_cuenta"
+        android:title=""
+        android:icon="@drawable/cuenta_nav"
+        />
+
+</menu>
