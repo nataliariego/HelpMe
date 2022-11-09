@@ -28,4 +28,16 @@
     <string name="tituloAsignatura">Asignatura</string>
     <string name="dudaPublicada">Duda publicada</string>
     <string name="camposRellenados">Error: Campos incorrectos</string>
+    <string name="login_email">Correo electrónico</string>
+    <string name="contentDescription_logo">HelpMe es una aplicación para resolución de dudas y realizar tutorías entre alumnos</string>
+    <string name="hint_psasword_login">Contraseña</string>
+    <string name="hint_contraseña_login">Contraseña</string>
+    <string name="login">Iniciar Sesión</string>
+    <string name="crear_cuenta_login">Crear una cuenta</string>
+    <string name="login_titulo">Inicio sesión</string>
+    <string name="button_create_account">Crear una cuenta</string>
+    <string name="create_account_login">¿Ya tienes una cuenta?</string>
+    <string name="hint_uo">UOXXXXXX</string>
+    <string name="hint_nombre_completo">Nombre Completo</string>
+    <string name="hint_repetir_password">Repetir contraseña</string>
 </resources>

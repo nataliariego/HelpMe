@@ -1,6 +1,6 @@
 package com.example.helpme;
 
-import android.app.PendingIntent;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,7 +52,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        initCalendarData();
+        //initCalendarData();
 
         btVerTodasDudas = (Button) findViewById(R.id.btVerTodasDudas);
         btNuevaDuda = (ConstraintLayout) findViewById(R.id.bt_nueva_duda_home); // Es un layout no un boton
@@ -91,7 +91,10 @@ public class HomeActivity extends AppCompatActivity {
      */
     private void redirectPantallaListadoDudas() {
         Intent listadoDudasIntent = new Intent(HomeActivity.this, ListarDudasActivity.class);
-        startActivity(listadoDudasIntent);
+        // Para transiciones
+         startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
     }
 
     /**
@@ -99,7 +102,11 @@ public class HomeActivity extends AppCompatActivity {
      */
     private void redirectPantallaPublicarNuevaDuda() {
         Intent publicarDudasIntent = new Intent(HomeActivity.this, PublicarDudaActivity.class);
-        startActivity(publicarDudasIntent);
+
+        // Para transiciones
+         startActivity(publicarDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(publicarDudasIntent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -120,10 +127,6 @@ public class HomeActivity extends AppCompatActivity {
         dudas.clear();
 
         dudaViewModel.getAllDudas().observe(this, dudasResult -> {
-            //this.dudas = dudas;
-
-            Log.i(TAG, "pasando por el observer... " + dudasResult.get(0).getAlumnoId() + " " + dudasResult.get(0).getAsignaturaId());
-
             if (dudasResult != null) {
                 dudasResult.forEach(d -> {
                     Log.i(TAG, d.getTitulo() + " " + d.getAlumnoId());
@@ -137,10 +140,6 @@ public class HomeActivity extends AppCompatActivity {
                 });
             }
         });
-    }
-
-    private void printDudas() {
-
     }
 
     /**
