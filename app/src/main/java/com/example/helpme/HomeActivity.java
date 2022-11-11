@@ -46,8 +46,6 @@ public class HomeActivity extends AppCompatActivity {
 
     private List<DudaDto> dudas = new ArrayList<>();
 
-    private Button btLogoutDemo;
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +65,6 @@ public class HomeActivity extends AppCompatActivity {
         listadoDudasHomeRecycler.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         listadoDudasHomeRecycler.setLayoutManager(layoutManager);
-
-        btLogoutDemo = (Button) findViewById(R.id.button_logout);
 
         cargarDudas();
 
@@ -93,18 +89,26 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        btLogoutDemo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Authentication.getInstance().signOut();
-                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                        | Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-            }
-        });
+        // TODO: No borrar este evento
+//        btLogoutDemo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // TODO: Mover a cuenta de usuario funcionalidad logout
+////                Authentication.getInstance().signOut();
+////                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+////                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+////                        | Intent.FLAG_ACTIVITY_CLEAR_TOP
+////                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+////                startActivity(intent);
+////                finish();
+//
+//                Authentication.getInstance().sendEmailVerification();
+//
+//                // TODO: Plantilla correo
+//                // https://support.google.com/firebase/answer/7000714
+//
+//            }
+//        });
     }
 
     /**

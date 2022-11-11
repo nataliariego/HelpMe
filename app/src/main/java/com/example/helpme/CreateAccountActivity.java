@@ -16,6 +16,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import auth.Authentication;
 import controller.AlumnoController;
+import controller.callback.GenericCallback;
 import dto.AlumnoDto;
 import util.FormValidator;
 
@@ -85,7 +86,14 @@ public class CreateAccountActivity extends AppCompatActivity {
             alumno.email = txEmail.getText().toString();
             alumno.password = txPassword.getText().toString();
 
-            Authentication.getInstance().signUp(alumno);
+            Authentication.getInstance().signUp(alumno, new GenericCallback() {
+                @Override
+                public void callback(String msg) {
+                    if(msg.equals(GenericCallback.SUCCESS_CODE)){
+                        redirectToHomeView();
+                    }
+                }
+            });
         }
     }
 
@@ -134,5 +142,10 @@ public class CreateAccountActivity extends AppCompatActivity {
 //        }
 
         return isValid;
+    }
+
+    public void redirectToHomeView() {
+        Intent intent = new Intent(CreateAccountActivity.this, HomeActivity.class);
+        startActivity(intent);
     }
 }

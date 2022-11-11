@@ -14,9 +14,8 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.function.Function;
-
 import controller.AlumnoController;
+import controller.callback.GenericCallback;
 import dto.AlumnoDto;
 
 /**
@@ -39,7 +38,7 @@ public class Authentication {
      *
      * @param alumno
      */
-    public void signUp(AlumnoDto alumno) {
+    public void signUp(AlumnoDto alumno, GenericCallback callback) {
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(alumno.email, alumno.password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -52,6 +51,8 @@ public class Authentication {
                             alumnoController.update(alumno, userInSession.getUid());
                             Log.d(TAG, "createUserWithEmail:success");
 
+                            callback.callback(GenericCallback.SUCCESS_CODE);
+
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                         }
@@ -60,7 +61,7 @@ public class Authentication {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.i(TAG, "Error al crear la cuenta dle usuario.");
+                        Log.i(TAG, "Error al crear la cuenta dle ua");
                     }
                 })
         ;
@@ -135,6 +136,18 @@ public class Authentication {
         auth.setLanguageCode("es");
 
         auth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "Email sent.");
+                        }
+                    }
+                });
+    }
+
+    public void sendEmailVerification(){
+        userInSession.sendEmailVerification()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
