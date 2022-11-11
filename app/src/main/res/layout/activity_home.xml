@@ -7,175 +7,204 @@
     tools:context=".HomeActivity">
 
 
-    <LinearLayout
-        android:id="@+id/home_main_layout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
-        android:background="@color/tertiary"
-        android:isScrollContainer="true"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <include
-            android:id="@+id/app_toolbar"
-            layout="@layout/toolbar" />
+        <LinearLayout
+            android:id="@+id/home_main_layout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
+            android:background="@color/tertiary"
+            android:isScrollContainer="true"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.51"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.gridlayout.widget.GridLayout
-            android:id="@+id/home_calendar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="18dp"
-            android:paddingTop="10dp"
-            android:paddingRight="18dp"
+            <include
+                android:id="@+id/app_toolbar"
+                layout="@layout/toolbar" />
 
-            android:paddingBottom="18dp"
-            android:visibility="visible"
-            app:columnCount="1"
-            app:rowCount="3"
-            app:useDefaultMargins="true">
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.gridlayout.widget.GridLayout
+                android:id="@+id/home_calendar"
                 android:layout_width="match_parent"
-                android:layout_height="230dp"
-                app:layout_gravity="center">
+                android:layout_height="match_parent"
+                android:paddingLeft="18dp"
+                android:paddingTop="10dp"
+                android:paddingRight="18dp"
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/calendar_background"
+                android:paddingBottom="18dp"
+                android:visibility="visible"
+                app:columnCount="1"
+                app:rowCount="3"
+                app:useDefaultMargins="true">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/home_date_background"
-                    android:src="@drawable/home_calendar_rounded_card"
-                    android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:shapeAppearanceOverlay="@style/RoundedSquare" />
+                    android:layout_height="230dp"
+                    app:layout_gravity="center">
 
-                <!--                <ImageView-->
-                <!--                    android:id="@+id/home_calendar_background"-->
-                <!--                    android:layout_width="fill_parent"-->
-                <!--                    android:layout_height="fill_parent"-->
-                <!--                    android:contentDescription="@string/background_calendario_home"-->
-                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                    app:layout_constraintStart_toStartOf="parent"-->
-                <!--                    app:layout_constraintTop_toTopOf="parent"-->
-                <!--                    app:srcCompat="@drawable/home_date_background"-->
-                <!--                    android:scaleType="centerCrop"-->
-                <!--                    />-->
-
-                <LinearLayout
-                    android:id="@+id/home_calendar_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="254dp"
-                    android:gravity="center_horizontal|center_vertical"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-
-                    <TextView
-                        android:id="@+id/home_calendar_day_week"
-                        android:layout_width="329dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/home_day_calendar"
-                        android:textAlignment="center"
-                        android:textColor="@color/primary"
-                        android:textSize="32sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/home_calendar_custom_date_today"
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/calendar_background"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/date_custom"
-                        android:textAlignment="center"
-                        android:textColor="@color/primary"
-                        android:textSize="32sp"
-                        android:textStyle="bold"
-                        app:layout_column="0"
-                        app:layout_row="0" />
+                        android:layout_height="match_parent"
+                        android:background="@drawable/home_date_background"
+                        android:src="@drawable/home_calendar_rounded_card"
+                        android:visibility="visible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="@style/RoundedSquare" />
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/bt_nueva_duda_home"
-                        android:layout_width="156dp"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/button_rounded_corners_primary">
+                    <!--                <ImageView-->
+                    <!--                    android:id="@+id/home_calendar_background"-->
+                    <!--                    android:layout_width="fill_parent"-->
+                    <!--                    android:layout_height="fill_parent"-->
+                    <!--                    android:contentDescription="@string/background_calendario_home"-->
+                    <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+                    <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                    <!--                    app:layout_constraintTop_toTopOf="parent"-->
+                    <!--                    app:srcCompat="@drawable/home_date_background"-->
+                    <!--                    android:scaleType="centerCrop"-->
+                    <!--                    />-->
+
+                    <LinearLayout
+                        android:id="@+id/home_calendar_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="254dp"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
 
                         <TextView
-                            android:id="@+id/tx_bt_nueva_duda"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/home_calendar_day_week"
+                            android:layout_width="329dp"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/roboto_medium"
-                            android:gravity="center"
-                            android:text="@string/nueva_duda"
-                            android:textColor="@color/white"
-                            android:textSize="14sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                            android:text="@string/home_day_calendar"
+                            android:textAlignment="center"
+                            android:textColor="@color/primary"
+                            android:textSize="32sp"
+                            android:textStyle="bold" />
 
-                </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:id="@+id/home_calendar_custom_date_today"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/date_custom"
+                            android:textAlignment="center"
+                            android:textColor="@color/primary"
+                            android:textSize="32sp"
+                            android:textStyle="bold"
+                            app:layout_column="0"
+                            app:layout_row="0" />
 
-            <LinearLayout
-                android:id="@+id/layout_ultimas_dudas_publicadas"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:orientation="horizontal">
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/bt_nueva_duda_home"
+                            android:layout_width="156dp"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/button_rounded_corners_primary">
 
-                <TextView
-                    android:id="@+id/txUltimasDudas"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/roboto_bold"
-                    android:text="@string/ultimas_dudas_publicadas"
-                    android:textColor="@color/primary"
-                    android:textSize="16sp" />
+                            <TextView
+                                android:id="@+id/tx_bt_nueva_duda"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto_medium"
+                                android:gravity="center"
+                                android:text="@string/nueva_duda"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <Button
-                    android:id="@+id/btVerTodasDudas"
-                    android:layout_width="wrap_content"
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_ultimas_dudas_publicadas"
+                    android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:layout_weight="1"
-                    android:background="#00FFFFFF"
-                    android:elegantTextHeight="false"
-                    android:fontFamily="@font/roboto"
-                    android:includeFontPadding="false"
-                    android:padding="0dp"
-                    android:text="@string/ver_todas"
-                    android:textAlignment="textEnd"
-                    android:textAllCaps="true"
-                    android:textColor="#8D6E63"
-                    android:textColorHighlight="@color/primary"
-                    android:textIsSelectable="true"
-                    android:textStyle="normal"
-                    app:iconPadding="0dp" />
-            </LinearLayout>
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="horizontal">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/listado_dudas_home_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="340dp" />
+                    <TextView
+                        android:id="@+id/txUltimasDudas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/roboto_bold"
+                        android:text="@string/ultimas_dudas_publicadas"
+                        android:textColor="@color/primary"
+                        android:textSize="16sp" />
 
-        </androidx.gridlayout.widget.GridLayout>
+                    <Button
+                        android:id="@+id/btVerTodasDudas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:background="#00FFFFFF"
+                        android:elegantTextHeight="false"
+                        android:fontFamily="@font/roboto"
+                        android:includeFontPadding="false"
+                        android:padding="0dp"
+                        android:text="@string/ver_todas"
+                        android:textAlignment="textEnd"
+                        android:textAllCaps="true"
+                        android:textColor="#8D6E63"
+                        android:textColorHighlight="@color/primary"
+                        android:textIsSelectable="true"
+                        android:textStyle="normal"
+                        app:iconPadding="0dp" />
+                </LinearLayout>
 
-    </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/listado_dudas_home_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="340dp" />
+
+            </androidx.gridlayout.widget.GridLayout>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="0dp"
+        android:layout_height="90dp"
+        android:background="@drawable/rounded_corners_navigation"
+        app:itemActiveIndicatorStyle="@style/Theme.Material3.DynamicColors.DayNight"
+        app:itemIconSize="70dp"
+        app:itemTextAppearanceInactive="@style/Theme.Material3.DynamicColors.DayNight"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/navigation_menu" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
