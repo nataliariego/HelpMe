@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.model.Duda;
+import com.google.android.material.button.MaterialButton;
 
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 import adapter.DudaAdapter;
+import auth.Authentication;
 import dto.DudaDto;
 import viewmodel.DudaViewModel;
 
@@ -43,6 +45,8 @@ public class HomeActivity extends AppCompatActivity {
     private DudaViewModel dudaViewModel = new DudaViewModel();
 
     private List<DudaDto> dudas = new ArrayList<>();
+
+    private Button btLogoutDemo;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -64,6 +68,8 @@ public class HomeActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         listadoDudasHomeRecycler.setLayoutManager(layoutManager);
 
+        btLogoutDemo = (Button) findViewById(R.id.button_logout);
+
         cargarDudas();
 
         dudaAdapter = new DudaAdapter(dudas);
@@ -84,6 +90,19 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 redirectPantallaPublicarNuevaDuda();
+            }
+        });
+
+        btLogoutDemo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Authentication.getInstance().signOut();
+                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
             }
         });
     }

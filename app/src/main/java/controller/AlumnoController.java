@@ -12,8 +12,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -49,11 +51,33 @@ public class AlumnoController {
         });
     }
 
-    public void update(AlumnoDto alumno){
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void findByUO(String uo, AlumnoCallback callback) {
+        Task<QuerySnapshot> document = db.collection(Alumno.COLLECTION).whereEqualTo("uo", uo).get();
 
-        String id = UUID.randomUUID().toString();
+
+
+        document.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<DocumentSnapshot> docs = task.getResult().getDocuments();
+
+                    if(docs.size() > 0){
+                        DocumentSnapshot doc = docs.get(0);
+
+                        Alumno alumno = getPayload(doc.getId(), doc.getString(Alumno.UO), doc.getString(Alumno.NOMBRE));
+                        callback.callback(alumno);
+                    }
+                }
+            }
+        });
+    }
+
+    public void update(AlumnoDto alumno, String uid){
+
         Map<String, Object> alHash = AlumnoAssembler.toHashMap(alumno);
-        db.collection(Alumno.COLLECTION).document(id).set(alHash).addOnCompleteListener(new OnCompleteListener<Void>() {
+        db.collection(Alumno.COLLECTION).document(uid).set(alHash).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
@@ -67,7 +91,7 @@ public class AlumnoController {
         return new Alumno(id, uo, nombre);
     }
 
-    interface AlumnoCallback {
+    public interface AlumnoCallback {
         void callback(Alumno alumno);
     }
 }
