@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.model.Duda;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 
 import java.time.LocalDate;
@@ -68,9 +69,14 @@ public class HomeActivity extends AppCompatActivity {
 
         cargarDudas();
 
+
+
         dudaAdapter = new DudaAdapter(dudas);
         listadoDudasHomeRecycler.setAdapter(dudaAdapter);
         dudaAdapter.notifyDataSetChanged();
+
+        BottomNavigationView navegacion = findViewById(R.id.bottomNavigationView);
+        navegacion.setSelectedItemId(R.id.nav_home);
 
 
         /* Redirecciones a otras pantallas */

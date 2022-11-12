@@ -198,7 +198,7 @@
         android:background="@drawable/rounded_corners_navigation"
         app:itemActiveIndicatorStyle="@style/Theme.Material3.DynamicColors.DayNight"
         app:itemIconSize="70dp"
-        app:itemTextAppearanceInactive="@style/Theme.Material3.DynamicColors.DayNight"
+        app:itemTextAppearanceActive="@style/Widget.Material3.TextInputLayout.FilledBox.Dense"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
