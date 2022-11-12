@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.model.Duda;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
 
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Locale;
 
 import adapter.DudaAdapter;
+import auth.Authentication;
 import dto.DudaDto;
 import viewmodel.DudaViewModel;
 
@@ -90,6 +92,27 @@ public class HomeActivity extends AppCompatActivity {
                 redirectPantallaPublicarNuevaDuda();
             }
         });
+
+        // TODO: No borrar este evento
+//        btLogoutDemo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // TODO: Mover a cuenta de usuario funcionalidad logout
+////                Authentication.getInstance().signOut();
+////                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+////                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+////                        | Intent.FLAG_ACTIVITY_CLEAR_TOP
+////                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+////                startActivity(intent);
+////                finish();
+//
+//                Authentication.getInstance().sendEmailVerification();
+//
+//                // TODO: Plantilla correo
+//                // https://support.google.com/firebase/answer/7000714
+//
+//            }
+//        });
     }
 
     /**

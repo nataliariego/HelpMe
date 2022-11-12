@@ -95,7 +95,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
-
                         <TextView
                             android:id="@+id/home_calendar_day_week"
                             android:layout_width="329dp"

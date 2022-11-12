@@ -1,27 +1,29 @@
 package com.example.helpme;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import auth.Authentication;
 import util.FormValidator;
 
 public class LoginActivity extends AppCompatActivity {
 
+    public static final String USER_IN_SESSION = "login_usuario_sesion";
+
     private TextInputEditText txEmail;
     private TextInputEditText txPassword;
     private Button btLogin;
     private Button btCreateAnAccount;
+
+    private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +54,36 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseAuth.getInstance().getCurrentUser();
     }
 
+    /**
+     * Inicio de sesión.
+     */
     private void signIn() {
-        Authentication.getInstance().signIn(txEmail.getText().toString(), txPassword.getText().toString());
+        String email = txEmail.getText().toString();
+        String pass = txPassword.getText().toString();
+        Authentication.getInstance().signIn(email, pass, new LoginCallback() {
+            @Override
+            public void callback() {
+                redirectToHomeView();
+            }
+        });
     }
 
+    /**
+     * Redirecciona a la vista de home con los datos del usuario logeado.
+     */
+    public void redirectToHomeView() {
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        intent.putExtra(USER_IN_SESSION, userInSession);
+        startActivity(intent);
+    }
+
+    /**
+     * Validacion de los campos del formulario de inicio de sesión.
+     *
+     * @return true si todos los campos son válidos y false en caso contrario.
+     */
     private boolean validateFields() {
         boolean isValid = true;
 
@@ -102,5 +127,9 @@ public class LoginActivity extends AppCompatActivity {
         txEmail = (TextInputEditText) findViewById(R.id.text_email_login);
         txPassword = (TextInputEditText) findViewById(R.id.text_password_login);
         btCreateAnAccount = (Button) findViewById(R.id.button_create_account_login);
+    }
+
+    public interface LoginCallback {
+        void callback();
     }
 }
