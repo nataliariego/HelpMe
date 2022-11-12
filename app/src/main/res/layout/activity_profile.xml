@@ -60,8 +60,8 @@
 
         <LinearLayout
             android:id="@+id/ll_user_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="369dp"
+            android:layout_height="68dp"
             android:layout_margin="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
@@ -75,20 +75,20 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp">
+                android:layout_height="48dp">
 
                 <EditText
                     android:id="@+id/tv_user_name"
-                    android:layout_width="275dp"
-                    android:layout_height="48dp"
+                    android:layout_width="280dp"
+                    android:layout_height="32dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="7dp"
-                    android:layout_marginEnd="59dp"
-                    android:layout_marginBottom="6dp"
+                    android:layout_marginEnd="54dp"
+                    android:layout_marginBottom="9dp"
                     android:background="@color/white"
                     android:minHeight="48dp"
                     android:textColor="@color/black"
@@ -100,8 +100,8 @@
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="13dp"
-                    android:layout_marginBottom="17dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="15dp"
                     android:contentDescription="@string/editicon"
                     app:srcCompat="@drawable/edit_icon"
                     app:tint="#646464" />
@@ -127,6 +127,8 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
+        <!-- ASIGNATURAS -->
+
         <LinearLayout
             android:id="@+id/ll_user_curse"
             android:layout_width="match_parent"
@@ -139,7 +141,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.392">
+            app:layout_constraintVertical_bias="0.333">
 
             <Spinner
                 android:id="@+id/spinnerCurso"
@@ -154,15 +156,13 @@
                 app:layout_constraintVertical_bias="0.243" />
         </LinearLayout>
 
-        <!-- ASIGNATURAS -->
-
         <TextView
             android:id="@+id/tv_user_curse"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="112dp"
+            android:layout_marginTop="96dp"
             android:layout_marginEnd="8dp"
             android:background="@color/white"
             android:text="@string/curso"
@@ -186,7 +186,7 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.762">
+            app:layout_constraintVertical_bias="0.699">
 
             <Spinner
                 android:id="@+id/spinnerAsignaturasProfile"
@@ -207,7 +207,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="212dp"
+            android:layout_marginTop="196dp"
             android:layout_marginEnd="8dp"
             android:background="@color/white"
             android:text="@string/asignaturas"
