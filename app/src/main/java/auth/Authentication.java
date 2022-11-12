@@ -61,7 +61,7 @@ public class Authentication {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.i(TAG, "Error al crear la cuenta dle ua");
+                        Log.i(TAG, "Error al crear la cuenta de usuario.");
                     }
                 })
         ;
