@@ -1,9 +1,11 @@
 package com.example.helpme;
 
 import android.app.ActivityOptions;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -75,6 +77,21 @@ public class ListarDudasActivity extends AppCompatActivity {
                     }
                 });
         listaDudaView.setAdapter(lpAdapter);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+//        backButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(ListarDudasActivity.this, HomeActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+
     }
 
     //click del item del adapter

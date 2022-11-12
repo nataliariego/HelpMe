@@ -1,6 +1,7 @@
 package com.example.helpme;
 
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,7 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.model.Duda;
+import com.example.helpme.navigation.ActivityNavigation;
+import com.example.helpme.navigation.impl.ActivityNavigationImpl;
 import com.google.android.material.button.MaterialButton;
+
+import org.checkerframework.checker.units.qual.A;
 
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -45,6 +50,8 @@ public class HomeActivity extends AppCompatActivity {
     private DudaViewModel dudaViewModel = new DudaViewModel();
 
     private List<DudaDto> dudas = new ArrayList<>();
+
+    private ActivityNavigationImpl navigation = new ActivityNavigationImpl();
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -185,7 +192,4 @@ public class HomeActivity extends AppCompatActivity {
         Duda d1 = new Duda("Duda 1", "asdfasfd", "asdfasdf", "000", "999", false, "20/10/2022 12:00:01");
 //        dudas.add(d1);
     }
-
-
-
 }
