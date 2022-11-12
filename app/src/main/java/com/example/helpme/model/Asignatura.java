@@ -25,6 +25,18 @@ public class Asignatura implements Parcelable {
         this.materia = materia;
     }
 
+    public Asignatura() {
+
+    }
+    public Asignatura(String curso, String materia, String nombre) {
+
+        this.nombre = nombre;
+        this.curso = curso;
+        this.materia = materia;
+    }
+
+
+
     protected Asignatura(Parcel in) {
         id = in.readString();
         nombre = in.readString();

@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
+import adapter.DudaAdapter;
 import controller.AlumnoController;
 import controller.AsignaturaController;
 import controller.DudaController;
@@ -32,9 +33,14 @@ public class ListarDudasActivity extends AppCompatActivity {
     //Modelo de datos
     private List<Duda> listaDuda = new ArrayList<Duda>();
 
-    private DudaViewModel dudaViewModel = new DudaViewModel();
+
 
     private RecyclerView listaDudaView;
+
+    private DudaAdapter dudaAdapter;
+    private DudaViewModel dudaViewModel = new DudaViewModel();
+
+    private List<DudaDto> dudas = new ArrayList<>();
 
 
 
@@ -67,15 +73,20 @@ public class ListarDudasActivity extends AppCompatActivity {
         // Generar el adaptador, le pasamos la lista de dudas
         // y el manejador para el evento click sobre un elemento
 
-        ListaDudasAdapter lpAdapter = new ListaDudasAdapter(listaDuda,
-                new ListaDudasAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(Duda duda) {
-                        clikonIntem(duda);
-                    }
-                });
-        listaDudaView.setAdapter(lpAdapter);
-        lpAdapter.notifyDataSetChanged();
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        cargarDudas();
+
+        dudaAdapter = new DudaAdapter(dudas);
+        listaDudaView.setAdapter(dudaAdapter);
+
+        dudaAdapter.notifyDataSetChanged();
     }
 
     //click del item del adapter
@@ -105,28 +116,24 @@ public class ListarDudasActivity extends AppCompatActivity {
         listaDuda.add(d5);
          */
 
-        listaDuda.clear();
-
-
+        dudas.clear();
 
         dudaViewModel.getAllDudas().observe(this, dudasResult -> {
             if (dudasResult != null) {
-
                 dudasResult.forEach(d -> {
-                    Log.i(TAG, "---->" + d.getTitulo() + " " + d.getAlumnoId());
-                    Duda newDuda = new Duda();
-                    newDuda.setTitulo(d.getTitulo());
-                    newDuda.setAlumnoId(d.getAlumnoId());
-                    newDuda.setAsignaturaId(d.getAsignaturaId());
-                    newDuda.setFecha(d.getFecha());
-                    newDuda.setDescripcion(d.getDescripcion());
-                    newDuda.setResuelta(d.isResuelta());
-                    newDuda.setMateriaId(d.getMateriaId());
+                    Log.i(TAG, d.getTitulo() + " " + d.getAlumnoId());
+                    DudaDto newDuda = new DudaDto();
+                    newDuda.titulo = d.getTitulo();
+                    newDuda.alumno = d.getAlumnoId();
+                    newDuda.asignatura = d.getAsignaturaId();
+                    newDuda.fecha = d.getFecha();
 
-                    listaDuda.add(newDuda);
+                    dudas.add(newDuda);
                 });
             }
-
+            dudaAdapter = new DudaAdapter(dudas);
+            listaDudaView.setAdapter(dudaAdapter);
+            dudaAdapter.notifyDataSetChanged();
         });
     }
 
