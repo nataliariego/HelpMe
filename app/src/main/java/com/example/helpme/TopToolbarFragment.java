@@ -27,6 +27,10 @@ public class TopToolbarFragment extends Fragment {
 
     private ImageButton btFaq;
     private ImageButton btBack;
+
+    // TODO: Temporal - Borrar
+    private ImageButton btSettings;
+
     private ImageView toolbarLogo;
 
 
@@ -76,6 +80,9 @@ public class TopToolbarFragment extends Fragment {
         btFaq = (ImageButton) view.findViewById(R.id.button_toolbar_faq);
         toolbarLogo = (ImageView) view.findViewById(R.id.toolbar_logo);
 
+        //TODO: Temporal - borrar
+        btSettings = (ImageButton) view.findViewById(R.id.button_toolbar_settings);
+
         String activityName = getActivity().getClass().getSimpleName();
 
         // En la vista de Home mostrar el logo en vez del botón de volver
@@ -83,6 +90,14 @@ public class TopToolbarFragment extends Fragment {
             btBack.setVisibility(View.INVISIBLE);
             toolbarLogo.setVisibility(View.VISIBLE);
         }
+
+        btSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), AjustesCuentaActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btFaq.setOnClickListener(new View.OnClickListener() {
             @Override
