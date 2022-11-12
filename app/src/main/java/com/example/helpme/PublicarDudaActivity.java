@@ -88,7 +88,6 @@ public class PublicarDudaActivity extends AppCompatActivity {
         });
 
         //Navegacion:
-        navegacion.setSelectedItemId(R.id.nav_dudas);
         navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
