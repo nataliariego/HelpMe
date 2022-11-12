@@ -166,7 +166,6 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
         android:layout_height="90dp"
-        app:itemTextAppearanceActive="@color/transparent"
         app:menu="@menu/navigation_menu"
         app:itemActiveIndicatorStyle="@style/Theme.Material3.DynamicColors.DayNight"
         android:background="@drawable/rounded_corners_navigation"

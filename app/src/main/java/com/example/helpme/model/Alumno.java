@@ -27,6 +27,8 @@ public class Alumno implements Parcelable {
 
     private List<Asignatura> asignaturasDominadas = new ArrayList<>();
 
+    public Alumno(){}
+
     public Alumno(String id, String nombre, String uo, String url_foto, List<Asignatura> asignaturasDominadas) {
         this.id = id;
         this.nombre = nombre;

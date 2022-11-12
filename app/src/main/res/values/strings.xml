@@ -44,6 +44,10 @@
     <string name="tituloMenuChat">Chat</string>
     <string name="tituloMenuDudas">Dudas</string>
     <string name="tituloMenuCuenta">Cuenta</string>
+    <string name="tituloConectados">Compañeros conectados</string>
+    <string name="nombreAlumno">Nombre Alumno</string>
+    <string name="asignaturas">Asignaturas dominadas</string>
+    <string name="verPeefil">Ver perfil</string>
     <string name="ajustes_cuenta_titulo">Ajustes</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>

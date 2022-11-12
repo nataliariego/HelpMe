@@ -5,8 +5,11 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.helpme.model.Alumno;
+import com.example.helpme.model.Asignatura;
+import com.example.helpme.model.Duda;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -14,6 +17,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +30,57 @@ public class AlumnoController {
 
     public static final String TAG = "ALUMNO_CONTROLLER";
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private static AlumnoController instance;
+
+    public static synchronized AlumnoController getInstance() {
+        if (instance == null) {
+            instance = new AlumnoController();
+            db = FirebaseFirestore.getInstance();
+        }
+
+        return instance;
+    }
+
+    /**
+     * Listado de todas las dudas de la aplicación.
+     *
+     * @return
+     */
+    public MutableLiveData<List<Alumno>> findAll() {
+        MutableLiveData<List<Alumno>> liveAlumnos = new MutableLiveData<List<Alumno>>();
+
+        db.collection(Alumno.COLLECTION)
+                .addSnapshotListener((snapshot, e) -> {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+
+                    List<Alumno> alumnos = new ArrayList<>();
+                    if (snapshot != null && !snapshot.isEmpty()) {
+                        for (DocumentSnapshot documentSnapshot : snapshot.getDocuments()) {
+                            Alumno alumno = documentSnapshot.toObject(Alumno.class);
+
+//                            AlumnoDto aRes = AlumnoAssembler.toDto(documentSnapshot.get(Duda.REF_ALUMNO).toString());
+//                            Log.i(TAG, "ALUMNO CONTROLLER: " + aRes.nombre + " " + aRes.uo);
+
+                            alumno.setNombre(documentSnapshot.getString(Alumno.NOMBRE));
+                            alumno.setUo(documentSnapshot.getString(Alumno.UO));
+                            alumno.setUrl_foto(documentSnapshot.getString(Alumno.URL_FOTO));
+                            alumno.setAsignaturasDominadas(new ArrayList<Asignatura>());
+
+                            alumnos.add(alumno);
+                        }
+                    }
+                    liveAlumnos.postValue(alumnos);
+
+                });
+
+
+        return liveAlumnos;
+    }
 
     /**
      * Obtiene un alumno por su referencia.
