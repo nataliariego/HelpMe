@@ -33,17 +33,11 @@ public class ListarDudasActivity extends AppCompatActivity {
     private List<Duda> listaDuda = new ArrayList<Duda>();
 
     private DudaViewModel dudaViewModel = new DudaViewModel();
-    ;
-    private Duda duda;
+
     private RecyclerView listaDudaView;
-    private Object[] asignatura_data;
-
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
-    private AsignaturaController asignaturaController = new AsignaturaController();
-    private AlumnoController alumnoController = new AlumnoController();
-    private DudaController dudaController = new DudaController();
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -113,7 +107,7 @@ public class ListarDudasActivity extends AppCompatActivity {
 
         listaDuda.clear();
 
-        Log.i(TAG, "----------->"+dudaViewModel.getAllDudas());
+
 
         dudaViewModel.getAllDudas().observe(this, dudasResult -> {
             if (dudasResult != null) {

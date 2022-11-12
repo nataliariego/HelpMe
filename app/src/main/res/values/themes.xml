@@ -15,7 +15,7 @@
         <!-- Customize your theme here. -->
         <!-- Transiciones -->
         <item name="android:windowContentTransitions">true</item>
-        <item name="android:windowEnterTransition">@android:transition/slide_right  </item>
+        <item name="android:windowEnterTransition">@android:transition/slide_right</item>
         <item name="android:windowExitTransition">@android:transition/slide_left</item>
     </style>
 
@@ -36,4 +36,13 @@
     <style name="RoundedSquare">
         <item name="cornerSize">10%</item>
     </style>
+
+    <style name="Theme.HelpMe.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.HelpMe.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.HelpMe.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
