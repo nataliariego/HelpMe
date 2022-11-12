@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.R;
 import com.example.helpme.model.Asignatura;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +72,7 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
         public void bindAlumno(final AlumnoDto alumno) {
             nombreAlumno.setText(alumno.nombre);
             asiganturas.setText("hola");
+            Picasso.get().load(alumno.urlFoto).into(imagen_alumno);
 
             //fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha));
         }

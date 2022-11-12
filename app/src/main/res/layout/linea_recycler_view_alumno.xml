@@ -31,19 +31,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.329" />
 
-        <Button
-            android:id="@+id/buttonVerPerfil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@string/verPeefil"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.2"
-            app:layout_constraintStart_toEndOf="@+id/nombreAlumno"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageViewPerfil"
             android:layout_width="74dp"
             android:layout_height="77dp"
@@ -59,11 +47,25 @@
             android:layout_height="wrap_content"
             android:text="@string/asignaturas"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/buttonVerPerfil"
-            app:layout_constraintHorizontal_bias="0.478"
+            app:layout_constraintEnd_toStartOf="@+id/buttonPerfil"
+            app:layout_constraintHorizontal_bias="0.363"
             app:layout_constraintStart_toEndOf="@+id/imageViewPerfil"
             app:layout_constraintTop_toBottomOf="@+id/nombreAlumno"
             app:layout_constraintVertical_bias="0.214" />
+
+
+
+        <Button
+            android:id="@+id/buttonPerfil"
+            android:layout_width="106dp"
+            android:layout_height="47dp"
+            android:background="@drawable/rounded_corners_button_perfil"
+            android:text="Ver perfil"
+            android:textSize="13.5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/nombreAlumno"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
