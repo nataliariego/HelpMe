@@ -16,7 +16,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
         <LinearLayout
             android:id="@+id/home_main_layout"
@@ -34,9 +35,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <include
-                android:id="@+id/app_toolbar"
-                layout="@layout/toolbar" />
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragment_toolbar_home"
+                android:name="com.example.helpme.TopToolbarFragment"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:visibility="visible" />
 
             <androidx.gridlayout.widget.GridLayout
                 android:id="@+id/home_calendar"

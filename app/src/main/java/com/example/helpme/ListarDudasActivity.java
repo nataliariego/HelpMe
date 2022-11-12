@@ -2,11 +2,9 @@ package com.example.helpme;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +18,6 @@ import java.util.List;
 import controller.AlumnoController;
 import controller.AsignaturaController;
 import controller.DudaController;
-import dto.DudaDto;
 import viewmodel.DudaViewModel;
 
 public class ListarDudasActivity extends AppCompatActivity {
@@ -54,7 +51,7 @@ public class ListarDudasActivity extends AppCompatActivity {
         cargarDudas();
 
         // Recuperamos referencia y configuramos recyclerView con la lista de dudas
-        listaDudaView = (RecyclerView) findViewById(R.id.reciclerView);
+        listaDudaView = (RecyclerView) findViewById(R.id.recicler_listado_dudas);
         listaDudaView.setHasFixedSize(true);
 
         /* Un RecyclerView necesita un Layout Manager para manejar el posicionamiento de los

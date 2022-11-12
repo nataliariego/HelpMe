@@ -39,7 +39,7 @@ public class HomeActivity extends AppCompatActivity {
     private TextView txDateFormatted;
     private Button btVerTodasDudas;
     private RecyclerView listadoDudasHomeRecycler;
-    private ConstraintLayout btNuevaDuda;
+    private Button btNuevaDuda;
 
     private DudaAdapter dudaAdapter;
     private DudaViewModel dudaViewModel = new DudaViewModel();
@@ -59,7 +59,7 @@ public class HomeActivity extends AppCompatActivity {
         //initCalendarData();
 
         btVerTodasDudas = (Button) findViewById(R.id.btVerTodasDudas);
-        btNuevaDuda = (ConstraintLayout) findViewById(R.id.bt_nueva_duda_home); // Es un layout no un boton
+        btNuevaDuda = (Button) findViewById(R.id.bt_nueva_duda_home); // Es un layout no un boton
         listadoDudasHomeRecycler = (RecyclerView) findViewById(R.id.listado_dudas_home_recycler);
 
         listadoDudasHomeRecycler.setHasFixedSize(true);
@@ -70,7 +70,6 @@ public class HomeActivity extends AppCompatActivity {
 
         dudaAdapter = new DudaAdapter(dudas);
         listadoDudasHomeRecycler.setAdapter(dudaAdapter);
-        dudaAdapter.notifyDataSetChanged();
 
 
         /* Redirecciones a otras pantallas */
@@ -117,7 +116,7 @@ public class HomeActivity extends AppCompatActivity {
     private void redirectPantallaListadoDudas() {
         Intent listadoDudasIntent = new Intent(HomeActivity.this, ListarDudasActivity.class);
         // Para transiciones
-         startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+         startActivity(listadoDudasIntent);
 
         //startActivity(listadoDudasIntent);
     }

@@ -31,6 +31,10 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         setTitle("Iniciar sesión");
 
+        if(Authentication.getInstance().isSigned()){
+            redirectToHomeView();
+        }
+
         initFields();
 
 
