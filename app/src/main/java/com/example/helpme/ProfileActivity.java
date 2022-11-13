@@ -6,17 +6,27 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
+import controller.AlumnoController;
+import de.hdodenhof.circleimageview.CircleImageView;
 import dto.AsignaturaDto;
 import dto.CursoDto;
 import dto.DudaDto;
 import viewmodel.AsignaturaViewModel;
 import viewmodel.CursoViewModel;
+
+import com.example.helpme.model.Alumno;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -31,10 +41,46 @@ public class ProfileActivity extends AppCompatActivity {
     private Spinner spinnerCursos;
     private List<String> numeroCursos = new ArrayList<>();
 
+    private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
+    private AlumnoController alumnoController = new AlumnoController();
+
+    private TextView textViewUO;
+    private TextView textViewEmail;
+    private CircleImageView img_persona;
+    private EditText nombreCompleto;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        textViewUO = findViewById(R.id.textViewUO);
+        textViewEmail = findViewById(R.id.textViewEmail);
+        img_persona = findViewById(R.id.img_persona_duda);
+        nombreCompleto = findViewById(R.id.tv_user_name);
+
+        //Pongo los datos del usuario que está autenticado
+        String uo = userInSession.getEmail().split("@")[0].toUpperCase();
+
+       // Log.i("patatita: " , uo);
+        //Tengo que buscar el alumno que tenga ese email para poner después los datos
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            alumnoController.findByUOWithPhoto(uo, new AlumnoController.AlumnoCallback() {
+                @Override
+                public void callback(Alumno alumno) {
+                    if (alumno != null) {
+                        //Esto tdo no está bien porque en la base de datos
+                        //Se guardan raro los datos, faltan cosas...etc
+                        Log.i("patita", alumno.toString());
+                        textViewUO.setText(alumno.getNombre());
+                        textViewEmail.setText(alumno.getNombre()+"@uniovi.es");
+                        nombreCompleto.setText(alumno.getUo());
+                        Picasso.get().load(alumno.getUrl_foto()).into(img_persona);
+                    }
+                }
+            });
+        }
+
 
         cargarAsignaturas();
         cargarCursos();
