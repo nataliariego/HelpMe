@@ -1,10 +1,13 @@
 package com.example.helpme;
 
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,6 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.model.Duda;
+import com.example.helpme.navigation.ActivityNavigation;
+import com.example.helpme.navigation.impl.ActivityNavigationImpl;
+import com.google.android.material.button.MaterialButton;
+
+import org.checkerframework.checker.units.qual.A;
 
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -24,6 +32,7 @@ import java.util.List;
 import java.util.Locale;
 
 import adapter.DudaAdapter;
+import auth.Authentication;
 import dto.DudaDto;
 import viewmodel.DudaViewModel;
 
@@ -35,12 +44,14 @@ public class HomeActivity extends AppCompatActivity {
     private TextView txDateFormatted;
     private Button btVerTodasDudas;
     private RecyclerView listadoDudasHomeRecycler;
-    private ConstraintLayout btNuevaDuda;
+    private Button btNuevaDuda;
 
     private DudaAdapter dudaAdapter;
     private DudaViewModel dudaViewModel = new DudaViewModel();
 
     private List<DudaDto> dudas = new ArrayList<>();
+
+    private ActivityNavigationImpl navigation = new ActivityNavigationImpl();
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -55,7 +66,7 @@ public class HomeActivity extends AppCompatActivity {
         //initCalendarData();
 
         btVerTodasDudas = (Button) findViewById(R.id.btVerTodasDudas);
-        btNuevaDuda = (ConstraintLayout) findViewById(R.id.bt_nueva_duda_home); // Es un layout no un boton
+        btNuevaDuda = (Button) findViewById(R.id.bt_nueva_duda_home); // Es un layout no un boton
         listadoDudasHomeRecycler = (RecyclerView) findViewById(R.id.listado_dudas_home_recycler);
 
         listadoDudasHomeRecycler.setHasFixedSize(true);
@@ -66,7 +77,6 @@ public class HomeActivity extends AppCompatActivity {
 
         dudaAdapter = new DudaAdapter(dudas);
         listadoDudasHomeRecycler.setAdapter(dudaAdapter);
-        dudaAdapter.notifyDataSetChanged();
 
 
         /* Redirecciones a otras pantallas */
@@ -84,6 +94,27 @@ public class HomeActivity extends AppCompatActivity {
                 redirectPantallaPublicarNuevaDuda();
             }
         });
+
+        // TODO: No borrar este evento
+//        btLogoutDemo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // TODO: Mover a cuenta de usuario funcionalidad logout
+////                Authentication.getInstance().signOut();
+////                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+////                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+////                        | Intent.FLAG_ACTIVITY_CLEAR_TOP
+////                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+////                startActivity(intent);
+////                finish();
+//
+//                Authentication.getInstance().sendEmailVerification();
+//
+//                // TODO: Plantilla correo
+//                // https://support.google.com/firebase/answer/7000714
+//
+//            }
+//        });
     }
 
     /**
@@ -92,7 +123,7 @@ public class HomeActivity extends AppCompatActivity {
     private void redirectPantallaListadoDudas() {
         Intent listadoDudasIntent = new Intent(HomeActivity.this, ListarDudasActivity.class);
         // Para transiciones
-         startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+         startActivity(listadoDudasIntent);
 
         //startActivity(listadoDudasIntent);
     }

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_ajustes_cuenta"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".AjustesCuentaActivity">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_toolbar_ajustes"
+        android:name="com.example.helpme.TopToolbarFragment"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        app:layout_constraintBottom_toTopOf="@+id/layout_ajustes_cuenta_wrapper"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/layout_ajustes_cuenta_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="65dp"
+        android:orientation="vertical"
+        android:paddingLeft="18dp"
+        android:paddingRight="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/text_ajustes_cuenta_titulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/ajustes"
+            android:textColor="@color/primary"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/text_ajustes_cuenta_privacidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/privacidad_seguridad"
+            android:textColor="@color/primary"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:id="@+id/layout_ajustes_privacidad"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/button_reset_password"
+                style="@style/Widget.Material3.ExtendedFloatingActionButton.Icon.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/roboto"
+                android:text="@string/reset_password"
+                android:textAlignment="viewStart"
+                android:textColor="@color/primary"
+                android:textColorHighlight="@color/primary"
+                android:textColorLink="@color/primary"
+                android:textSize="14sp"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/ic_round_keyboard_arrow_right_24"
+                app:iconGravity="end"
+                app:iconPadding="0dp"
+                app:iconTint="@color/primary"
+                app:strokeColor="@color/tertiary_light" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

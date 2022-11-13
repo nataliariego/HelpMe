@@ -23,6 +23,27 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".FriendsActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".FaqActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".AjustesCuentaActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".CreateAccountActivity"
             android:exported="false" >
             <meta-data
@@ -45,6 +66,7 @@
         <activity
             android:name=".HomeActivity"
             android:exported="true" >
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

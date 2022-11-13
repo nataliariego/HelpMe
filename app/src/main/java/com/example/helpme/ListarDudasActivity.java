@@ -1,12 +1,12 @@
 package com.example.helpme;
 
 import android.app.ActivityOptions;
+import android.app.Fragment;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageButton;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +21,6 @@ import adapter.DudaAdapter;
 import controller.AlumnoController;
 import controller.AsignaturaController;
 import controller.DudaController;
-import dto.DudaDto;
 import viewmodel.DudaViewModel;
 
 public class ListarDudasActivity extends AppCompatActivity {
@@ -54,7 +53,7 @@ public class ListarDudasActivity extends AppCompatActivity {
 
 
         // Recuperamos referencia y configuramos recyclerView con la lista de dudas
-        listaDudaView = (RecyclerView) findViewById(R.id.reciclerView);
+        listaDudaView = (RecyclerView) findViewById(R.id.recicler_listado_dudas);
         listaDudaView.setHasFixedSize(true);
 
         /* Un RecyclerView necesita un Layout Manager para manejar el posicionamiento de los
@@ -74,12 +73,15 @@ public class ListarDudasActivity extends AppCompatActivity {
         // y el manejador para el evento click sobre un elemento
 
 
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
+
     @Override
     protected void onResume() {
         super.onResume();
+
 
         cargarDudas();
 
@@ -87,6 +89,7 @@ public class ListarDudasActivity extends AppCompatActivity {
         listaDudaView.setAdapter(dudaAdapter);
 
         dudaAdapter.notifyDataSetChanged();
+
     }
 
     //click del item del adapter

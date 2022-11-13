@@ -2,9 +2,12 @@ package com.example.helpme;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,8 +27,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -59,6 +62,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
         titulo = (EditText) findViewById(R.id.editTextTituloDudaNueva);
         descripcion = (EditText) findViewById(R.id.editTextDuda);
         myFirebase = FirebaseFirestore.getInstance();
+        BottomNavigationView navegacion = findViewById(R.id.bottomNavigationView);
         //TODO: loadAsignaturas();
         List<String> asignaturas1 = new ArrayList<>();
         asignaturas1.add("Estructuras de datos");
@@ -68,9 +72,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
         ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter<String>(PublicarDudaActivity.this
                 , android.R.layout.simple_dropdown_item_1line, asignaturas1);
         spinner.setAdapter(arrayAdapter1);
-
         btnPublicar = (Button) findViewById(R.id.buttonpublicar);
-
         btnPublicar.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -82,6 +84,28 @@ public class PublicarDudaActivity extends AppCompatActivity {
                     Snackbar.make(findViewById(R.id.layaoutPublicarDuda), R.string.camposRellenados, Snackbar.LENGTH_LONG).show();
                 }
 
+            }
+        });
+
+        //Navegacion:
+        navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.nav_home:
+                        redirectPantallaHome();
+                        return true;
+                    case R.id.nav_chat:
+
+                        return true;
+                    case R.id.nav_cuenta:
+
+                        return true;
+                    case R.id.nav_dudas:
+
+                        return true;
+                }
+                return false;
             }
         });
 
@@ -117,6 +141,8 @@ public class PublicarDudaActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void crearDuda() {
@@ -242,5 +268,13 @@ public class PublicarDudaActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private void redirectPantallaHome() {
+        Intent listadoDudasIntent = new Intent(PublicarDudaActivity.this, HomeActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
     }
 }

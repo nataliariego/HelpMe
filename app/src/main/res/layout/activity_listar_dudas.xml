@@ -6,14 +6,49 @@
     android:layout_height="match_parent"
     tools:context=".ListarDudasActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/reciclerView"
-        android:layout_width="398dp"
-        android:layout_height="667dp"
-        android:background="@drawable/button_rounded_gray_light"
+    <LinearLayout
+        android:id="@+id/layout_listar_dudas_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.333" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_toolbar_listar_dudas"
+            android:name="com.example.helpme.TopToolbarFragment"
+            android:layout_width="match_parent"
+            android:layout_height="55dp" />
+
+        <ScrollView
+            android:id="@+id/scroll_listado_dudas"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recicler_listado_dudas"
+                    android:layout_width="match_parent"
+                    android:layout_height="667dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginBottom="0dp"
+                    android:background="@color/transparent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

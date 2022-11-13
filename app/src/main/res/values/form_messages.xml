@@ -5,4 +5,7 @@
 
     <string name="email_invalid">El email no es válido</string>
     <string name="password_invalid">La contraseña no es segura</string>
+    <string name="password_not_matching">Las contraseñas no coinciden</string>
+    <string name="uo_not_valid">El Identificador UO no es válido</string>
+    <string name="uo_already_exists">Ya tienes una cuenta creada con el UO</string>
 </resources>

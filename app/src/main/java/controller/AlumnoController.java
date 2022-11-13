@@ -5,15 +5,21 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.helpme.model.Alumno;
+import com.example.helpme.model.Asignatura;
+import com.example.helpme.model.Duda;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -24,7 +30,57 @@ public class AlumnoController {
 
     public static final String TAG = "ALUMNO_CONTROLLER";
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private static AlumnoController instance;
+
+    public static synchronized AlumnoController getInstance() {
+        if (instance == null) {
+            instance = new AlumnoController();
+            db = FirebaseFirestore.getInstance();
+        }
+
+        return instance;
+    }
+
+    /**
+     * Listado de todas las dudas de la aplicación.
+     *
+     * @return
+     */
+    public MutableLiveData<List<Alumno>> findAll() {
+        MutableLiveData<List<Alumno>> liveAlumnos = new MutableLiveData<List<Alumno>>();
+
+        db.collection(Alumno.COLLECTION)
+                .addSnapshotListener((snapshot, e) -> {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+
+                    List<Alumno> alumnos = new ArrayList<>();
+                    if (snapshot != null && !snapshot.isEmpty()) {
+                        for (DocumentSnapshot documentSnapshot : snapshot.getDocuments()) {
+                            Alumno alumno = documentSnapshot.toObject(Alumno.class);
+
+//                            AlumnoDto aRes = AlumnoAssembler.toDto(documentSnapshot.get(Duda.REF_ALUMNO).toString());
+//                            Log.i(TAG, "ALUMNO CONTROLLER: " + aRes.nombre + " " + aRes.uo);
+
+                            alumno.setNombre(documentSnapshot.getString(Alumno.NOMBRE));
+                            alumno.setUo(documentSnapshot.getString(Alumno.UO));
+                            alumno.setUrl_foto(documentSnapshot.getString(Alumno.URL_FOTO));
+                            alumno.setAsignaturasDominadas(new ArrayList<Asignatura>());
+
+                            alumnos.add(alumno);
+                        }
+                    }
+                    liveAlumnos.postValue(alumnos);
+
+                });
+
+
+        return liveAlumnos;
+    }
 
     /**
      * Obtiene un alumno por su referencia.
@@ -49,11 +105,33 @@ public class AlumnoController {
         });
     }
 
-    public void update(AlumnoDto alumno){
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void findByUO(String uo, AlumnoCallback callback) {
+        Task<QuerySnapshot> document = db.collection(Alumno.COLLECTION).whereEqualTo("uo", uo).get();
 
-        String id = UUID.randomUUID().toString();
+
+
+        document.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<DocumentSnapshot> docs = task.getResult().getDocuments();
+
+                    if(docs.size() > 0){
+                        DocumentSnapshot doc = docs.get(0);
+
+                        Alumno alumno = getPayload(doc.getId(), doc.getString(Alumno.UO), doc.getString(Alumno.NOMBRE));
+                        callback.callback(alumno);
+                    }
+                }
+            }
+        });
+    }
+
+    public void update(AlumnoDto alumno, String uid){
+
         Map<String, Object> alHash = AlumnoAssembler.toHashMap(alumno);
-        db.collection(Alumno.COLLECTION).document(id).set(alHash).addOnCompleteListener(new OnCompleteListener<Void>() {
+        db.collection(Alumno.COLLECTION).document(uid).set(alHash).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
@@ -67,7 +145,7 @@ public class AlumnoController {
         return new Alumno(id, uo, nombre);
     }
 
-    interface AlumnoCallback {
+    public interface AlumnoCallback {
         void callback(Alumno alumno);
     }
 }

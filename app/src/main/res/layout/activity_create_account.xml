@@ -88,35 +88,55 @@
                 android:paddingRight="20dp"
                 android:textColorHint="@color/text_color_hint" />
 
-            <EditText
-                android:id="@+id/text_password_create_account"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_password_ca_wrapper"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
                 android:layout_marginBottom="20dp"
-                android:autofillHints=""
                 android:background="@drawable/rounded_corners_publicarduda"
-                android:drawableEnd="@drawable/ic_round_visibility_24"
-                android:ems="10"
-                android:hint="@string/hint_contraseña_login"
-                android:inputType="textPassword"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:textColorHint="@color/text_color_hint" />
+                app:endIconMode="password_toggle"
+                app:endIconDrawable="@drawable/show_password_24"
+                android:textColorHint="@color/text_color_hint"
+                android:tooltipText="Introduce una contraseña de al menos 6 caracteres alfanuméricos."
+                >
 
-            <EditText
-                android:id="@+id/text_repeat_password_create_account"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/text_password_ca"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:hint="@string/hint_contraseña_login"
+                    android:inputType="textPassword"
+                    android:shadowColor="@color/transparent"
+                    android:textColorHint="@color/text_color_hint"
+                    android:textSize="16sp"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_password_repeated_ca_wrapper"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
                 android:layout_marginBottom="20dp"
-                android:autofillHints=""
                 android:background="@drawable/rounded_corners_publicarduda"
-                android:drawableEnd="@drawable/ic_round_visibility_24"
-                android:ems="10"
-                android:hint="@string/hint_repetir_password"
-                android:inputType="textPassword"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:textColorHint="@color/text_color_hint" />
+                app:endIconMode="password_toggle"
+                app:endIconDrawable="@drawable/show_password_24"
+                android:textColorHint="@color/text_color_hint"
+                android:tooltipText="Introduce una contraseña de al menos 6 caracteres alfanuméricos."
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/text_repeat_password_create_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:hint="@string/hint_repetir_password"
+                    android:inputType="textPassword"
+                    android:shadowColor="@color/transparent"
+                    android:textColorHint="@color/text_color_hint"
+                    android:textSize="16sp"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_signup_create_account"
