@@ -4,10 +4,14 @@ public class Curso {
     private String id;
     private String numero;
 
+    public static final String NUMERO = "numero";
+
     public Curso(String id, String numero) {
         this.id = id;
         this.numero = numero;
     }
+
+    public Curso(){}
 
     public String getId() {
         return id;

@@ -40,6 +40,24 @@
     <string name="hint_uo">UOXXXXXX</string>
     <string name="hint_nombre_completo">Nombre Completo</string>
     <string name="hint_repetir_password">Repetir contraseña</string>
+
+    <string name="title_activity_profile">ProfileActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="UO">UO277516</string>
+    <string name="email">UO277516@uniovi.es</string>
+    <string name="editicon">editicon</string>
+    <string name="asignaturas">Asignaturas</string>
+    <string name="curso">Curso</string>
+    <string name="nombre_completo">Nombre completo</string>
+    <string name="guardar">Guardar</string>
+
     <string name="tituloMenuHome">Home</string>
     <string name="tituloMenuChat">Chat</string>
     <string name="tituloMenuDudas">Dudas</string>
@@ -70,4 +88,5 @@
     <string name="ajustes">Ajustes</string>
     <string name="privacidad_seguridad">Privacidad y seguridad</string>
     <string name="reset_password">Restablecer contraseña</string>
+
 </resources>
