@@ -2,4 +2,5 @@
 <resources>
     <dimen name="top_border">32dp</dimen>
     <dimen name="spacing_xlarge">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

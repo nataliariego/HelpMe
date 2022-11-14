@@ -1,110 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_duda_resumen"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:padding="@dimen/spacing_xlarge"
-    >
+    android:layout_height="123dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="114dp"
-        android:background="@drawable/constraintlayout_rounded_courners">
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/layout_main_resumen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:foregroundGravity="center"
+        app:flow_verticalAlign="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <RelativeLayout
+            android:id="@+id/layout_resumen_avatar"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:gravity="center">
 
+            <ImageView
+                android:id="@+id/img_perfil_alumno_duda"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerInParent="true"
+                android:baselineAlignBottom="false"
+                android:contentDescription="@string/resumen_img_perfil_alumno_descripcion"
+                android:foregroundGravity="center"
+                app:srcCompat="@drawable/profile_placeholcer_primary_48" />
 
-        <TextView
-            android:id="@+id/asignatura"
-            android:layout_width="44dp"
-            android:layout_height="36dp"
-            android:background="@drawable/textview_rounded_courners"
-            android:gravity="center"
-            android:text="@string/asignatura"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.988"
-            app:layout_constraintStart_toStartOf="parent"
-            android:color="@color/primary"
-            app:layout_constraintVertical_bias="0.805" />
+            <TextView
+                android:id="@+id/tx_siglas_alumno_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:text="@string/avatar_placeholder_text"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="25sp" />
+        </RelativeLayout>
 
-        <TextView
-            android:id="@+id/fecha"
-            android:layout_width="162dp"
-            android:layout_height="25dp"
-            android:layout_marginTop="29dp"
-            android:color="#546E7A"
-            android:text="@string/fecha"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/persona_duda"
-            app:layout_constraintHorizontal_bias="0.951"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/persona_duda"
-            app:layout_constraintVertical_bias="0.0" />
+        <LinearLayout
+            android:id="@+id/resumen_duda_detalles"
+            android:layout_width="310dp"
+            android:layout_height="123dp"
+            android:gravity="clip_vertical|center_vertical"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/persona_duda"
-            android:layout_width="166dp"
-            android:layout_height="22dp"
-            android:color="@color/primary"
-            android:text="@string/persona_duda"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.408"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tituloDuda"
-            app:layout_constraintVertical_bias="0.486" />
+            <TextView
+                android:id="@+id/txTituloDuda"
+                android:layout_width="228dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="@string/resumen_ttitulo_duda"
+                android:textColor="@color/primary"
+                android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/tituloDuda"
-            android:layout_width="225dp"
-            android:layout_height="26dp"
-            android:color="@color/primary"
-            android:text="@string/titulo"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.564"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.181" />
+            <LinearLayout
+                android:id="@+id/layout_resumen_datos_alumno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/img_persona_duda"
-            android:layout_width="56dp"
-            android:layout_height="62dp"
-            android:contentDescription="@string/app_name"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="2dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.018"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/ic_launcher" />
+                <LinearLayout
+                    android:id="@+id/layout_resumen_duda_datos_alumno_nombre_fecha"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/resuelta"
-            android:color="@color/primary"
-            android:layout_width="48dp"
-            android:layout_height="39dp"
-            android:background="@android:color/transparent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.04"
-            app:srcCompat="@drawable/check" />
+                    <TextView
+                        android:id="@+id/txNombreAlumnoDudaResumen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
+                        android:text="@string/resumen_nombre_alumno_duda"
+                        android:textColor="@color/primary"
+                        android:textSize="14sp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/txResumenFechaPublicacionDuda"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
+                        android:text="@string/txFechaSubidaDuda"
+                        android:textColor="#546E7A"
+                        android:textSize="12sp" />
 
-</LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txResumenDudaAbrevMateria"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:background="@color/secondary"
+                    android:fontFamily="@font/roboto_bold"
+                    android:gravity="center"
+                    android:text="@string/tx_asignatura_resumen_duda_abreviatura"
+                    android:textColor="@color/primary" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.gridlayout.widget.GridLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
