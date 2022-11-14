@@ -128,6 +128,30 @@ public class AlumnoController {
         });
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void findByUOWithPhoto(String uo, AlumnoCallback callback) {
+        Task<QuerySnapshot> document = db.collection(Alumno.COLLECTION).whereEqualTo("uo", uo).get();
+
+
+
+        document.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<DocumentSnapshot> docs = task.getResult().getDocuments();
+
+                    if(docs.size() > 0){
+                        DocumentSnapshot doc = docs.get(0);
+
+                        Alumno alumno = getPayloadWithUrl(doc.getId(), doc.getString(Alumno.UO), doc.getString(Alumno.NOMBRE), doc.getString("url_foto"));
+                        callback.callback(alumno);
+                    }
+                }
+            }
+        });
+    }
+
     public void update(AlumnoDto alumno, String uid){
 
         Map<String, Object> alHash = AlumnoAssembler.toHashMap(alumno);
@@ -143,6 +167,10 @@ public class AlumnoController {
 
     private Alumno getPayload(String id, String uo, String nombre) {
         return new Alumno(id, uo, nombre);
+    }
+
+    private Alumno getPayloadWithUrl(String id, String uo, String nombre, String url_foto) {
+        return new Alumno(id, uo, nombre, url_foto);
     }
 
     public interface AlumnoCallback {

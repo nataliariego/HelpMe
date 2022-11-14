@@ -49,6 +49,9 @@ public class Alumno implements Parcelable {
     public Alumno(String id, String nombre, String uo) {
         this(id, nombre, uo, null, null);
     }
+    public Alumno(String id, String nombre, String uo, String url_foto) {
+        this(id, nombre, uo, url_foto, null);
+    }
 
     public Alumno(Parcel in) {
         id = in.readString();
@@ -119,5 +122,18 @@ public class Alumno implements Parcelable {
 
     public void setUrl_foto(String url_foto) {
         this.url_foto = url_foto;
+    }
+
+    @Override
+    public String toString() {
+        return "Alumno{" +
+                "id='" + id + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", uo='" + uo + '\'' +
+                ", url_foto='" + url_foto + '\'' +
+                ", email='" + email + '\'' +
+                ", userId='" + userId + '\'' +
+                ", asignaturasDominadas=" + asignaturasDominadas +
+                '}';
     }
 }
