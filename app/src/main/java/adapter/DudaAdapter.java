@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import assembler.AlumnoAssembler;
+import de.hdodenhof.circleimageview.CircleImageView;
 import dto.DudaDto;
 import util.DateUtils;
 import util.StringUtils;
@@ -65,7 +66,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
         private TextView fechaPublicacion;
         private TextView abrevMateria;
         private TextView siglasAlumno;
-        private ImageView img_persona_duda;
+        private CircleImageView img_persona_duda;
 
         public DudaViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -86,6 +87,9 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
             siglasAlumno.setText(StringUtils.getAcronymName(AlumnoAssembler.toDto(duda.alumno).nombre));
             //cojo la url de la foto
             String url_foto = duda.alumno.split(",")[1].split("=")[1];
+            System.out.println("patata"+url_foto );
+            System.out.println("patatita"+duda.alumno );
+
             Picasso.get()
                     .load(url_foto)
                     .into(img_persona_duda);

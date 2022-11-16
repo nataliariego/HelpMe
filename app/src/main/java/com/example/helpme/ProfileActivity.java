@@ -2,6 +2,7 @@ package com.example.helpme;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -9,8 +10,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -23,8 +26,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import assembler.MateriaAssembler;
 import controller.AlumnoController;
 import de.hdodenhof.circleimageview.CircleImageView;
+import dto.AlumnoDto;
 import dto.AsignaturaDto;
 import dto.CursoDto;
 import dto.DudaDto;
@@ -32,6 +37,7 @@ import viewmodel.AsignaturaViewModel;
 import viewmodel.CursoViewModel;
 
 import com.example.helpme.model.Alumno;
+import com.example.helpme.model.Asignatura;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -58,7 +64,13 @@ public class ProfileActivity extends AppCompatActivity {
     private CircleImageView img_persona;
     private EditText nombreCompleto;
 
+    private List<CheckBox> cB = new ArrayList<>();
+
     private BottomNavigationView navegacion;
+
+    private ConstraintLayout btnGuardar;
+
+    private List<AsignaturaDto> asignaturaDuda = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +81,7 @@ public class ProfileActivity extends AppCompatActivity {
         textViewEmail = findViewById(R.id.textViewEmail);
         img_persona = findViewById(R.id.img_persona_duda);
         nombreCompleto = findViewById(R.id.tv_user_name);
+        btnGuardar = findViewById(R.id.bt_guardar_perfil);
 
         //Pongo los datos del usuario que está autenticado
         String uo = userInSession.getEmail().split("@")[0].toUpperCase();
@@ -82,10 +95,10 @@ public class ProfileActivity extends AppCompatActivity {
                     if (alumno != null) {
                         //Esto tdo no está bien porque en la base de datos
                         //Se guardan raro los datos, faltan cosas...etc
-                        Log.i("patita", alumno.toString());
+                        System.out.println("aver"+alumno.toString());
                         textViewUO.setText(alumno.getNombre());
                         textViewEmail.setText(alumno.getNombre()+"@uniovi.es");
-                        nombreCompleto.setText(alumno.getUo());
+                        nombreCompleto.setText(alumno.getNombre());
                         Picasso.get().load(alumno.getUrl_foto()).into(img_persona);
                     }
                 }
@@ -117,6 +130,73 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        //Boton guardar
+        btnGuardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                actualizarPerfil();
+            }
+        });
+    }
+
+    private void actualizarPerfil() {
+
+        String uo = userInSession.getEmail().split("@")[0].toUpperCase();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            alumnoController.findByUOWithPhoto(uo, new AlumnoController.AlumnoCallback() {
+                @Override
+                public void callback(Alumno alumno) {
+                    if (alumno != null) {
+                        AlumnoDto a = new AlumnoDto();
+                        a.email=alumno.getEmail();
+                        a.uo=alumno.getNombre();
+                        a.urlFoto=alumno.getEmail();
+                        a.nombre=nombreCompleto.getText().toString();
+                        a.id=alumno.getId();
+                        for (CheckBox c: cB
+                             ) {
+                            if (c.isChecked())
+                            {
+                                crearAsignaturaDuda(c.getText().toString());
+                            }
+                        }
+                        for (AsignaturaDto as: asignaturaDuda
+                             ) {
+                            a.asignaturasDominadas.add(MateriaAssembler.toHashMap(as.materia).get("abreviatura").toString());
+                        }
+                        asignaturaDuda.clear();
+                        System.out.println(a.asignaturasDominadas);
+                        alumnoController.update(a, a.id);
+                    }
+
+
+
+                }
+            });
+        }
+
+    }
+
+
+    private void crearAsignaturaDuda(String nombreA) {
+        asignaturaViewModel.getAllDudas().observe(this, dudasResult -> {
+            if (dudasResult != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    dudasResult.forEach(d -> {
+
+                        AsignaturaDto a = new AsignaturaDto();
+                        if (d.getNombre().equals(nombreA)){
+                            a.nombre = d.getNombre();
+                            a.id=d.getId();
+                            a.curso=d.getCurso();
+                            a.materia=d.getMateria();
+                            asignaturaDuda.add(a);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private void cargarCursos() {
@@ -158,22 +238,18 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
 
-            for (AsignaturaDto dto: asignaturaList
-            ) {
-                nombreAsignaturas.add(dto.nombre);
-            }
+
 
             LinearLayout ll = findViewById(R.id.ll_dentroscroll);
 
-            //ScrollView s = findViewById(R.id.scrollView2);
-            //spinnerAsignaturas = findViewById(R.id.spinnerAsignaturasProfile);
-            //spinnerAsignaturas.setAdapter(new ArrayAdapter<>(ProfileActivity.this, android.R.layout.simple_selectable_list_item, nombreAsignaturas));
-            for (String a : nombreAsignaturas) {
+
+            for (AsignaturaDto a : asignaturaList) {
                 CheckBox opcion = new CheckBox(this);
-                opcion.setText(a);
+                opcion.setText(a.nombre);
                 opcion.setLayoutParams(
                         new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 ll.addView(opcion);
+                cB.add(opcion);
             }
         });
     }
