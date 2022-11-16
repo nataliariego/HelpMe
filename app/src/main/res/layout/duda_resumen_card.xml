@@ -23,7 +23,7 @@
             android:layout_height="match_parent"
             android:gravity="center">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_perfil_alumno_duda"
                 android:layout_width="70dp"
                 android:layout_height="70dp"

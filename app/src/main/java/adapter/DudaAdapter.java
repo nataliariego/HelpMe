@@ -13,14 +13,17 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.R;
+
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Materia;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import assembler.AlumnoAssembler;
+import de.hdodenhof.circleimageview.CircleImageView;
 import dto.DudaDto;
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 import util.StringUtils;
@@ -69,7 +72,9 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
         private TextView fechaPublicacion;
         private TextView abrevMateria;
         private TextView siglasAlumno;
+
         private ImageView imgPerfilAlumno;
+
 
         public DudaViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -79,7 +84,9 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
             fechaPublicacion = itemView.findViewById(R.id.txResumenFechaPublicacionDuda);
             abrevMateria = itemView.findViewById(R.id.txResumenDudaAbrevMateria);
             siglasAlumno = itemView.findViewById(R.id.tx_siglas_alumno_avatar);
+
             imgPerfilAlumno = itemView.findViewById(R.id.img_perfil_alumno_duda);
+
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
@@ -87,6 +94,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
             titulo.setText(duda.titulo);
             //fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha));
             fechaPublicacion.setText(duda.fecha);
+
             siglasAlumno.setText(StringUtils.getAcronymName(duda.alumno.get(Alumno.NOMBRE).toString()));
 
             if(duda.materia != null){
@@ -105,6 +113,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
                         .transform(new CropCircleTransformation())
                         .into(imgPerfilAlumno);
             }
+
 
         }
     }

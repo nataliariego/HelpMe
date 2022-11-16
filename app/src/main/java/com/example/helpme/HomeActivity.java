@@ -79,6 +79,7 @@ public class HomeActivity extends AppCompatActivity {
         cargarDudas();
 
 
+
         //Navegación
         navegacion = findViewById(R.id.bottomNavigationView);
         navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -188,6 +189,7 @@ public class HomeActivity extends AppCompatActivity {
                     dudas.add(newDuda);
                 });
             }
+
 
             dudaAdapter = new DudaAdapter(dudas);
             listadoDudasHomeRecycler.setAdapter(dudaAdapter);
