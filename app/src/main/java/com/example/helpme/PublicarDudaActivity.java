@@ -42,7 +42,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import assembler.CursoAssembler;
+import assembler.MateriaAssembler;
 import controller.CursoController;
+import dto.AsignaturaDto;
+import dto.CursoDto;
+import dto.MateriaDto;
+import viewmodel.AsignaturaViewModel;
+import viewmodel.CursoViewModel;
+import viewmodel.MateriaViewModel;
 
 public class PublicarDudaActivity extends AppCompatActivity {
 
@@ -51,8 +59,15 @@ public class PublicarDudaActivity extends AppCompatActivity {
     private EditText descripcion;
     private FirebaseFirestore myFirebase;
     private Button btnPublicar;
-
+    private AsignaturaViewModel asignaturaViewModel = new AsignaturaViewModel();
+    private List<String> nombreAsignaturas = new ArrayList<>();
+    private List<AsignaturaDto> asignaturaList = new ArrayList<AsignaturaDto>();
     private CursoController cursoController = new CursoController();
+    private List<AsignaturaDto> asignaturaDuda = new ArrayList<>();
+    private CursoViewModel cursoViewModel = new CursoViewModel();
+    private List<CursoDto> cursos = new ArrayList<CursoDto>();
+    private MateriaViewModel materiaViewModel = new MateriaViewModel();
+    private List<MateriaDto> materias =  new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,15 +78,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
         descripcion = (EditText) findViewById(R.id.editTextDuda);
         myFirebase = FirebaseFirestore.getInstance();
         BottomNavigationView navegacion = findViewById(R.id.bottomNavigationView);
-        //TODO: loadAsignaturas();
-        List<String> asignaturas1 = new ArrayList<>();
-        asignaturas1.add("Estructuras de datos");
-        asignaturas1.add("Bases de datos");
-        asignaturas1.add("Comunicación Persona-Máquina");
-
-        ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter<String>(PublicarDudaActivity.this
-                , android.R.layout.simple_dropdown_item_1line, asignaturas1);
-        spinner.setAdapter(arrayAdapter1);
+        cargarAsignaturas();
         btnPublicar = (Button) findViewById(R.id.buttonpublicar);
         btnPublicar.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -99,10 +106,10 @@ public class PublicarDudaActivity extends AppCompatActivity {
 
                         return true;
                     case R.id.nav_cuenta:
-
+                        redirectPantallaCuenta();
                         return true;
                     case R.id.nav_dudas:
-
+                        redirectPantallaDudas();
                         return true;
                 }
                 return false;
@@ -159,48 +166,30 @@ public class PublicarDudaActivity extends AppCompatActivity {
         alumno.put("asignaturasDominadas", new ArrayList<>());
 
         Map<String, Object> asignaturaMap = new HashMap<>();
-        asignaturaMap.put("nombre", spinner.getSelectedItem().toString());
-        asignaturaMap.put("curso", new HashMap<>());
-        asignaturaMap.put("id", "2");
-        asignaturaMap.put("materia", new HashMap<>());
+        String nAsignatura = spinner.getSelectedItem().toString();
+        crearAsignaturaDuda(nAsignatura);
 
-        Map<String, Object> materia = new HashMap<>();
-        materia.put("abreviatura", "");
-        materia.put("denominacion", "");
-        materia.put("id", "");
+        Map<String, Object> cursoMap = CursoAssembler.toHashMap(asignaturaDuda.get(0).curso);
+
+
+        Map<String, Object> materiaMap = MateriaAssembler.toHashMap(asignaturaDuda.get(0).materia);
+        asignaturaMap.put("nombre", nAsignatura);
+        asignaturaMap.put("curso", cursoMap);
+        asignaturaMap.put("id", asignaturaDuda.get(0).id);
+        asignaturaMap.put("materia", materiaMap);
+
+
 
         Map<String, Object> docData = new HashMap<>();
         docData.put("titulo", titulo.getText().toString());
         docData.put("descripcion", descripcion.getText().toString());
         docData.put("alumno", alumno);
         docData.put("asignatura", asignaturaMap);
-        docData.put("materia", materia);
+        docData.put("materia", materiaMap);
         docData.put("resuelta", false);
         docData.put("fecha", fecha);
 
-
-// todo:       Duda duda = new Duda(titulo.getText().toString(), descripcion.getText().toString(), alumno.toString()
-//                , "ASIGNATURA/Pu86h2KJes5iydRSNEGl", asig.getMateria(), false, fecha);
-
-//        Duda duda = new Duda(titulo.getText().toString(), descripcion.getText().toString(), alumno.toString()
-//                , asignaturaMap.toString(), "", false, fecha);
-
-//        myFirebase.collection("DUDA")
-//                .add(duda)
-//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                    @Override
-//                    public void onSuccess(DocumentReference documentReference) {
-//                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w(TAG, "Error adding document", e);
-//                    }
-//                });
-
-        myFirebase.collection(Duda.COLLECTION).document("one")
+        myFirebase.collection(Duda.COLLECTION).document()
                 .set(docData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -235,43 +224,109 @@ public class PublicarDudaActivity extends AppCompatActivity {
         return true;
     }
 
-    public void loadAsignaturas() {
-        List<Asignatura> asignaturas = new ArrayList<Asignatura>();
-        final Curso[] cursoAsi = new Curso[1];
-        final Materia[] materiaAsi = new Materia[1];
-        Optional<Curso> curso2;
-        //Cambiar xq cabio constructor asignatura
-        //asignaturas.add(new Asignatura("a","b","Sin definir"));
-        myFirebase.collection("ASIGNATURA")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String id = document.getId();
-                                String curso = document.getData().get("curso").toString();
-                                String materia = document.getData().get("materia").toString();
-                                String nombre = document.getData().get("nombre").toString();
-                                System.out.println("holaaaaaa"+curso);
-                                asignaturas.add(new Asignatura(id,nombre, curso, materia));
-                            }
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
+    private void cargarAsignaturas() {
+        asignaturaViewModel.getAllDudas().observe(this, dudasResult -> {
+            if (dudasResult != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    dudasResult.forEach(d -> {
+                        Log.i(TAG, d.getNombre());
+                        AsignaturaDto a = new AsignaturaDto();
+                        a.nombre = d.getNombre();
+
+                        asignaturaList.add(a);
+                    });
+                }
+            }
+
+            for (AsignaturaDto dto: asignaturaList
+            ) {
+                nombreAsignaturas.add(dto.nombre);
+            }
+
+            spinner = findViewById(R.id.spinnerAsignaturas);
+            spinner.setAdapter(new ArrayAdapter<>(PublicarDudaActivity.this, android.R.layout.simple_selectable_list_item, nombreAsignaturas));
+
+        });
+    }
+
+    private void crearMateriaDuda(String abre) {
+        materiaViewModel.getAllDudas().observe(this, dudasResult -> {
+            if (dudasResult != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    dudasResult.forEach(d -> {
+                        System.out.println("LLegdshfgshdgfskjhf");
+                        Log.i(TAG, d.getAbreviatura());
+                        if (abre.equals(d.getAbreviatura())){
+                            MateriaDto a = new MateriaDto();
+                            a.id = d.getId();
+                            a.abreviatura=d.getAbreviatura();
+                            a.denominacion=d.getDenominacion();
+
+                            materias.add(a);
                         }
-                        ArrayAdapter<Asignatura> arrayAdapter = new ArrayAdapter<Asignatura>(PublicarDudaActivity.this
-                                , android.R.layout.simple_dropdown_item_1line, asignaturas);
-                        spinner.setAdapter(arrayAdapter);
-                    }
-                });
 
+                    });
+                }
+            }
+        });
+    }
 
+    private void crearAsignaturaDuda(String nombreA) {
+        asignaturaViewModel.getAllDudas().observe(this, dudasResult -> {
+            if (dudasResult != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    dudasResult.forEach(d -> {
 
+                        AsignaturaDto a = new AsignaturaDto();
+                        if (d.getNombre().equals(nombreA)){
+                            a.nombre = d.getNombre();
+                            a.id=d.getId();
+                            a.curso=d.getCurso();
+                            a.materia=d.getMateria();
+                            asignaturaDuda.add(a);
+                        }
+                    });
+                }
+            }
+        });
+    }
 
+    private void crearCursoDuda(String num) {
+        cursoViewModel.getAllCursos().observe(this, dudasResult -> {
+            if (dudasResult != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    dudasResult.forEach(d -> {
+                        Log.i(TAG, d.getNumero());
+                        if (num.equals(d.getNumero())) {
+                            CursoDto a = new CursoDto();
+                            a.numero = d.getNumero();
+                            cursos.add(a);
+                        }
+                    });
+                }
+            }
+
+        });
     }
 
     private void redirectPantallaHome() {
         Intent listadoDudasIntent = new Intent(PublicarDudaActivity.this, HomeActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
+    }
+
+    private void redirectPantallaDudas() {
+        Intent listadoDudasIntent = new Intent(PublicarDudaActivity.this, ListarDudasActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
+    }
+
+    private void redirectPantallaCuenta() {
+        Intent listadoDudasIntent = new Intent(PublicarDudaActivity.this, ProfileActivity.class);
         // Para transiciones
         startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 

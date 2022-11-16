@@ -55,9 +55,7 @@ public class FriendsActivity extends AppCompatActivity {
 
         cargarAmigos();
 
-        alumnoAdapter = new AlumnoAdapter(amigos);
-        listadoAmigos.setAdapter(alumnoAdapter);
-        alumnoAdapter.notifyDataSetChanged();
+
 
 
     }
@@ -91,10 +89,6 @@ public class FriendsActivity extends AppCompatActivity {
         super.onResume();
 
         cargarAmigos();
-
-        alumnoAdapter = new AlumnoAdapter(amigos);
-        listadoAmigos.setAdapter(alumnoAdapter);
-        alumnoAdapter.notifyDataSetChanged();
     }
 
 
@@ -114,6 +108,9 @@ public class FriendsActivity extends AppCompatActivity {
                     amigos.add(newDuda);
                 });
             }
+            alumnoAdapter = new AlumnoAdapter(amigos);
+            listadoAmigos.setAdapter(alumnoAdapter);
+            alumnoAdapter.notifyDataSetChanged();
         });
     }
 }
