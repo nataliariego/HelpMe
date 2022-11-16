@@ -97,9 +97,11 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
 
             siglasAlumno.setText(StringUtils.getAcronymName(duda.alumno.get(Alumno.NOMBRE).toString()));
 
+            System.out.println("--->"+duda.materia);
             if(duda.materia != null){
                 String abrev = duda.materia.get(Materia.ABREVIATURA).toString();
                 abrevMateria.setText(abrev);
+                System.out.println("--->"+abrev);
             }
 
 

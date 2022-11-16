@@ -162,6 +162,7 @@ public class ListarDudasActivity extends AppCompatActivity {
                     newDuda.asignatura = d.getAsignaturaId();
                     newDuda.fecha = d.getFecha();
                     newDuda.id=d.getId();
+                    newDuda.materia = d.getMateriaId();
 
                     dudas.add(newDuda);
 
