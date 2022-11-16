@@ -7,244 +7,270 @@
     android:background="@color/white"
     tools:context=".ProfileActivity">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/img_persona_duda"
-        android:layout_width="143dp"
-        android:layout_height="124dp"
-        android:contentDescription="@string/app_name"
-        app:civ_border_color="#FF000000"
-        app:civ_border_width="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.074"
-        app:srcCompat="@mipmap/ic_launcher" />
-
-    <TextView
-        android:id="@+id/textViewUO"
-        android:layout_width="91dp"
-        android:layout_height="34dp"
-        android:text="@string/UO"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_persona_duda"
-        app:layout_constraintVertical_bias="0.038" />
-
-    <TextView
-        android:id="@+id/textViewEmail"
-        android:layout_width="178dp"
-        android:layout_height="24dp"
-        android:text="@string/email"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewUO"
-        app:layout_constraintVertical_bias="0.0" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="401dp"
-        android:layout_height="381dp"
+        android:id="@+id/containerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.66">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/ll_user_name"
-            android:layout_width="369dp"
-            android:layout_height="68dp"
-            android:layout_margin="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/text_view_profile"
-            android:orientation="vertical"
-            android:padding="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp">
-
-                <EditText
-                    android:id="@+id/tv_user_name"
-                    android:layout_width="280dp"
-                    android:layout_height="32dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginEnd="54dp"
-                    android:layout_marginBottom="9dp"
-                    android:background="@color/white"
-                    android:minHeight="48dp"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="26dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginBottom="15dp"
-                    android:contentDescription="@string/editicon"
-                    app:srcCompat="@drawable/edit_icon"
-                    app:tint="#646464" />
-            </RelativeLayout>
-
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_user_name_title"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="@color/white"
-            android:text="@string/nombre_completo"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <!-- ASIGNATURAS -->
-
-        <LinearLayout
-            android:id="@+id/ll_user_curse"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:background="@drawable/text_view_profile"
-            android:orientation="vertical"
-            android:padding="15dp"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_persona_duda"
+            android:layout_width="143dp"
+            android:layout_height="124dp"
+            android:contentDescription="@string/app_name"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.333">
-
-            <Spinner
-                android:id="@+id/spinnerCurso"
-                android:layout_width="345dp"
-                android:layout_height="48dp"
-                android:entries="@array/asiganturas_array"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.355"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextDuda"
-                app:layout_constraintVertical_bias="0.243" />
-        </LinearLayout>
+            app:layout_constraintVertical_bias="0.074"
+            app:srcCompat="@mipmap/ic_launcher" />
 
         <TextView
-            android:id="@+id/tv_user_curse"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="96dp"
-            android:layout_marginEnd="8dp"
-            android:background="@color/white"
-            android:text="@string/curso"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <LinearLayout
-            android:id="@+id/ll_user_asignaturas"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/text_view_profile"
-            android:orientation="vertical"
-            android:padding="15dp"
+            android:id="@+id/textViewUO"
+            android:layout_width="91dp"
+            android:layout_height="34dp"
+            android:text="@string/UO"
+            android:textStyle="bold"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.699">
-
-            <Spinner
-                android:id="@+id/spinnerAsignaturasProfile"
-                android:layout_width="345dp"
-                android:layout_height="48dp"
-                android:entries="@array/asiganturas_array"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.355"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextDuda"
-                app:layout_constraintVertical_bias="0.243" />
-        </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@+id/img_persona_duda"
+            app:layout_constraintVertical_bias="0.038" />
 
         <TextView
-            android:id="@+id/tv_asignaturas"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="196dp"
-            android:layout_marginEnd="8dp"
-            android:background="@color/white"
-            android:text="@string/asignaturas"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/bt_guardar_perfil"
-            android:layout_width="156dp"
-            android:layout_height="40dp"
-            android:background="@drawable/button_rounded_corners_primary"
+            android:id="@+id/textViewEmail"
+            android:layout_width="178dp"
+            android:layout_height="24dp"
+            android:text="@string/email"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewUO"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="401dp"
+            android:layout_height="381dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.982"
-            tools:ignore="MissingConstraints">
+            app:layout_constraintVertical_bias="0.66">
+
+            <LinearLayout
+                android:id="@+id/ll_user_name"
+                android:layout_width="369dp"
+                android:layout_height="68dp"
+                android:layout_margin="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/text_view_profile"
+                android:orientation="vertical"
+                android:padding="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp">
+
+                    <EditText
+                        android:id="@+id/tv_user_name"
+                        android:layout_width="280dp"
+                        android:layout_height="32dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginEnd="54dp"
+                        android:layout_marginBottom="9dp"
+                        android:background="@color/white"
+                        android:minHeight="48dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="26dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginBottom="15dp"
+                        android:contentDescription="@string/editicon"
+                        app:srcCompat="@drawable/edit_icon"
+                        app:tint="#646464" />
+                </RelativeLayout>
+
+
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/tx_bt_guardar_perfil"
+                android:id="@+id/tv_user_name_title"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_medium"
-                android:gravity="center"
-                android:text="@string/guardar"
-                android:textColor="@color/white"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@color/white"
+                android:text="@string/nombre_completo"
                 android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <!-- ASIGNATURAS -->
+
+            <LinearLayout
+                android:id="@+id/ll_user_curse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/text_view_profile"
+                android:orientation="vertical"
+                android:padding="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.333">
+
+                <Spinner
+                    android:id="@+id/spinnerCurso"
+                    android:layout_width="345dp"
+                    android:layout_height="48dp"
+                    android:entries="@array/asiganturas_array"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.355"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editTextDuda"
+                    app:layout_constraintVertical_bias="0.243" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_user_curse"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="96dp"
+                android:layout_marginEnd="8dp"
+                android:background="@color/white"
+                android:text="@string/curso"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/ll_user_asignaturas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/text_view_profile"
+                android:orientation="vertical"
+                android:padding="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.699">
+
+                <Spinner
+                    android:id="@+id/spinnerAsignaturasProfile"
+                    android:layout_width="345dp"
+                    android:layout_height="48dp"
+                    android:entries="@array/asiganturas_array"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.355"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editTextDuda"
+                    app:layout_constraintVertical_bias="0.243" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_asignaturas"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="196dp"
+                android:layout_marginEnd="8dp"
+                android:background="@color/white"
+                android:text="@string/asignaturas"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/bt_guardar_perfil"
+                android:layout_width="156dp"
+                android:layout_height="40dp"
+                android:background="@drawable/button_rounded_corners_primary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.982"
+                tools:ignore="MissingConstraints">
+
+                <TextView
+                    android:id="@+id/tx_bt_guardar_perfil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center"
+                    android:text="@string/guardar"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="0dp"
+        android:layout_height="90dp"
+        android:background="@drawable/rounded_corners_navigation"
+        app:itemActiveIndicatorStyle="@style/Theme.Material3.DynamicColors.DayNight"
+        app:itemIconSize="70dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/navigation_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

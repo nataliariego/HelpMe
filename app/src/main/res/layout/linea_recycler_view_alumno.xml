@@ -45,7 +45,7 @@
             android:id="@+id/textViewAsignaturasDominadas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/asignaturas"
+            android:text="@string/asignaturas_dominadas"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/buttonPerfil"
             app:layout_constraintHorizontal_bias="0.363"

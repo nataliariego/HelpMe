@@ -1,13 +1,19 @@
 package com.example.helpme;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +36,7 @@ public class ProfileActivity extends AppCompatActivity {
     private CursoViewModel cursoViewModel = new CursoViewModel();
     private Spinner spinnerCursos;
     private List<String> numeroCursos = new ArrayList<>();
+    private BottomNavigationView navegacion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,25 @@ public class ProfileActivity extends AppCompatActivity {
         cargarAsignaturas();
         cargarCursos();
 
+        //navegacion
+        navegacion = findViewById(R.id.bottomNavigationView);
+        navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.nav_chat:
+
+                        return true;
+                    case R.id.nav_home:
+                        redirectPantallaHome();
+                        return true;
+                    case R.id.nav_dudas:
+
+                        return true;
+                }
+                return false;
+            }
+        });
 
     }
 
@@ -90,5 +116,13 @@ public class ProfileActivity extends AppCompatActivity {
             spinnerAsignaturas.setAdapter(new ArrayAdapter<>(ProfileActivity.this, android.R.layout.simple_selectable_list_item, nombreAsignaturas));
 
         });
+    }
+
+    private void redirectPantallaHome() {
+        Intent listadoDudasIntent = new Intent(ProfileActivity.this, HomeActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
     }
 }
