@@ -106,10 +106,10 @@ public class PublicarDudaActivity extends AppCompatActivity {
 
                         return true;
                     case R.id.nav_cuenta:
-
+                        redirectPantallaCuenta();
                         return true;
                     case R.id.nav_dudas:
-
+                        redirectPantallaDudas();
                         return true;
                 }
                 return false;
@@ -311,6 +311,22 @@ public class PublicarDudaActivity extends AppCompatActivity {
 
     private void redirectPantallaHome() {
         Intent listadoDudasIntent = new Intent(PublicarDudaActivity.this, HomeActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
+    }
+
+    private void redirectPantallaDudas() {
+        Intent listadoDudasIntent = new Intent(PublicarDudaActivity.this, ListarDudasActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
+    }
+
+    private void redirectPantallaCuenta() {
+        Intent listadoDudasIntent = new Intent(PublicarDudaActivity.this, ProfileActivity.class);
         // Para transiciones
         startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 

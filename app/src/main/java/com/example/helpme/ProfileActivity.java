@@ -59,7 +59,7 @@ public class ProfileActivity extends AppCompatActivity {
                         redirectPantallaHome();
                         return true;
                     case R.id.nav_dudas:
-
+                        redirectPantallaDudas();
                         return true;
                 }
                 return false;
@@ -120,6 +120,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void redirectPantallaHome() {
         Intent listadoDudasIntent = new Intent(ProfileActivity.this, HomeActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
+    }
+
+    private void redirectPantallaDudas() {
+        Intent listadoDudasIntent = new Intent(ProfileActivity.this, ListarDudasActivity.class);
         // Para transiciones
         startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
