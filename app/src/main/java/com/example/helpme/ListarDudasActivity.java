@@ -3,10 +3,12 @@ package com.example.helpme;
 import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +23,7 @@ import adapter.DudaAdapter;
 import controller.AlumnoController;
 import controller.AsignaturaController;
 import controller.DudaController;
+import dto.DudaDto;
 import viewmodel.DudaViewModel;
 
 public class ListarDudasActivity extends AppCompatActivity {

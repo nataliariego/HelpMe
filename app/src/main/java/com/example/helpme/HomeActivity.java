@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.helpme.model.Duda;
 import com.example.helpme.navigation.ActivityNavigation;
 import com.example.helpme.navigation.impl.ActivityNavigationImpl;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 
 import org.checkerframework.checker.units.qual.A;
@@ -52,6 +54,7 @@ public class HomeActivity extends AppCompatActivity {
     private List<DudaDto> dudas = new ArrayList<>();
 
     private ActivityNavigationImpl navigation = new ActivityNavigationImpl();
+    private BottomNavigationView navegacion;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -78,6 +81,26 @@ public class HomeActivity extends AppCompatActivity {
         dudaAdapter = new DudaAdapter(dudas);
         listadoDudasHomeRecycler.setAdapter(dudaAdapter);
 
+
+        //Navegación
+        navegacion = findViewById(R.id.bottomNavigationView);
+        navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.nav_chat:
+
+                        return true;
+                    case R.id.nav_cuenta:
+                        redirectPantallaCuenta();
+                        return true;
+                    case R.id.nav_dudas:
+
+                        return true;
+                }
+                return false;
+            }
+        });
 
         /* Redirecciones a otras pantallas */
 
@@ -191,5 +214,13 @@ public class HomeActivity extends AppCompatActivity {
     private void cargarDudasInit() {
         Duda d1 = new Duda("Duda 1", "asdfasfd", "asdfasdf", "000", "999", false, "20/10/2022 12:00:01");
 //        dudas.add(d1);
+    }
+
+    private void redirectPantallaCuenta() {
+        Intent listadoDudasIntent = new Intent(HomeActivity.this, ProfileActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
     }
 }
