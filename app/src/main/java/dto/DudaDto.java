@@ -12,9 +12,9 @@ import java.util.Objects;
 public class DudaDto {
     public String titulo;
     public String descripcion;
-    public String alumno;
+    public Map<String, Object> alumno;
     public String asignatura;
-    public String materia;
+    public Map<String, Object> materia;
     public boolean isResuelta;
     public String fecha;
     public String id;

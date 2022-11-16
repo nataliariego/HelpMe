@@ -80,7 +80,6 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-
         //Navegación
         navegacion = findViewById(R.id.bottomNavigationView);
         navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -167,12 +166,9 @@ public class HomeActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        cargarDudas();
+        //cargarDudas();
 
-        dudaAdapter = new DudaAdapter(dudas);
-        listadoDudasHomeRecycler.setAdapter(dudaAdapter);
 
-        dudaAdapter.notifyDataSetChanged();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -187,13 +183,18 @@ public class HomeActivity extends AppCompatActivity {
                     newDuda.titulo = d.getTitulo();
                     newDuda.alumno = d.getAlumnoId();
                     newDuda.asignatura = d.getAsignaturaId();
+                    newDuda.materia = d.getMateriaId();
                     newDuda.fecha = d.getFecha();
 
                     dudas.add(newDuda);
                 });
             }
+
+
             dudaAdapter = new DudaAdapter(dudas);
             listadoDudasHomeRecycler.setAdapter(dudaAdapter);
+
+            dudaAdapter.notifyDataSetChanged();
         });
     }
 
@@ -213,7 +214,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void cargarDudasInit() {
-        Duda d1 = new Duda("Duda 1", "asdfasfd", "asdfasdf", "000", "999", false, "20/10/2022 12:00:01");
+//        Duda d1 = new Duda("Duda 1", "asdfasfd", "asdfasdf", "000", "999", false, "20/10/2022 12:00:01");
 //        dudas.add(d1);
     }
 

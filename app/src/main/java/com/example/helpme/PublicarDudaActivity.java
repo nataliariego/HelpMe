@@ -29,9 +29,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -44,7 +47,9 @@ import java.util.Optional;
 
 import assembler.CursoAssembler;
 import assembler.MateriaAssembler;
+import controller.AlumnoController;
 import controller.CursoController;
+import dto.AlumnoDto;
 import dto.AsignaturaDto;
 import dto.CursoDto;
 import dto.MateriaDto;
@@ -68,6 +73,9 @@ public class PublicarDudaActivity extends AppCompatActivity {
     private List<CursoDto> cursos = new ArrayList<CursoDto>();
     private MateriaViewModel materiaViewModel = new MateriaViewModel();
     private List<MateriaDto> materias =  new ArrayList<>();
+    private AlumnoController alumnoController = new AlumnoController();
+    private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,57 +163,76 @@ public class PublicarDudaActivity extends AppCompatActivity {
     private void crearDuda() {
         List<Asignatura> list = new ArrayList<>();
         String fecha = sacarFecha();
-        Alumno a = new Alumno("", "", "", "", list);
         //CAmbiar porqeue cambio constructor duda
         // TODO: Asignatura asig = (Asignatura) spinner.getSelectedItem();
-        Map<String, Object> alumno = new HashMap<>();
-        alumno.put("nombre", "Pepe");
-        alumno.put("id", "");
-        alumno.put("uo", "Pepe");
-        alumno.put("url_foto", "aldsfasldfjasdf");
-        alumno.put("asignaturasDominadas", new ArrayList<>());
-
-        Map<String, Object> asignaturaMap = new HashMap<>();
-        String nAsignatura = spinner.getSelectedItem().toString();
-        crearAsignaturaDuda(nAsignatura);
-
-        Map<String, Object> cursoMap = CursoAssembler.toHashMap(asignaturaDuda.get(0).curso);
-
-
-        Map<String, Object> materiaMap = MateriaAssembler.toHashMap(asignaturaDuda.get(0).materia);
-        asignaturaMap.put("nombre", nAsignatura);
-        asignaturaMap.put("curso", cursoMap);
-        asignaturaMap.put("id", asignaturaDuda.get(0).id);
-        asignaturaMap.put("materia", materiaMap);
 
 
 
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("titulo", titulo.getText().toString());
-        docData.put("descripcion", descripcion.getText().toString());
-        docData.put("alumno", alumno);
-        docData.put("asignatura", asignaturaMap);
-        docData.put("materia", materiaMap);
-        docData.put("resuelta", false);
-        docData.put("fecha", fecha);
+        //Pongo los datos del usuario que está autenticado
+        String uo = userInSession.getEmail().split("@")[0].toUpperCase();
 
-        myFirebase.collection(Duda.COLLECTION).document()
-                .set(docData)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
+        // Log.i("patatita: " , uo);
+        //Tengo que buscar el alumno que tenga ese email para poner después los datos
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            alumnoController.findByUOWithPhoto(uo, new AlumnoController.AlumnoCallback() {
+                @Override
+                public void callback(Alumno alumno) {
+                    if (alumno != null) {
+                        Map<String, Object> alumnoMap = new HashMap<>();
+                        //Esto tdo no está bien porque en la base de datos
+                        //Se guardan raro los datos, faltan cosas...etc
+                        alumnoMap.put("nombre", alumno.getUo());
+                        alumnoMap.put("id", alumno.getId());
+                        alumnoMap.put("uo", alumno.getNombre());
+                        alumnoMap.put("url_foto", alumno.getUrl_foto());
+                        alumnoMap.put("asignaturasDominadas", new ArrayList<>());
+                        Map<String, Object> asignaturaMap = new HashMap<>();
+                        String nAsignatura = spinner.getSelectedItem().toString();
+                        crearAsignaturaDuda(nAsignatura);
+
+                        Map<String, Object> cursoMap = CursoAssembler.toHashMap(asignaturaDuda.get(0).curso);
+
+
+                        Map<String, Object> materiaMap = MateriaAssembler.toHashMap(asignaturaDuda.get(0).materia);
+                        asignaturaMap.put("nombre", nAsignatura);
+                        asignaturaMap.put("curso", cursoMap);
+                        asignaturaMap.put("id", asignaturaDuda.get(0).id);
+                        asignaturaMap.put("materia", materiaMap);
+
+
+
+                        Map<String, Object> docData = new HashMap<>();
+                        docData.put("titulo", titulo.getText().toString());
+                        docData.put("descripcion", descripcion.getText().toString());
+                        docData.put("alumno", alumnoMap);
+                        docData.put("asignatura", asignaturaMap);
+                        docData.put("materia", materiaMap);
+                        docData.put("resuelta", false);
+                        docData.put("fecha", fecha);
+
+                        myFirebase.collection(Duda.COLLECTION).document()
+                                .set(docData)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error writing document", e);
+                                    }
+                                });
+
+                        titulo.setText("");
+                        descripcion.setText("");
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
-                    }
-                });
+                }
+            });
+        }
 
-        titulo.setText("");
-        descripcion.setText("");
+
     }
 
     private String sacarFecha() {

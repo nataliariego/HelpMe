@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AlumnoDto {
+    public String id;
     public String nombre;
     public String uo;
     public String urlFoto;

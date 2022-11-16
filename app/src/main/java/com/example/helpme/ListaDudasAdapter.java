@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Duda;
 import com.squareup.picasso.Picasso;
 
@@ -87,9 +88,9 @@ public class ListaDudasAdapter extends RecyclerView.Adapter<ListaDudasAdapter.Du
 
         public void bindUser(final Duda duda, final OnItemClickListener listener) {
             titulo.setText(" " + duda.getTitulo());
-            persona_duda.setText(duda.getAlumnoId());
+            persona_duda.setText(duda.getAlumnoId().get(Alumno.NOMBRE).toString());
             fecha.setText(duda.getFecha());
-            asignatura.setText(duda.getMateriaId());
+            //asignatura.setText(duda.getMateriaId());
             if (duda.isResuelta()) {
                 resuelta.setImageResource(R.drawable.check);
             } else {
@@ -103,7 +104,7 @@ public class ListaDudasAdapter extends RecyclerView.Adapter<ListaDudasAdapter.Du
             images.put("Manuel Carillo Gómez", "https://img.freepik.com/fotos-premium/retrato-hombre-maduro-chico-adulto-tiene-pelo-canoso-hombre-guapo-barba-canosa-moda-cabello-masculino-barberia-cara-chico-canoso-afeitar-cuidado-cabello-piel-cuidado-piel-masculino-belleza-hombres_545934-56.jpg?w=2000");
             images.put("Estela García Antuña", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6aGDVV8G4834Zj3D4WaKjO3Aypf58H3te8jC0-uoFltjW2V5AD3NMebJi6L0-i7sZZY8&usqp=CAU");
 
-            Picasso.get().load(images.get(duda.getAlumnoId())).into(img_persona_duda);
+            Picasso.get().load(images.get(duda.getAlumnoId().get(Alumno.URL_FOTO))).into(img_persona_duda);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
