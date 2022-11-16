@@ -99,7 +99,8 @@ public class ProfileActivity extends AppCompatActivity {
                         textViewUO.setText(alumno.getNombre());
                         textViewEmail.setText(alumno.getNombre()+"@uniovi.es");
                         nombreCompleto.setText(alumno.getNombre());
-                        Picasso.get().load(alumno.getUrl_foto()).into(img_persona);
+                        if (alumno.getUrl_foto()!=null &&  alumno.getUrl_foto()!="")
+                            Picasso.get().load(alumno.getUrl_foto()).into(img_persona);
                     }
                 }
             });

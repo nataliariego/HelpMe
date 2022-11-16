@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".ListarDudasActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
     <LinearLayout
         android:id="@+id/layout_listar_dudas_wrapper"
         android:layout_width="match_parent"
@@ -51,5 +62,21 @@
         </ScrollView>
 
     </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="0dp"
+        android:layout_height="90dp"
+        android:background="@drawable/rounded_corners_navigation"
+        app:itemActiveIndicatorStyle="@style/Theme.Material3.DynamicColors.DayNight"
+        app:itemIconSize="70dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/navigation_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

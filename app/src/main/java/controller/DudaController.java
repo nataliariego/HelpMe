@@ -82,7 +82,7 @@ public class DudaController {
                             duda.setFecha(documentSnapshot.getString(Duda.FECHA));
                             duda.setResuelta(documentSnapshot.getBoolean(Duda.IS_RESUELTA));
                             duda.setAsignaturaId(documentSnapshot.get(Duda.ASIGNATURA_REF).toString());
-                            duda.setAlumnoId(AlumnoAssembler.toHashMap(documentSnapshot.get(Duda.REF_ALUMNO).toString()).toString());
+                            duda.setAlumnoId(AlumnoAssembler.toHashMap(documentSnapshot.get(Duda.REF_ALUMNO).toString()));
                             duda.setId(documentSnapshot.getId());
                             Log.i(TAG, ((Map<String, Object>) documentSnapshot.get(Duda.REF_MATERIA)).toString());
                             duda.setMateriaId(((Map<String, Object>) documentSnapshot.get(Duda.REF_MATERIA)));

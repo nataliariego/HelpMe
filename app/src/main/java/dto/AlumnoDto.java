@@ -11,5 +11,4 @@ public class AlumnoDto {
     public List<String> asignaturasDominadas = new ArrayList<>();
     public String email;
     public String password;
-    public String id;
 }
