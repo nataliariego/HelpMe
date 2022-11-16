@@ -1,10 +1,14 @@
 package com.example.helpme;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -28,6 +32,7 @@ import viewmodel.AsignaturaViewModel;
 import viewmodel.CursoViewModel;
 
 import com.example.helpme.model.Alumno;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
@@ -52,6 +57,8 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView textViewEmail;
     private CircleImageView img_persona;
     private EditText nombreCompleto;
+
+    private BottomNavigationView navegacion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +96,26 @@ public class ProfileActivity extends AppCompatActivity {
         cargarAsignaturas();
         cargarCursos();
 
+
+        //navegacion
+        navegacion = findViewById(R.id.bottomNavigationView);
+        navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.nav_chat:
+
+                        return true;
+                    case R.id.nav_home:
+                        redirectPantallaHome();
+                        return true;
+                    case R.id.nav_dudas:
+                        redirectPantallaDudas();
+                        return true;
+                }
+                return false;
+            }
+        });
 
     }
 
@@ -149,5 +176,22 @@ public class ProfileActivity extends AppCompatActivity {
                 ll.addView(opcion);
             }
         });
+    }
+
+
+    private void redirectPantallaHome() {
+        Intent listadoDudasIntent = new Intent(ProfileActivity.this, HomeActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
+    }
+
+    private void redirectPantallaDudas() {
+        Intent listadoDudasIntent = new Intent(ProfileActivity.this, ListarDudasActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
     }
 }
