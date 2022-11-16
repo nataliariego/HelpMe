@@ -78,8 +78,7 @@ public class HomeActivity extends AppCompatActivity {
 
         cargarDudas();
 
-        dudaAdapter = new DudaAdapter(dudas);
-        listadoDudasHomeRecycler.setAdapter(dudaAdapter);
+
 
 
         //Navegación
@@ -193,6 +192,8 @@ public class HomeActivity extends AppCompatActivity {
                     dudas.add(newDuda);
                 });
             }
+            dudaAdapter = new DudaAdapter(dudas);
+            listadoDudasHomeRecycler.setAdapter(dudaAdapter);
         });
     }
 
