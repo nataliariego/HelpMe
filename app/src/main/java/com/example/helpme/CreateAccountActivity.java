@@ -86,7 +86,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             alumno.email = txEmail.getText().toString();
             alumno.password = txPassword.getText().toString();
 
-            Authentication.getInstance().signUp(alumno, new GenericCallback() {
+            Authentication.getInstance().signUp(alumno, new GenericCallback<String>() {
                 @Override
                 public void callback(String msg) {
                     if(msg.equals(GenericCallback.SUCCESS_CODE)){

@@ -40,6 +40,24 @@
     <string name="hint_uo">UOXXXXXX</string>
     <string name="hint_nombre_completo">Nombre Completo</string>
     <string name="hint_repetir_password">Repetir contraseña</string>
+
+    <string name="title_activity_profile">ProfileActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="UO">UO277516</string>
+    <string name="email">UO277516@uniovi.es</string>
+    <string name="editicon">editicon</string>
+    <string name="asignaturas">Asignaturas</string>
+    <string name="curso">Curso</string>
+    <string name="nombre_completo">Nombre completo</string>
+    <string name="guardar">Guardar</string>
+
     <string name="tituloMenuHome">Home</string>
     <string name="tituloMenuChat">Chat</string>
     <string name="tituloMenuDudas">Dudas</string>
@@ -48,4 +66,27 @@
     <string name="nombreAlumno">Nombre Alumno</string>
     <string name="asignaturas">Asignaturas dominadas</string>
     <string name="verPeefil">Ver perfil</string>
+    <string name="ajustes_cuenta_titulo">Ajustes</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="volver">Volver</string>
+    <string name="faq">Preguntas y respuestas frecuentes</string>
+    <string name="ajustes">Ajustes</string>
+    <string name="privacidad_seguridad">Privacidad y seguridad</string>
+    <string name="reset_password">Restablecer contraseña</string>
+
 </resources>

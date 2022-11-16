@@ -1,9 +1,11 @@
 package auth;
 
+import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.helpme.HomeActivity;
 import com.example.helpme.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -61,7 +63,7 @@ public class Authentication {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.i(TAG, "Error al crear la cuenta dle ua");
+                        Log.i(TAG, "Error al crear la cuenta de usuario.");
                     }
                 })
         ;
@@ -119,6 +121,10 @@ public class Authentication {
                 });
     }
 
+    public void showStatus(){
+
+    }
+
     /**
      * Cierra la sesión actual.
      */
@@ -173,6 +179,14 @@ public class Authentication {
                         }
                     }
                 });
+    }
+
+    /**
+     * Comprueba si hay un usuario logeado.
+     * @return
+     */
+    public boolean isSigned(){
+        return userInSession != null;
     }
 
     public static Authentication getInstance() {

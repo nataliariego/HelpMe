@@ -15,6 +15,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,12 +54,16 @@ public class AsignaturaController {
                     List<Asignatura> asignasturas = new ArrayList<>();
                     if (snapshot != null && !snapshot.isEmpty()) {
                         for (DocumentSnapshot documentSnapshot : snapshot.getDocuments()) {
-                            Asignatura asig = documentSnapshot.toObject(Asignatura.class);
+                            Log.i("---> " , String.valueOf(documentSnapshot.get(Asignatura.CURSO).toString().split("=")[1].charAt(0)));
+
+                            Asignatura asig = new Asignatura();
 
                             asig.setId(documentSnapshot.getId());
                             asig.setNombre(documentSnapshot.getString(Asignatura.NOMBRE));
-                            //asig.setCurso(documentSnapshot.get(Asignatura.CURSO).toString());
-                            //asig.setMateria(documentSnapshot.get(Asignatura.MATERIA).toString());
+                            //documentSnapshot.get(Duda.ASIGNATURA_REF).toString()
+                            Log.i("---> " ,documentSnapshot.get(Asignatura.CURSO).toString());
+                            asig.setCurso(documentSnapshot.get(Asignatura.CURSO).toString());
+                            asig.setMateria(documentSnapshot.get(Asignatura.MATERIA).toString());
 
                             asignasturas.add(asig);
                             

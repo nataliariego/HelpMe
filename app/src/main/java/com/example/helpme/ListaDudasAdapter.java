@@ -74,12 +74,12 @@ public class ListaDudasAdapter extends RecyclerView.Adapter<ListaDudasAdapter.Du
 
         public DudaViewHolder(@NonNull View itemView) {
             super(itemView);
-            titulo = (TextView) itemView.findViewById(R.id.tituloDuda);
+           /* titulo = (TextView) itemView.findViewById(R.id.tituloDuda);
             persona_duda = (TextView) itemView.findViewById(R.id.persona_duda);
             fecha = (TextView) itemView.findViewById(R.id.fecha);
             asignatura = (TextView) itemView.findViewById(R.id.asignatura);
             img_persona_duda = (ImageView) itemView.findViewById(R.id.img_persona_duda);
-            resuelta = (ImageView) itemView.findViewById(R.id.resuelta);
+            resuelta = (ImageView) itemView.findViewById(R.id.resuelta);*/
         }
 
 
