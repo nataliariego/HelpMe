@@ -147,7 +147,7 @@ public class ListarDudasActivity extends AppCompatActivity {
         listaDuda.add(d5);
          */
 
-        dudas.clear();
+        dudas = new ArrayList<>();
 
         dudaViewModel.getAllDudas().observe(this, dudasResult -> {
             if (dudasResult != null) {

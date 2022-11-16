@@ -15,6 +15,7 @@ public class Alumno implements Parcelable {
     public static final String UO = "uo";
     public static final String URL_FOTO = "url_foto";
     public static final String EMAIL = "email";
+    public static final String ASIGNATURAS_DOMINADAS = "asignaturasDominadas";
     public static final String USER_ID = "user_id";
 
 

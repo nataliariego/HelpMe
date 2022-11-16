@@ -1,9 +1,11 @@
 package adapter;
 
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,16 +13,21 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.R;
+import com.example.helpme.model.Alumno;
+import com.example.helpme.model.Materia;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import assembler.AlumnoAssembler;
 import dto.DudaDto;
-import util.DateUtils;
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 import util.StringUtils;
 
 public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder> {
+
+    public static final String TAG = "DUDA_ADAPTER";
 
     private List<DudaDto> dudas = new ArrayList<>();
 //    private final AdapterView.OnItemClickListener listener;
@@ -62,6 +69,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
         private TextView fechaPublicacion;
         private TextView abrevMateria;
         private TextView siglasAlumno;
+        private ImageView imgPerfilAlumno;
 
         public DudaViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -71,6 +79,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
             fechaPublicacion = itemView.findViewById(R.id.txResumenFechaPublicacionDuda);
             abrevMateria = itemView.findViewById(R.id.txResumenDudaAbrevMateria);
             siglasAlumno = itemView.findViewById(R.id.tx_siglas_alumno_avatar);
+            imgPerfilAlumno = itemView.findViewById(R.id.img_perfil_alumno_duda);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
@@ -78,7 +87,25 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
             titulo.setText(duda.titulo);
             //fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha));
             fechaPublicacion.setText(duda.fecha);
-            siglasAlumno.setText(StringUtils.getAcronymName(AlumnoAssembler.toDto(duda.alumno).nombre));
+            siglasAlumno.setText(StringUtils.getAcronymName(duda.alumno.get(Alumno.NOMBRE).toString()));
+
+            if(duda.materia != null){
+                String abrev = duda.materia.get(Materia.ABREVIATURA).toString();
+                abrevMateria.setText(abrev);
+            }
+
+
+            if(!duda.alumno.get(Alumno.URL_FOTO).toString().isEmpty()){
+                siglasAlumno.setVisibility(View.INVISIBLE);
+
+                // https://github.com/wasabeef/picasso-transformations
+                Picasso.get().load(duda.alumno.get(Alumno.URL_FOTO).toString())
+                        .fit()
+                        .centerCrop()
+                        .transform(new CropCircleTransformation())
+                        .into(imgPerfilAlumno);
+            }
+
         }
     }
 }
