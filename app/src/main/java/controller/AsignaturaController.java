@@ -44,13 +44,13 @@ public class AsignaturaController {
      */
     public MutableLiveData<List<Asignatura>> findAll() {
         MutableLiveData<List<Asignatura>> liveAsign = new MutableLiveData<List<Asignatura>>();
-
         db.collection("ASIGNATURA")
                 .addSnapshotListener((snapshot, e) -> {
                     if (e != null) {
                         Log.w(TAG, "Listen failed.", e);
                         return;
                     }
+
                     List<Asignatura> asignasturas = new ArrayList<>();
                     if (snapshot != null && !snapshot.isEmpty()) {
                         for (DocumentSnapshot documentSnapshot : snapshot.getDocuments()) {
