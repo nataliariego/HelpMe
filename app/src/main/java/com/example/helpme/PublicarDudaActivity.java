@@ -42,9 +42,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import assembler.CursoAssembler;
+import assembler.MateriaAssembler;
 import controller.CursoController;
 import dto.AsignaturaDto;
+import dto.CursoDto;
+import dto.MateriaDto;
 import viewmodel.AsignaturaViewModel;
+import viewmodel.CursoViewModel;
+import viewmodel.MateriaViewModel;
 
 public class PublicarDudaActivity extends AppCompatActivity {
 
@@ -57,6 +63,11 @@ public class PublicarDudaActivity extends AppCompatActivity {
     private List<String> nombreAsignaturas = new ArrayList<>();
     private List<AsignaturaDto> asignaturaList = new ArrayList<AsignaturaDto>();
     private CursoController cursoController = new CursoController();
+    private List<AsignaturaDto> asignaturaDuda = new ArrayList<>();
+    private CursoViewModel cursoViewModel = new CursoViewModel();
+    private List<CursoDto> cursos = new ArrayList<CursoDto>();
+    private MateriaViewModel materiaViewModel = new MateriaViewModel();
+    private List<MateriaDto> materias =  new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,48 +166,30 @@ public class PublicarDudaActivity extends AppCompatActivity {
         alumno.put("asignaturasDominadas", new ArrayList<>());
 
         Map<String, Object> asignaturaMap = new HashMap<>();
-        asignaturaMap.put("nombre", spinner.getSelectedItem().toString());
-        asignaturaMap.put("curso", new HashMap<>());
-        asignaturaMap.put("id", "2");
-        asignaturaMap.put("materia", new HashMap<>());
+        String nAsignatura = spinner.getSelectedItem().toString();
+        crearAsignaturaDuda(nAsignatura);
 
-        Map<String, Object> materia = new HashMap<>();
-        materia.put("abreviatura", "");
-        materia.put("denominacion", "");
-        materia.put("id", "");
+        Map<String, Object> cursoMap = CursoAssembler.toHashMap(asignaturaDuda.get(0).curso);
+
+
+        Map<String, Object> materiaMap = MateriaAssembler.toHashMap(asignaturaDuda.get(0).materia);
+        asignaturaMap.put("nombre", nAsignatura);
+        asignaturaMap.put("curso", cursoMap);
+        asignaturaMap.put("id", asignaturaDuda.get(0).id);
+        asignaturaMap.put("materia", materiaMap);
+
+
 
         Map<String, Object> docData = new HashMap<>();
         docData.put("titulo", titulo.getText().toString());
         docData.put("descripcion", descripcion.getText().toString());
         docData.put("alumno", alumno);
         docData.put("asignatura", asignaturaMap);
-        docData.put("materia", materia);
+        docData.put("materia", materiaMap);
         docData.put("resuelta", false);
         docData.put("fecha", fecha);
 
-
-// todo:       Duda duda = new Duda(titulo.getText().toString(), descripcion.getText().toString(), alumno.toString()
-//                , "ASIGNATURA/Pu86h2KJes5iydRSNEGl", asig.getMateria(), false, fecha);
-
-//        Duda duda = new Duda(titulo.getText().toString(), descripcion.getText().toString(), alumno.toString()
-//                , asignaturaMap.toString(), "", false, fecha);
-
-//        myFirebase.collection("DUDA")
-//                .add(duda)
-//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                    @Override
-//                    public void onSuccess(DocumentReference documentReference) {
-//                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w(TAG, "Error adding document", e);
-//                    }
-//                });
-
-        myFirebase.collection(Duda.COLLECTION).document("one")
+        myFirebase.collection(Duda.COLLECTION).document()
                 .set(docData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -252,6 +245,66 @@ public class PublicarDudaActivity extends AppCompatActivity {
 
             spinner = findViewById(R.id.spinnerAsignaturas);
             spinner.setAdapter(new ArrayAdapter<>(PublicarDudaActivity.this, android.R.layout.simple_selectable_list_item, nombreAsignaturas));
+
+        });
+    }
+
+    private void crearMateriaDuda(String abre) {
+        materiaViewModel.getAllDudas().observe(this, dudasResult -> {
+            if (dudasResult != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    dudasResult.forEach(d -> {
+                        System.out.println("LLegdshfgshdgfskjhf");
+                        Log.i(TAG, d.getAbreviatura());
+                        if (abre.equals(d.getAbreviatura())){
+                            MateriaDto a = new MateriaDto();
+                            a.id = d.getId();
+                            a.abreviatura=d.getAbreviatura();
+                            a.denominacion=d.getDenominacion();
+
+                            materias.add(a);
+                        }
+
+                    });
+                }
+            }
+        });
+    }
+
+    private void crearAsignaturaDuda(String nombreA) {
+        asignaturaViewModel.getAllDudas().observe(this, dudasResult -> {
+            if (dudasResult != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    dudasResult.forEach(d -> {
+
+                        AsignaturaDto a = new AsignaturaDto();
+                        if (d.getNombre().equals(nombreA)){
+                            a.nombre = d.getNombre();
+                            a.id=d.getId();
+                            a.curso=d.getCurso();
+                            a.materia=d.getMateria();
+                            asignaturaDuda.add(a);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void crearCursoDuda(String num) {
+        cursoViewModel.getAllCursos().observe(this, dudasResult -> {
+            if (dudasResult != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    dudasResult.forEach(d -> {
+                        Log.i(TAG, d.getNumero());
+                        if (num.equals(d.getNumero())) {
+                            CursoDto a = new CursoDto();
+                            a.numero = d.getNumero();
+                            cursos.add(a);
+                        }
+                    });
+                }
+            }
 
         });
     }
