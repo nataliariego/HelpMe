@@ -5,8 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -132,9 +136,18 @@ public class ProfileActivity extends AppCompatActivity {
                 nombreAsignaturas.add(dto.nombre);
             }
 
-            spinnerAsignaturas = findViewById(R.id.spinnerAsignaturasProfile);
-            spinnerAsignaturas.setAdapter(new ArrayAdapter<>(ProfileActivity.this, android.R.layout.simple_selectable_list_item, nombreAsignaturas));
+            LinearLayout ll = findViewById(R.id.ll_dentroscroll);
 
+            //ScrollView s = findViewById(R.id.scrollView2);
+            //spinnerAsignaturas = findViewById(R.id.spinnerAsignaturasProfile);
+            //spinnerAsignaturas.setAdapter(new ArrayAdapter<>(ProfileActivity.this, android.R.layout.simple_selectable_list_item, nombreAsignaturas));
+            for (String a : nombreAsignaturas) {
+                CheckBox opcion = new CheckBox(this);
+                opcion.setText(a);
+                opcion.setLayoutParams(
+                        new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                ll.addView(opcion);
+            }
         });
     }
 }

@@ -63,13 +63,10 @@
             android:layout_width="369dp"
             android:layout_height="68dp"
             android:layout_margin="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
             android:background="@drawable/text_view_profile"
             android:orientation="vertical"
             android:padding="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
+
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -172,23 +169,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/ll_user_asignaturas"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/text_view_profile"
-            android:orientation="vertical"
-            android:padding="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.699">
-
-            <Spinner
+        <!--<Spinner
                 android:id="@+id/spinnerAsignaturasProfile"
                 android:layout_width="345dp"
                 android:layout_height="48dp"
@@ -198,8 +179,50 @@
                 app:layout_constraintHorizontal_bias="0.355"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTextDuda"
-                app:layout_constraintVertical_bias="0.243" />
+                app:layout_constraintVertical_bias="0.243" />-->
+
+
+        <LinearLayout
+            android:id="@+id/ll_user_asignaturas"
+            android:layout_width="370dp"
+            android:layout_height="96dp"
+            android:layout_margin="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/text_view_profile"
+            android:orientation="vertical"
+            android:padding="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.758"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.772">
+
+
+            <ScrollView
+                android:id="@+id/scrollView2"
+                android:layout_width="371dp"
+                android:layout_height="69dp"
+                android:contentDescription="@string/Título"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.676">
+
+
+                <LinearLayout
+                    android:id="@+id/ll_dentroscroll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"></LinearLayout>
+
+
+            </ScrollView>
+
+
         </LinearLayout>
+
 
         <TextView
             android:id="@+id/tv_asignaturas"
@@ -207,7 +230,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="196dp"
+            android:layout_marginTop="200dp"
             android:layout_marginEnd="8dp"
             android:background="@color/white"
             android:text="@string/asignaturasProfile"
@@ -227,7 +250,7 @@
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.982"
+            app:layout_constraintVertical_bias="1.0"
             tools:ignore="MissingConstraints">
 
             <TextView
