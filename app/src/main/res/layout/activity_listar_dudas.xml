@@ -20,7 +20,8 @@
             android:id="@+id/fragment_toolbar_listar_dudas"
             android:name="com.example.helpme.TopToolbarFragment"
             android:layout_width="match_parent"
-            android:layout_height="55dp" />
+            android:layout_height="55dp"
+            tools:layout="@layout/fragment_top_toolbar" />
 
         <ScrollView
             android:id="@+id/scroll_listado_dudas"

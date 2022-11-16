@@ -83,7 +83,7 @@ public class DudaController {
                             duda.setResuelta(documentSnapshot.getBoolean(Duda.IS_RESUELTA));
                             duda.setAsignaturaId(documentSnapshot.get(Duda.ASIGNATURA_REF).toString());
                             duda.setAlumnoId(AlumnoAssembler.toHashMap(documentSnapshot.get(Duda.REF_ALUMNO).toString()).toString());
-
+                            duda.setId(documentSnapshot.getId());
                             dudas.add(duda);
                         }
                     }

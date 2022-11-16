@@ -135,4 +135,8 @@ public class Duda implements Parcelable {
         parcel.writeString(alumnoId);
         parcel.writeByte((byte) (isResuelta ? 1 : 0));
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

@@ -1,9 +1,11 @@
 package adapter;
 
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,6 +13,7 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +65,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
         private TextView fechaPublicacion;
         private TextView abrevMateria;
         private TextView siglasAlumno;
+        private ImageView img_persona_duda;
 
         public DudaViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -71,6 +75,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
             fechaPublicacion = itemView.findViewById(R.id.txResumenFechaPublicacionDuda);
             abrevMateria = itemView.findViewById(R.id.txResumenDudaAbrevMateria);
             siglasAlumno = itemView.findViewById(R.id.tx_siglas_alumno_avatar);
+            img_persona_duda = itemView.findViewById(R.id.img_perfil_alumno_duda);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
@@ -79,6 +84,14 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
             //fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha));
             fechaPublicacion.setText(duda.fecha);
             siglasAlumno.setText(StringUtils.getAcronymName(AlumnoAssembler.toDto(duda.alumno).nombre));
+            //cojo la url de la foto
+            String url_foto = duda.alumno.split(",")[1].split("=")[1];
+            Picasso.get()
+                    .load(url_foto)
+                    .into(img_persona_duda);
+            String ab = duda.asignatura.split(",")[3].split("=")[1];
+            Log.i("jose" , duda.asignatura);
+            abrevMateria.setText(ab);
         }
     }
 }

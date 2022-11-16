@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import adapter.DudaAdapter;
 import controller.AlumnoController;
@@ -43,7 +44,7 @@ public class ListarDudasActivity extends AppCompatActivity {
     private DudaViewModel dudaViewModel = new DudaViewModel();
 
     private List<DudaDto> dudas = new ArrayList<>();
-
+    private List<String> idDudas = new ArrayList<>();
 
 
 
@@ -133,8 +134,11 @@ public class ListarDudasActivity extends AppCompatActivity {
                     newDuda.alumno = d.getAlumnoId();
                     newDuda.asignatura = d.getAsignaturaId();
                     newDuda.fecha = d.getFecha();
+                    newDuda.id=d.getId();
 
                     dudas.add(newDuda);
+
+                    dudas = dudas.stream().distinct().collect(Collectors.toList());
                 });
             }
             dudaAdapter = new DudaAdapter(dudas);
