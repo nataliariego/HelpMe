@@ -15,7 +15,7 @@ public class CursoAssembler {
     public static Map<String, Object> toHashMap(String cursoStringHash) {
         Map<String, Object> hashMapcursoResult = new HashMap<>();
 
-        System.out.println(cursoStringHash);
+
         String[] lista = cursoStringHash.split(",");
 
         String id = lista[0].split("=")[1];

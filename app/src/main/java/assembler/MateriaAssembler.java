@@ -14,12 +14,12 @@ public class MateriaAssembler {
     public static Map<String, Object> toHashMap(String materiStringHash) {
         Map<String, Object> hashMapcursoResult = new HashMap<>();
 
+        System.out.println(materiStringHash);
         String[] lista = materiStringHash.split(",");
 
         String denominacion = lista[0].split("=")[1];
-        String[] listaAbreviatura = lista[1].split("=");
-        int tamañoDeno = listaAbreviatura[1].length();
-        String abreviatura = listaAbreviatura[1].substring(0,tamañoDeno);
+
+        String abreviatura = lista[1].split("=")[1];
 
         String[] listaId = lista[2].split("=");
         int tamañoId = listaId[1].length();
