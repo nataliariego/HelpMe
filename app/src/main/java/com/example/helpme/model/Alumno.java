@@ -50,13 +50,14 @@ public class Alumno implements Parcelable {
         this(id, nombre, uo, null, null);
     }
     public Alumno(String id, String nombre, String uo, String url_foto) {
-        this(id, nombre, uo, url_foto, null);
+        this(id, nombre, uo, url_foto, new ArrayList<>());
     }
 
     public Alumno(Parcel in) {
-        id = in.readString();
+//        id = in.readString();
         nombre = in.readString();
         uo = in.readString();
+        url_foto = in.readString();
     }
 
     public static final Creator<Alumno> CREATOR = new Creator<Alumno>() {

@@ -60,10 +60,12 @@ public class ProfileActivity extends AppCompatActivity {
         nombreCompleto = findViewById(R.id.tv_user_name);
 
         //Pongo los datos del usuario que está autenticado
-        String uo = userInSession.getEmail().split("@")[0].toUpperCase();
+
 
        // Log.i("patatita: " , uo);
         //Tengo que buscar el alumno que tenga ese email para poner después los datos
+
+        String uo = userInSession.getEmail().split("@")[0].toUpperCase();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             alumnoController.findByUOWithPhoto(uo, new AlumnoController.AlumnoCallback() {
                 @Override
@@ -71,7 +73,7 @@ public class ProfileActivity extends AppCompatActivity {
                     if (alumno != null) {
                         //Esto tdo no está bien porque en la base de datos
                         //Se guardan raro los datos, faltan cosas...etc
-                        Log.i("patita", alumno.toString());
+                        Log.i(TAG, alumno.getUo() + " " + alumno.getNombre());
                         textViewUO.setText(alumno.getNombre());
                         textViewEmail.setText(alumno.getNombre()+"@uniovi.es");
                         nombreCompleto.setText(alumno.getUo());
@@ -84,6 +86,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         cargarAsignaturas();
         cargarCursos();
+
 
 
     }

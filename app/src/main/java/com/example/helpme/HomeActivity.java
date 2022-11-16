@@ -147,10 +147,7 @@ public class HomeActivity extends AppCompatActivity {
 
         cargarDudas();
 
-        dudaAdapter = new DudaAdapter(dudas);
-        listadoDudasHomeRecycler.setAdapter(dudaAdapter);
 
-        dudaAdapter.notifyDataSetChanged();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -170,6 +167,11 @@ public class HomeActivity extends AppCompatActivity {
                     dudas.add(newDuda);
                 });
             }
+
+            dudaAdapter = new DudaAdapter(dudas);
+            listadoDudasHomeRecycler.setAdapter(dudaAdapter);
+
+            dudaAdapter.notifyDataSetChanged();
         });
     }
 
