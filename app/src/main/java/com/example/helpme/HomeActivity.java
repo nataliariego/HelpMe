@@ -95,7 +95,7 @@ public class HomeActivity extends AppCompatActivity {
                         redirectPantallaCuenta();
                         return true;
                     case R.id.nav_dudas:
-
+                        redirectPantallaDudas();
                         return true;
                 }
                 return false;
@@ -218,6 +218,14 @@ public class HomeActivity extends AppCompatActivity {
 
     private void redirectPantallaCuenta() {
         Intent listadoDudasIntent = new Intent(HomeActivity.this, ProfileActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
+    }
+
+    private void redirectPantallaDudas() {
+        Intent listadoDudasIntent = new Intent(HomeActivity.this, ListarDudasActivity.class);
         // Para transiciones
         startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
