@@ -6,14 +6,17 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageButton;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.model.Duda;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -44,6 +47,7 @@ public class ListarDudasActivity extends AppCompatActivity {
 
     private List<DudaDto> dudas = new ArrayList<>();
 
+    private BottomNavigationView navegacion;
 
 
 
@@ -75,6 +79,27 @@ public class ListarDudasActivity extends AppCompatActivity {
         // Generar el adaptador, le pasamos la lista de dudas
         // y el manejador para el evento click sobre un elemento
 
+        //Navegacion:
+        navegacion = findViewById(R.id.bottomNavigationView);
+        navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.nav_home:
+                        redirectPantallaHome();
+                        return true;
+                    case R.id.nav_chat:
+
+                        return true;
+                    case R.id.nav_cuenta:
+                        redirectPantallaCuenta();
+                        return true;
+                    case R.id.nav_dudas:
+
+                }
+                return false;
+            }
+        });
 
 
     }
@@ -144,6 +169,29 @@ public class ListarDudasActivity extends AppCompatActivity {
     }
 
 
+    private void redirectPantallaHome() {
+        Intent listadoDudasIntent = new Intent(ListarDudasActivity.this, HomeActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
+    }
+
+    private void redirectPantallaDudas() {
+        Intent listadoDudasIntent = new Intent(ListarDudasActivity.this, ListarDudasActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
+    }
+
+    private void redirectPantallaCuenta() {
+        Intent listadoDudasIntent = new Intent(ListarDudasActivity.this, ProfileActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
+    }
 
 
 }

@@ -13,6 +13,8 @@ import android.util.Log;
 
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Duda;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,8 @@ public class FriendsActivity extends AppCompatActivity {
     //Hardcodeado
     private List<Alumno> listaAlumnos = new ArrayList<Alumno>();
 
+    private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +59,7 @@ public class FriendsActivity extends AppCompatActivity {
 
         cargarAmigos();
 
-        alumnoAdapter = new AlumnoAdapter(amigos);
-        listadoAmigos.setAdapter(alumnoAdapter);
-        alumnoAdapter.notifyDataSetChanged();
+
 
 
     }
@@ -90,30 +92,30 @@ public class FriendsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        cargarAmigos();
-
-        alumnoAdapter = new AlumnoAdapter(amigos);
-        listadoAmigos.setAdapter(alumnoAdapter);
-        alumnoAdapter.notifyDataSetChanged();
     }
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void cargarAmigos() {
         amigos.clear();
-
+        String uo = userInSession.getEmail().split("@")[0].toUpperCase();
         alumnoViewModel.getAllAlumnos().observe(this, alumnosResult -> {
             if (alumnosResult != null) {
                 alumnosResult.forEach(d -> {
-                    Log.i(TAG, d.getNombre() + " " + d.getUo()+ " "+d.getUrl_foto());
-                    AlumnoDto newDuda = new AlumnoDto();
-                    newDuda.nombre = d.getNombre();
-                    newDuda.uo = d.getUo();
-                    newDuda.urlFoto = d.getUrl_foto();
+                    if (!d.getUo().toUpperCase().equals(uo)) {
+                        Log.i(TAG, d.getNombre() + " " + d.getUo() + " " + d.getUrl_foto());
+                        AlumnoDto newDuda = new AlumnoDto();
+                        newDuda.nombre = d.getNombre();
+                        newDuda.uo = d.getUo();
+                        newDuda.urlFoto = d.getUrl_foto();
 
-                    amigos.add(newDuda);
+                        amigos.add(newDuda);
+                    }
                 });
             }
+            alumnoAdapter = new AlumnoAdapter(amigos);
+            listadoAmigos.setAdapter(alumnoAdapter);
+            alumnoAdapter.notifyDataSetChanged();
         });
     }
 }

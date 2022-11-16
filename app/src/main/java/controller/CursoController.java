@@ -53,6 +53,7 @@ public class CursoController {
                         Log.w(TAG, "Listen failed.", e);
                         return;
                     }
+
                     List<Curso> cursos = new ArrayList<>();
                     if (snapshot != null && !snapshot.isEmpty()) {
                         for (DocumentSnapshot documentSnapshot : snapshot.getDocuments()) {
