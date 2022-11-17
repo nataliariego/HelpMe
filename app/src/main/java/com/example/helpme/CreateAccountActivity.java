@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.helpme.model.Alumno;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.ArrayList;
+
 import auth.Authentication;
 import controller.AlumnoController;
 import controller.callback.GenericCallback;
@@ -86,7 +88,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             alumno.email = txEmail.getText().toString();
             alumno.password = txPassword.getText().toString();
             alumno.urlFoto = "https://ui-avatars.com/api/?name=" + alumno.nombre;
-
+            alumno.asignaturasDominadas = new ArrayList<>();
             Authentication.getInstance().signUp(alumno, new GenericCallback<String>() {
                 @Override
                 public void callback(String msg) {

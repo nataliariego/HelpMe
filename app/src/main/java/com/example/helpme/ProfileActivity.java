@@ -98,7 +98,7 @@ public class ProfileActivity extends AppCompatActivity {
                         System.out.println("aver"+alumno.toString());
                         textViewUO.setText(alumno.getNombre());
                         textViewEmail.setText(alumno.getNombre()+"@uniovi.es");
-                        nombreCompleto.setText(alumno.getNombre());
+                        nombreCompleto.setText(alumno.getUo());
                         if (alumno.getUrl_foto()!=null &&  alumno.getUrl_foto()!="")
                             Picasso.get().load(alumno.getUrl_foto()).into(img_persona);
                     }
@@ -152,9 +152,10 @@ public class ProfileActivity extends AppCompatActivity {
                         AlumnoDto a = new AlumnoDto();
                         a.email=alumno.getEmail();
                         a.uo=alumno.getNombre();
-                        a.urlFoto=alumno.getEmail();
+                        a.urlFoto=alumno.getUrl_foto();
                         a.nombre=nombreCompleto.getText().toString();
                         a.id=alumno.getId();
+                        //a.asignaturasDominadas=alumno.getAsignaturasDominadas();
                         for (CheckBox c: cB
                              ) {
                             if (c.isChecked())
@@ -166,6 +167,7 @@ public class ProfileActivity extends AppCompatActivity {
                              ) {
                             a.asignaturasDominadas.add(MateriaAssembler.toHashMap(as.materia).get("abreviatura").toString());
                         }
+                        Log.i("*",a.toString());
                         asignaturaDuda.clear();
                         System.out.println(a.asignaturasDominadas);
                         alumnoController.update(a, a.id);

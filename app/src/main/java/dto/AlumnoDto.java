@@ -11,4 +11,17 @@ public class AlumnoDto {
     public List<String> asignaturasDominadas = new ArrayList<>();
     public String email;
     public String password;
+
+    @Override
+    public String toString() {
+        return "AlumnoDto{" +
+                "id='" + id + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", uo='" + uo + '\'' +
+                ", urlFoto='" + urlFoto + '\'' +
+                ", asignaturasDominadas=" + asignaturasDominadas +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }
