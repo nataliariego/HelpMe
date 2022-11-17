@@ -6,47 +6,59 @@
     android:layout_height="match_parent"
     tools:context=".FriendsActivity">
 
-
-    <TextView
-        android:id="@+id/textViewConcetados"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tituloConectados"
-        android:textColor="@color/primary"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.057" />
+        app:layout_constraintVertical_bias="1.0">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/reciclerViewAmigos"
-        android:layout_width="389dp"
-        android:layout_height="446dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewConcetados"
-        app:layout_constraintVertical_bias="0.071" />
+        <TextView
+            android:id="@+id/textViewConcetados"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tituloConectados"
+            android:textColor="@color/primary"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.059"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.042" />
 
-    <Button
-        android:id="@+id/buttonVerTodos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
-        android:text="Ver todos"
-        android:textColor="@color/white"
-        android:background="@drawable/rounded_corners_boton_ver_todos"
-        android:backgroundTint="@color/secondary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reciclerViewAmigos"
-        app:layout_constraintVertical_bias="0.0" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/reciclerViewAmigos"
+            android:layout_width="403dp"
+            android:layout_height="531dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.636"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewConcetados"
+            app:layout_constraintVertical_bias="0.069" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+    android:id="@+id/bottomNavigationView"
+    android:layout_width="0dp"
+    android:layout_height="90dp"
+    app:menu="@menu/navigation_menu"
+    app:itemActiveIndicatorStyle="@style/Theme.Material3.DynamicColors.DayNight"
+    android:background="@drawable/rounded_corners_navigation"
+    app:itemIconSize="70dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.5"
+    app:layout_constraintStart_toStartOf="parent"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

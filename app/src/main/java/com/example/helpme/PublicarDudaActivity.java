@@ -198,7 +198,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
                         asignaturaMap.put("curso", cursoMap);
                         asignaturaMap.put("id", asignaturaDuda.get(0).id);
                         asignaturaMap.put("materia", materiaMap);
-
+                        asignaturaDuda.clear();
 
 
                         Map<String, Object> docData = new HashMap<>();
@@ -306,6 +306,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
 
                         AsignaturaDto a = new AsignaturaDto();
                         if (d.getNombre().equals(nombreA)){
+                            System.out.println(d.getNombre());
                             a.nombre = d.getNombre();
                             a.id=d.getId();
                             a.curso=d.getCurso();
