@@ -1,18 +1,22 @@
 package com.example.helpme;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Duda;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -40,11 +44,14 @@ public class FriendsActivity extends AppCompatActivity {
 
     private List<AlumnoDto> amigos = new ArrayList<>();
 
+    private BottomNavigationView navegacion;
+
     //Hardcodeado
     private List<Alumno> listaAlumnos = new ArrayList<Alumno>();
 
     private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
 
+    @SuppressLint("MissingInflatedId")
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +67,25 @@ public class FriendsActivity extends AppCompatActivity {
         cargarAmigos();
 
 
+        //Navegación
+        navegacion = findViewById(R.id.bottomNavigationView);
+        navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.nav_home:
+                        redirectPantallaHome();
+                        return true;
+                    case R.id.nav_cuenta:
+                        redirectPantallaCuenta();
+                        return true;
+                    case R.id.nav_dudas:
+                        redirectPantallaDudas();
+                        return true;
+                }
+                return false;
+            }
+        });
 
 
     }
@@ -91,7 +117,7 @@ public class FriendsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        cargarAmigos();
     }
 
 
@@ -117,5 +143,29 @@ public class FriendsActivity extends AppCompatActivity {
             listadoAmigos.setAdapter(alumnoAdapter);
             alumnoAdapter.notifyDataSetChanged();
         });
+    }
+
+    private void redirectPantallaHome() {
+        Intent listadoDudasIntent = new Intent(FriendsActivity.this, HomeActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
+    }
+
+    private void redirectPantallaCuenta() {
+        Intent listadoDudasIntent = new Intent(FriendsActivity.this, ProfileActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
+    }
+
+    private void redirectPantallaDudas() {
+        Intent listadoDudasIntent = new Intent(FriendsActivity.this, ListarDudasActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
     }
 }
