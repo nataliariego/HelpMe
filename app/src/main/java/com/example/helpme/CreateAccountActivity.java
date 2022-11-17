@@ -3,6 +3,7 @@ package com.example.helpme;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -89,6 +90,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             alumno.password = txPassword.getText().toString();
             alumno.urlFoto = "https://ui-avatars.com/api/?name=" + alumno.nombre;
             alumno.asignaturasDominadas = new ArrayList<>();
+            Log.i("nnn",alumno.toString());
             Authentication.getInstance().signUp(alumno, new GenericCallback<String>() {
                 @Override
                 public void callback(String msg) {
