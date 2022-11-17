@@ -88,5 +88,6 @@
     <string name="ajustes">Ajustes</string>
     <string name="privacidad_seguridad">Privacidad y seguridad</string>
     <string name="reset_password">Restablecer contraseña</string>
+    <string name="asignaturas_dominadas_hint">Selecciona las asignaturas</string>
 
 </resources>

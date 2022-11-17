@@ -156,7 +156,7 @@
                 android:id="@+id/spinnerCurso"
                 android:layout_width="345dp"
                 android:layout_height="48dp"
-                android:entries="@array/asiganturas_array"
+                android:entries="@array/asignaturas_array"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.355"
