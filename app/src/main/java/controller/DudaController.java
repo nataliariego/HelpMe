@@ -11,6 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import assembler.AlumnoAssembler;
 import dto.AlumnoDto;
@@ -74,15 +75,18 @@ public class DudaController {
                         for (DocumentSnapshot documentSnapshot : snapshot.getDocuments()) {
                             Duda duda = documentSnapshot.toObject(Duda.class);
 
-//                            AlumnoDto aRes = AlumnoAssembler.toDto(documentSnapshot.get(Duda.REF_ALUMNO).toString());
-//                            Log.i(TAG, "ALUMNO CONTROLLER: " + aRes.nombre + " " + aRes.uo);
+                            AlumnoDto aRes = AlumnoAssembler.fromHashMapToDto((Map<String, Object>) documentSnapshot.get(Duda.REF_ALUMNO));
 
                             duda.setTitulo(documentSnapshot.getString(Duda.TITULO));
                             duda.setDescripcion(documentSnapshot.getString(Duda.DESCRIPCION));
                             duda.setFecha(documentSnapshot.getString(Duda.FECHA));
                             duda.setResuelta(documentSnapshot.getBoolean(Duda.IS_RESUELTA));
                             duda.setAsignaturaId(documentSnapshot.get(Duda.ASIGNATURA_REF).toString());
-                            duda.setAlumnoId(AlumnoAssembler.toHashMap(documentSnapshot.get(Duda.REF_ALUMNO).toString()).toString());
+                            duda.setAlumnoId(AlumnoAssembler.toHashMap(documentSnapshot.get(Duda.REF_ALUMNO).toString()));
+                            duda.setId(documentSnapshot.getId());
+                            Log.i(TAG, ((Map<String, Object>) documentSnapshot.get(Duda.REF_MATERIA)).toString());
+                            duda.setMateriaId(((Map<String, Object>) documentSnapshot.get(Duda.REF_MATERIA)));
+                            duda.setAlumnoId(((Map<String, Object>) documentSnapshot.get(Duda.REF_ALUMNO)));
 
                             dudas.add(duda);
                         }

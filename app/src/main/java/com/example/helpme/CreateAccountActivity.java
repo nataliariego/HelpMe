@@ -85,6 +85,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             alumno.uo = txUo.getText().toString();
             alumno.email = txEmail.getText().toString();
             alumno.password = txPassword.getText().toString();
+            alumno.urlFoto = "https://ui-avatars.com/api/?name=" + alumno.nombre;
 
             Authentication.getInstance().signUp(alumno, new GenericCallback<String>() {
                 @Override

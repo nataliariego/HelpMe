@@ -144,7 +144,10 @@ public class AlumnoController {
                     if(docs.size() > 0){
                         DocumentSnapshot doc = docs.get(0);
 
-                        Alumno alumno = getPayloadWithUrl(doc.getId(), doc.getString(Alumno.UO), doc.getString(Alumno.NOMBRE), doc.getString("url_foto"));
+                        Alumno alumno = getPayloadWithUrl(doc.getId(), doc.getString(Alumno.UO), doc.getString(Alumno.NOMBRE), doc.getString(Alumno.URL_FOTO));
+                        alumno.setUo(doc.getString(Alumno.UO));
+                        alumno.setEmail(doc.getString("email"));
+                        alumno.setId(doc.getId());
                         callback.callback(alumno);
                     }
                 }
@@ -159,7 +162,7 @@ public class AlumnoController {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    Log.d(TAG, "Alumno creado");
+                    Log.d(TAG, "Alumno actualizado");
                 }
             }
         });
