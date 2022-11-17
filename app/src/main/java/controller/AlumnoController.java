@@ -69,7 +69,7 @@ public class AlumnoController {
                             alumno.setNombre(documentSnapshot.getString(Alumno.NOMBRE));
                             alumno.setUo(documentSnapshot.getString(Alumno.UO));
                             alumno.setUrl_foto(documentSnapshot.getString(Alumno.URL_FOTO));
-                            alumno.setAsignaturasDominadas(new ArrayList<Asignatura>());
+                            alumno.setAsignaturasDominadas(new HashMap<>());
 
                             alumnos.add(alumno);
                         }
@@ -81,6 +81,7 @@ public class AlumnoController {
 
         return liveAlumnos;
     }
+
 
     /**
      * Obtiene un alumno por su referencia.

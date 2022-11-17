@@ -16,6 +16,7 @@ import com.example.helpme.model.Alumno;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import auth.Authentication;
 import controller.AlumnoController;
@@ -89,7 +90,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             alumno.email = txEmail.getText().toString();
             alumno.password = txPassword.getText().toString();
             alumno.urlFoto = "https://ui-avatars.com/api/?name=" + alumno.nombre;
-            alumno.asignaturasDominadas = new ArrayList<>();
+            alumno.asignaturasDominadas = new HashMap<>();
             Log.i("nnn",alumno.toString());
             Authentication.getInstance().signUp(alumno, new GenericCallback<String>() {
                 @Override

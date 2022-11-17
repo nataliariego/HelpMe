@@ -50,7 +50,7 @@ public class MateriaAssembler {
         alumnoResult.nombre = String.valueOf(alumnoHashMap.get("nombre"));
         alumnoResult.uo = String.valueOf(alumnoHashMap.get("uo"));
         alumnoResult.urlFoto = String.valueOf(alumnoHashMap.get("url_foto"));
-        alumnoResult.asignaturasDominadas = Arrays.asList(alumnoHashMap.get("asignaturasDominadas").toString());
+        alumnoResult.asignaturasDominadas = (Map<String, Object>) alumnoHashMap.get("asignaturasDominadas");
 
         return alumnoResult;
     }

@@ -1,5 +1,7 @@
 package com.example.helpme;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -24,7 +26,9 @@ import android.widget.Toast;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import assembler.MateriaAssembler;
 import controller.AlumnoController;
@@ -38,12 +42,18 @@ import viewmodel.CursoViewModel;
 
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Asignatura;
+import com.example.helpme.model.Duda;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 public class ProfileActivity extends AppCompatActivity {
+
+    private FirebaseFirestore myFirebase = FirebaseFirestore.getInstance();
 
     private static final String TAG = "profile_activity";
     private List<AsignaturaDto> asignaturaList = new ArrayList<AsignaturaDto>();
@@ -144,17 +154,25 @@ public class ProfileActivity extends AppCompatActivity {
 
         String uo = userInSession.getEmail().split("@")[0].toUpperCase();
 
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             alumnoController.findByUOWithPhoto(uo, new AlumnoController.AlumnoCallback() {
                 @Override
                 public void callback(Alumno alumno) {
                     if (alumno != null) {
-                        AlumnoDto a = new AlumnoDto();
+                        Map<String, Object> docData = new HashMap<>();
+                        docData.put("email", alumno.getEmail());
+                        docData.put("nombre",nombreCompleto.getText().toString());
+                        docData.put("uo", alumno.getNombre());
+                        docData.put("url_foto", alumno.getUrl_foto());
+
+                        /*AlumnoDto a = new AlumnoDto();
                         a.email=alumno.getEmail();
                         a.uo=alumno.getNombre();
                         a.urlFoto=alumno.getUrl_foto();
                         a.nombre=nombreCompleto.getText().toString();
                         a.id=alumno.getId();
+                        a.asignaturasDominadas=alumno.getAsignaturasDominadas();*/
                         //a.asignaturasDominadas=alumno.getAsignaturasDominadas();
                         for (CheckBox c: cB
                              ) {
@@ -163,14 +181,37 @@ public class ProfileActivity extends AppCompatActivity {
                                 crearAsignaturaDuda(c.getText().toString());
                             }
                         }
+                        int i=1;
                         for (AsignaturaDto as: asignaturaDuda
                              ) {
-                            a.asignaturasDominadas.add(MateriaAssembler.toHashMap(as.materia).get("abreviatura").toString());
+                            Map<String, Object> mapAsi = new HashMap<>();
+                            mapAsi.put("curso", as.curso);
+                            mapAsi.put("materia", as.materia);
+                            mapAsi.put("nombre", as.nombre);
+                            docData.put("asignaturasDominada"+i, mapAsi);
+                            i++;
                         }
-                        Log.i("*",a.toString());
+
+                        System.out.println(docData);
+
+                        myFirebase.collection(Alumno.COLLECTION).document()
+                                .set(docData)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "DocumentSnapshot successfully actualizao!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error actualizando document", e);
+                                    }
+                                });
+                        /*Log.i("*",a.toString());
                         asignaturaDuda.clear();
                         System.out.println(a.asignaturasDominadas);
-                        alumnoController.update(a, a.id);
+                        alumnoController.update(a, a.id);*/
                     }
 
 
@@ -251,6 +292,26 @@ public class ProfileActivity extends AppCompatActivity {
                 opcion.setText(a.nombre);
                 opcion.setLayoutParams(
                         new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+
+                //Seleccionar si ya la tengo
+
+                String uo = userInSession.getEmail().split("@")[0].toUpperCase();
+
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    alumnoController.findByUOWithPhoto(uo, new AlumnoController.AlumnoCallback() {
+                                @Override
+                                public void callback(Alumno alumno) {
+                                    if (alumno != null) {
+
+                                    }
+                                }
+                    });
+                }
+
+
+
                 ll.addView(opcion);
                 cB.add(opcion);
             }

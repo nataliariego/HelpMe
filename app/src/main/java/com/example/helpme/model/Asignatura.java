@@ -18,6 +18,8 @@ public class Asignatura implements Parcelable {
     private String curso;
     private String materia;
 
+
+
     public Asignatura(String id, String nombre, String curso, String materia) {
         this.id = id;
         this.nombre = nombre;

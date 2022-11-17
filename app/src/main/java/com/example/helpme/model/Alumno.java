@@ -6,7 +6,9 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Alumno implements Parcelable {
     //    Nombre de los campos de la base de datos
@@ -26,11 +28,11 @@ public class Alumno implements Parcelable {
     private String email;
     private String userId; // For Firebase Auth purposes
 
-    private List<Asignatura> asignaturasDominadas = new ArrayList<>();
+    private Map<String, Object> asignaturasDominadas;
 
     public Alumno(){}
 
-    public Alumno(String id, String nombre, String uo, String url_foto, List<Asignatura> asignaturasDominadas) {
+    public Alumno(String id, String nombre, String uo, String url_foto, Map<String, Object> asignaturasDominadas) {
         this.id = id;
         this.nombre = nombre;
         this.uo = uo;
@@ -38,7 +40,7 @@ public class Alumno implements Parcelable {
         this.asignaturasDominadas = asignaturasDominadas;
     }
 
-    public Alumno(String nombre, String uo, String url_foto, String email, String userId, List<Asignatura> asignaturasDominadas) {
+    public Alumno(String nombre, String uo, String url_foto, String email, String userId, Map<String, Object> asignaturasDominadas) {
         this.nombre = nombre;
         this.uo = uo;
         this.url_foto = url_foto;
@@ -51,7 +53,7 @@ public class Alumno implements Parcelable {
         this(id, nombre, uo, null, null);
     }
     public Alumno(String id, String nombre, String uo, String url_foto) {
-        this(id, nombre, uo, url_foto, new ArrayList<>());
+        this(id, nombre, uo, url_foto, new HashMap<>());
     }
 
     public Alumno(Parcel in) {
@@ -98,11 +100,11 @@ public class Alumno implements Parcelable {
         this.uo = uo;
     }
 
-    public List<Asignatura> getAsignaturasDominadas() {
+    public Map<String, Object> getAsignaturasDominadas() {
         return asignaturasDominadas;
     }
 
-    public void setAsignaturasDominadas(List<Asignatura> asignaturasDominadas) {
+    public void setAsignaturasDominadas(Map<String, Object> asignaturasDominadas) {
         this.asignaturasDominadas = asignaturasDominadas;
     }
 
