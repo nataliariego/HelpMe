@@ -3,9 +3,8 @@ package com.example.helpme;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -15,17 +14,16 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.model.Alumno;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import auth.Authentication;
 import controller.AlumnoController;
@@ -47,12 +45,16 @@ public class CreateAccountActivity extends AppCompatActivity {
     private AutoCompleteTextView txSelectorAsignaturasDominadas;
     private Button btAddAsignatura;
 
+    private Button btVerAsignaturasDominadasSeleccionadas;
+
     private Button btCreateAccount;
     private Button btRedirectToLogin;
 
     private static AlumnoController alumnoController = new AlumnoController();
 
     private HashMap<String, Object> asignaturasDominadasSeleccionadas = new HashMap<>();
+
+    private AsignaturasDominadasBottomSheetDialogFragment bottomSheetAsignaturasDominadasFragment = new AsignaturasDominadasBottomSheetDialogFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         txRepeatPassword = (TextInputEditText) findViewById(R.id.text_repeat_password_create_account);
         btCreateAccount = (Button) findViewById(R.id.button_signup_create_account);
         btRedirectToLogin = (Button) findViewById(R.id.button_login_create_account);
+        btVerAsignaturasDominadasSeleccionadas = (Button) findViewById(R.id.buttonVerAsignaturasSeleccionadasCreateAccount);
 
         txSelectorAsignaturasDominadas = (AutoCompleteTextView) findViewById(R.id.text_asignaturas_dominadas_create_account);
         btAddAsignatura = (Button) findViewById(R.id.button_add_asignatura_create_account);
@@ -96,6 +99,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         ArrayAdapter asignaturasAutoCompleteAdapter = ArrayAdapter.createFromResource(this, R.array.asignaturas_array, android.R.layout.simple_spinner_dropdown_item);
         txSelectorAsignaturasDominadas.setAdapter(asignaturasAutoCompleteAdapter);
 
+        /* Evento click en boton añadir asignatura */
         btAddAsignatura.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -122,6 +126,17 @@ public class CreateAccountActivity extends AppCompatActivity {
                 }
             }
         });
+
+        /* Evento click en ver asignaturas seleccionadas */
+        btVerAsignaturasDominadasSeleccionadas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                AsignaturasDominadasBottomSheetDialogFragment fragment = AsignaturasDominadasBottomSheetDialogFragment.newInstance(asignaturasDominadasSeleccionadas);
+                fragment.show(getSupportFragmentManager(), fragment.getTag());
+
+            }
+        });
     }
 
     /**
@@ -143,6 +158,9 @@ public class CreateAccountActivity extends AppCompatActivity {
             alumno.urlFoto = "https://ui-avatars.com/api/?name=" + alumno.nombre;
             alumno.asignaturasDominadas = asignaturasDominadasSeleccionadas;
 
+            Log.i(TAG, bottomSheetAsignaturasDominadasFragment.getAsignaturasDominadas().toString());
+
+
             Log.i(TAG, "ALUMNO ANTES SIGNUP: " + alumno.toString());
 
             Authentication.getInstance().signUp(alumno, new GenericCallback<String>() {
@@ -151,7 +169,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                     if (msg.equals(GenericCallback.SUCCESS_CODE)) {
                         //redirectToHomeView();
                         Log.i(TAG, "SUCCESS");
-                    }else{
+                    } else {
                         Log.i(TAG, "ERROR");
                     }
                 }

@@ -89,5 +89,9 @@
     <string name="privacidad_seguridad">Privacidad y seguridad</string>
     <string name="reset_password">Restablecer contraseña</string>
     <string name="asignaturas_dominadas_hint">Selecciona las asignaturas</string>
+    <string name="ver_asignaturas_create_account">Ver asignaturas seleccionadas</string>
+    <string name="hint_asignatura_dominada_seleccionada">ASIGNATURA DOMINADA</string>
+    <string name="contentDescription_boton_eliminar_asignatura_dominada">Eliminar la asignatura dominada</string>
+    <string name="asignaturas_sheet_explicacion_eliminacion">Pulsa sobre el botón para eliminar las asignaturas</string>
 
 </resources>

@@ -22,9 +22,6 @@ public class TopToolbarFragment extends Fragment {
 
     public static final String TAG = "TOP_TOOLBAR_FRAGMENT";
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
     private ImageButton btFaq;
     private ImageButton btBack;
 

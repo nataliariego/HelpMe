@@ -94,11 +94,10 @@
                 android:layout_height="64dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/rounded_corners_publicarduda"
-                app:endIconMode="password_toggle"
-                app:endIconDrawable="@drawable/show_password_24"
                 android:textColorHint="@color/text_color_hint"
                 android:tooltipText="Introduce una contraseña de al menos 6 caracteres alfanuméricos."
-                >
+                app:endIconDrawable="@drawable/show_password_24"
+                app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/text_password_ca"
@@ -109,8 +108,7 @@
                     android:inputType="textPassword"
                     android:shadowColor="@color/transparent"
                     android:textColorHint="@color/text_color_hint"
-                    android:textSize="16sp"
-                    />
+                    android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -176,6 +174,21 @@
             </LinearLayout>
 
             <!-- Selector asignaturas dominadas por el alumno -->
+
+            <Button
+                android:id="@+id/buttonVerAsignaturasSeleccionadasCreateAccount"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:backgroundTint="@color/secondary"
+                android:text="@string/ver_asignaturas_create_account"
+                android:textColor="@color/primary"
+                android:textSize="16sp"
+                app:strokeColor="@color/primary" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"></LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_signup_create_account"
