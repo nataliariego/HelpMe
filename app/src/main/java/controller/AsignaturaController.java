@@ -7,18 +7,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Asignatura;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import org.checkerframework.checker.units.qual.A;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class AsignaturaController {
@@ -54,19 +53,19 @@ public class AsignaturaController {
                     List<Asignatura> asignasturas = new ArrayList<>();
                     if (snapshot != null && !snapshot.isEmpty()) {
                         for (DocumentSnapshot documentSnapshot : snapshot.getDocuments()) {
-                            Log.i("---> " , String.valueOf(documentSnapshot.get(Asignatura.CURSO).toString().split("=")[1].charAt(0)));
+                            Log.i("---> ", String.valueOf(documentSnapshot.get(Asignatura.CURSO).toString().split("=")[1].charAt(0)));
 
                             Asignatura asig = new Asignatura();
 
                             asig.setId(documentSnapshot.getId());
                             asig.setNombre(documentSnapshot.getString(Asignatura.NOMBRE));
                             //documentSnapshot.get(Duda.ASIGNATURA_REF).toString()
-                            Log.i("---> " ,documentSnapshot.get(Asignatura.CURSO).toString());
+                            Log.i("---> ", documentSnapshot.get(Asignatura.CURSO).toString());
                             asig.setCurso(documentSnapshot.get(Asignatura.CURSO).toString());
                             asig.setMateria(documentSnapshot.get(Asignatura.MATERIA).toString());
 
                             asignasturas.add(asig);
-                            
+
                             System.out.println(asig.toString());
                         }
                     }
@@ -94,11 +93,48 @@ public class AsignaturaController {
                 DocumentSnapshot a = task.getResult();
 
 
-
                 // CREAR asignatura
             }
         });
 
         return Optional.ofNullable(null);
+    }
+
+    /**
+     * Obtiene la asignatura con el nombre pasado como parámetro.
+     *
+     * @return
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void findByName(String subjectName, AsignaturaCallback callback) {
+        Task<QuerySnapshot> document = db.collection(Asignatura.COLLECTION)
+                .whereEqualTo("nombre", subjectName).get();
+
+
+        document.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<DocumentSnapshot> docs = task.getResult().getDocuments();
+
+                    if (docs.size() > 0) {
+                        DocumentSnapshot doc = docs.get(0);
+                        Map<String, Object> res = doc.getData();
+                        callback.callback(res);
+                    }
+                }
+            }
+        });
+    }
+
+    public Asignatura getPayLoad(String nombre) {
+        return new Asignatura(null, null, nombre);
+    }
+
+    public interface AsignaturaCallback {
+        //void callback(Asignatura subject);
+
+        // Ejemplo: {nombre=Comunicación Persona-Máquina, materia={abreviatura=CPM, denominacion=Interacción y Multimedia, id=eg8fSHgqSFd3ajoE7HmG}, curso={id=IvCCFH2OBBnMmmCvzZ0j, numero=2}}
+        void callback(Map<String, Object> payload);
     }
 }

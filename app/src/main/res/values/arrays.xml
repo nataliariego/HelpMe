@@ -53,7 +53,7 @@
         <item>Informática Forense y Auditoría</item>
         <item>Software de Modelado de Ingeniería</item>
         <item>Software para Dispositivos Móviles</item>
-        <item>Accesibilidad Aumentada</item>
+        <item>Realidad y Accesibilidad Aumentadas</item>
         <item>Sistemas de Información para la web</item>
         <item>Software de Entretenimiento y Videojuegos</item>
         <item>Software para Robots</item>
@@ -63,9 +63,9 @@
 
     <string-array name="materias_array">
         <item>Fundamentos Matemáticos</item>
-        <item>Fundamentos de Informática</item>
+        <item>Fundamentos Informáticos</item>
         <item>Programación</item>
-        <item>Hardware</item>
+        <item>Soporte físico y Hardware</item>
         <item>Práctica Profesional</item>
         <item>Sistemas de Información</item>
         <item>Persistencia</item>

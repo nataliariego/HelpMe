@@ -3,8 +3,12 @@ package com.example.helpme;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -15,16 +19,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.helpme.model.Alumno;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import auth.Authentication;
 import controller.AlumnoController;
+import controller.AsignaturaController;
 import controller.callback.GenericCallback;
 import dto.AlumnoDto;
 import util.FormValidator;
 
 public class CreateAccountActivity extends AppCompatActivity {
+
+    public static final String TAG = "CREATE_ACCOUNT_ACTIVITY";
 
     private EditText txEmail;
     private EditText txCompleteName;
@@ -32,10 +44,15 @@ public class CreateAccountActivity extends AppCompatActivity {
     private TextInputEditText txPassword;
     private TextInputEditText txRepeatPassword;
 
+    private AutoCompleteTextView txSelectorAsignaturasDominadas;
+    private Button btAddAsignatura;
+
     private Button btCreateAccount;
     private Button btRedirectToLogin;
 
     private static AlumnoController alumnoController = new AlumnoController();
+
+    private HashMap<String, Object> asignaturasDominadasSeleccionadas = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +88,40 @@ public class CreateAccountActivity extends AppCompatActivity {
         txRepeatPassword = (TextInputEditText) findViewById(R.id.text_repeat_password_create_account);
         btCreateAccount = (Button) findViewById(R.id.button_signup_create_account);
         btRedirectToLogin = (Button) findViewById(R.id.button_login_create_account);
+
+        txSelectorAsignaturasDominadas = (AutoCompleteTextView) findViewById(R.id.text_asignaturas_dominadas_create_account);
+        btAddAsignatura = (Button) findViewById(R.id.button_add_asignatura_create_account);
+
+        // Autocompletado para el textView de asignaturas
+        ArrayAdapter asignaturasAutoCompleteAdapter = ArrayAdapter.createFromResource(this, R.array.asignaturas_array, android.R.layout.simple_spinner_dropdown_item);
+        txSelectorAsignaturasDominadas.setAdapter(asignaturasAutoCompleteAdapter);
+
+        btAddAsignatura.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                if (String.valueOf(txSelectorAsignaturasDominadas.getText()).trim().toLowerCase(Locale.ROOT) != "null" &&
+                        !String.valueOf(txSelectorAsignaturasDominadas.getText()).isEmpty() &&
+                        String.valueOf(txSelectorAsignaturasDominadas.getText()).trim() != "") {
+
+                    String asigName = txSelectorAsignaturasDominadas.getText().toString();
+
+
+                    AsignaturaController.getInstance().findByName(asigName, new AsignaturaController.AsignaturaCallback() {
+                        @Override
+                        public void callback(Map<String, Object> payload) {
+                            int pos = asignaturasDominadasSeleccionadas.size() == 0 ? 1 : asignaturasDominadasSeleccionadas.size() - 1;
+                            asignaturasDominadasSeleccionadas.put(String.valueOf(pos), payload);
+
+                            Log.i(TAG, payload.toString());
+                        }
+                    });
+
+                    txSelectorAsignaturasDominadas.setText("");
+
+                }
+            }
+        });
     }
 
     /**
@@ -90,13 +141,18 @@ public class CreateAccountActivity extends AppCompatActivity {
             alumno.email = txEmail.getText().toString();
             alumno.password = txPassword.getText().toString();
             alumno.urlFoto = "https://ui-avatars.com/api/?name=" + alumno.nombre;
-            alumno.asignaturasDominadas = new HashMap<>();
-            Log.i("nnn",alumno.toString());
+            alumno.asignaturasDominadas = asignaturasDominadasSeleccionadas;
+
+            Log.i(TAG, "ALUMNO ANTES SIGNUP: " + alumno.toString());
+
             Authentication.getInstance().signUp(alumno, new GenericCallback<String>() {
                 @Override
                 public void callback(String msg) {
-                    if(msg.equals(GenericCallback.SUCCESS_CODE)){
-                        redirectToHomeView();
+                    if (msg.equals(GenericCallback.SUCCESS_CODE)) {
+                        //redirectToHomeView();
+                        Log.i(TAG, "SUCCESS");
+                    }else{
+                        Log.i(TAG, "ERROR");
                     }
                 }
             });
@@ -105,12 +161,16 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private boolean validateFields() {
-        boolean isValid = true;
 
         String email = txEmail.getText().toString();
         String password = txPassword.getText().toString();
         String passwordRepeated = txRepeatPassword.getText().toString();
         String uo = txUo.getText().toString();
+
+        if (!FormValidator.isNotEmpty(email)) {
+            txUo.setError(getText(R.string.uo_empty));
+            return false;
+        }
 
         alumnoController.findByUO(uo, new AlumnoController.AlumnoCallback() {
             @Override
@@ -124,21 +184,22 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         if (!FormValidator.isValidUOIdentifier(uo)) {
             txUo.setError(getText(R.string.uo_not_valid));
+            return false;
         }
 
         if (!FormValidator.isNotEmpty(email)) {
             txEmail.setError(getText(R.string.email_empty));
-            isValid = false;
+            return false;
         }
 
         if (!FormValidator.isNotEmpty(password)) {
             txPassword.setError(getText(R.string.password_empty));
-            isValid = false;
+            return false;
         }
 
         if (!FormValidator.passwordMatched(password, passwordRepeated)) {
             Toast.makeText(getApplicationContext(), getText(R.string.password_not_matching), Toast.LENGTH_SHORT);
-            isValid = false;
+            return false;
         }
 
 
@@ -147,7 +208,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 //            isValid = false;
 //        }
 
-        return isValid;
+        return true;
     }
 
     public void redirectToHomeView() {

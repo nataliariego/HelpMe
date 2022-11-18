@@ -1,11 +1,5 @@
 package com.example.helpme;
 
-import static android.content.ContentValues.TAG;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
@@ -14,39 +8,18 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
-import assembler.MateriaAssembler;
-import controller.AlumnoController;
-import de.hdodenhof.circleimageview.CircleImageView;
-import dto.AlumnoDto;
-import dto.AsignaturaDto;
-import dto.CursoDto;
-import dto.DudaDto;
-import viewmodel.AsignaturaViewModel;
-import viewmodel.CursoViewModel;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.helpme.model.Alumno;
-import com.example.helpme.model.Asignatura;
-import com.example.helpme.model.Duda;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,8 +27,20 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
-public class ProfileActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
+import controller.AlumnoController;
+import de.hdodenhof.circleimageview.CircleImageView;
+import dto.AsignaturaDto;
+import dto.CursoDto;
+import viewmodel.AsignaturaViewModel;
+import viewmodel.CursoViewModel;
+
+public class ProfileActivity extends AppCompatActivity {
 
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -101,7 +86,7 @@ public class ProfileActivity extends AppCompatActivity {
         //Pongo los datos del usuario que está autenticado
         String uo = userInSession.getEmail().split("@")[0].toUpperCase();
 
-       // Log.i("patatita: " , uo);
+        // Log.i("patatita: " , uo);
         //Tengo que buscar el alumno que tenga ese email para poner después los datos
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             alumnoController.findByUOWithPhoto(uo, new AlumnoController.AlumnoCallback() {
@@ -110,11 +95,11 @@ public class ProfileActivity extends AppCompatActivity {
                     if (alumno != null) {
                         //Esto tdo no está bien porque en la base de datos
                         //Se guardan raro los datos, faltan cosas...etc
-                        System.out.println("aver"+alumno.toString());
+                        System.out.println("aver" + alumno.toString());
                         textViewUO.setText(alumno.getNombre());
-                        textViewEmail.setText(alumno.getNombre()+"@uniovi.es");
+                        textViewEmail.setText(alumno.getNombre() + "@uniovi.es");
                         nombreCompleto.setText(alumno.getUo());
-                        if (alumno.getUrl_foto()!=null &&  alumno.getUrl_foto()!="")
+                        if (alumno.getUrl_foto() != null && alumno.getUrl_foto() != "")
                             Picasso.get().load(alumno.getUrl_foto()).into(img_persona);
                     }
                 }
@@ -131,7 +116,7 @@ public class ProfileActivity extends AppCompatActivity {
         navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.nav_chat:
 
                         return true;
@@ -167,7 +152,7 @@ public class ProfileActivity extends AppCompatActivity {
                     if (alumno != null) {
                         Map<String, Object> docData = new HashMap<>();
                         docData.put("email", alumno.getEmail());
-                        docData.put("nombre",nombreCompleto.getText().toString());
+                        docData.put("nombre", nombreCompleto.getText().toString());
                         docData.put("uo", alumno.getNombre());
                         docData.put("url_foto", alumno.getUrl_foto());
 
@@ -179,26 +164,23 @@ public class ProfileActivity extends AppCompatActivity {
                         a.id=alumno.getId();
                         a.asignaturasDominadas=alumno.getAsignaturasDominadas();*/
                         //a.asignaturasDominadas=alumno.getAsignaturasDominadas();
-                        for (CheckBox c: cB
-                             ) {
-                            if (c.isChecked())
-                            {
+                        for (CheckBox c : cB
+                        ) {
+                            if (c.isChecked()) {
                                 crearAsignaturaDuda(c.getText().toString());
                             }
                         }
                         Map<String, Object> mapAsi = new HashMap<>();
 
-                        int i=1;
-                        for (AsignaturaDto as: asignaturaDuda
-                             ) {
+                        int i = 1;
+                        for (AsignaturaDto as : asignaturaDuda
+                        ) {
                             //System.out.println("-->"+as.toString());
                             mapAsi.put(String.valueOf(i), as);
                             i++;
                         }
 
                         docData.put("asignaturasDominadas", mapAsi);
-
-                        System.out.println(docData.toString());
 
                         /*myFirebase.collection(Alumno.COLLECTION).document()
                                 .set(docData)
@@ -222,13 +204,12 @@ public class ProfileActivity extends AppCompatActivity {
                         db.collection(Alumno.COLLECTION).document(alumno.getId()).update(docData).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful()){
+                                if (task.isSuccessful()) {
                                     Log.d(TAG, "Alumno actualizado");
                                 }
                             }
                         });
                     }
-
 
 
                 }
@@ -245,11 +226,11 @@ public class ProfileActivity extends AppCompatActivity {
                     dudasResult.forEach(d -> {
 
                         AsignaturaDto a = new AsignaturaDto();
-                        if (d.getNombre().equals(nombreA)){
+                        if (d.getNombre().equals(nombreA)) {
                             a.nombre = d.getNombre();
-                            a.id=d.getId();
-                            a.curso=d.getCurso();
-                            a.materia=d.getMateria();
+                            a.id = d.getId();
+                            a.curso = d.getCurso();
+                            a.materia = d.getMateria();
                             asignaturaDuda.add(a);
                         }
                     });
@@ -291,9 +272,9 @@ public class ProfileActivity extends AppCompatActivity {
                         Log.i(TAG, d.getNombre());
                         AsignaturaDto a = new AsignaturaDto();
                         a.nombre = d.getNombre();
-                        a.curso=d.getCurso();
-                        a.materia=d.getMateria();
-                        a.id=d.getId();
+                        a.curso = d.getCurso();
+                        a.materia = d.getMateria();
+                        a.id = d.getId();
 
                         asignaturaList.add(a);
                     });
@@ -301,9 +282,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
 
-
             LinearLayout ll = findViewById(R.id.ll_dentroscroll);
-
 
 
             for (AsignaturaDto a : asignaturaList) {
@@ -320,30 +299,26 @@ public class ProfileActivity extends AppCompatActivity {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     alumnoController.findByUOWithPhoto(uo, new AlumnoController.AlumnoCallback() {
-                                @Override
-                                public void callback(Alumno alumno) {
-                                    if (alumno != null) {
+                        @Override
+                        public void callback(Alumno alumno) {
+                            if (alumno != null) {
 
 
-                                        List<AsignaturaDto> asignaturasAlumno = crearAsignaturas(alumno.getAsignaturasDominadas());
+                                List<AsignaturaDto> asignaturasAlumno = crearAsignaturas(alumno.getAsignaturasDominadas());
 
 
-                                        System.out.println("Las de el**"+ asignaturasAlumno);
-                                        System.out.println("Todas**"+asignaturaList);
+                                System.out.println("Las de el**" + asignaturasAlumno);
+                                System.out.println("Todas**" + asignaturaList);
 
-                                        for (AsignaturaDto as: asignaturasAlumno) {
-                                            if (a.equals(as)) opcion.setChecked(true);
-                                        }
-
-
-
-
-                                    }
+                                for (AsignaturaDto as : asignaturasAlumno) {
+                                    if (a.equals(as)) opcion.setChecked(true);
                                 }
+
+
+                            }
+                        }
                     });
                 }
-
-
 
 
                 ll.addView(opcion);
@@ -356,15 +331,15 @@ public class ProfileActivity extends AppCompatActivity {
 
         List<AsignaturaDto> asignaturas = new ArrayList<>();
         Object[] asigs = asignaturasDominadas.values().toArray();
-        for (Object nombre: asigs) {
+        for (Object nombre : asigs) {
             AsignaturaDto a = new AsignaturaDto();
             String linea = nombre.toString();
             System.out.println("pa" + nombre);
-            a.curso=linea.split("curso=")[1].split(Pattern.quote("}")+",")[0]+"}";
-            a.materia=linea.split("materia=")[1].split(Pattern.quote("}")+",")[0]+"}";
-            a.id=linea.split("id=")[1].split(",")[0].split(Pattern.quote("}"))[0];
+            a.curso = linea.split("curso=")[1].split(Pattern.quote("}") + ",")[0] + "}";
+            a.materia = linea.split("materia=")[1].split(Pattern.quote("}") + ",")[0] + "}";
+            a.id = linea.split("id=")[1].split(",")[0].split(Pattern.quote("}"))[0];
             //esta nal el id
-            a.nombre=linea.split("nombre=")[1].split(",")[0].split(Pattern.quote("}"))[0];
+            a.nombre = linea.split("nombre=")[1].split(",")[0].split(Pattern.quote("}"))[0];
             asignaturas.add(a);
         }
 
