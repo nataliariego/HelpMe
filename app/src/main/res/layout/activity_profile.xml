@@ -59,228 +59,172 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewUO"
         app:layout_constraintVertical_bias="0.0" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="401dp"
-        android:layout_height="381dp"
-        android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.66">
-
-        <LinearLayout
-            android:id="@+id/ll_user_name"
-            android:layout_width="369dp"
-            android:layout_height="68dp"
-            android:layout_margin="16dp"
-            android:background="@drawable/text_view_profile"
-            android:orientation="vertical"
-            android:padding="15dp"
-
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp">
-
-                <EditText
-                    android:id="@+id/tv_user_name"
-                    android:layout_width="280dp"
-                    android:layout_height="32dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginEnd="54dp"
-                    android:layout_marginBottom="9dp"
-                    android:background="@color/white"
-                    android:minHeight="48dp"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
-
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="26dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginBottom="15dp"
-                    android:contentDescription="@string/editicon"
-                    app:srcCompat="@drawable/edit_icon"
-                    app:tint="#646464" />
-            </RelativeLayout>
-
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_user_name_title"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="@color/white"
-            android:text="@string/nombre_completo"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <!-- ASIGNATURAS -->
-
-        <LinearLayout
-            android:id="@+id/ll_user_curse"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:background="@drawable/text_view_profile"
-            android:orientation="vertical"
-            android:padding="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.333">
-
-            <Spinner
-                android:id="@+id/spinnerCurso"
-                android:layout_width="345dp"
-                android:layout_height="48dp"
-                android:entries="@array/asignaturas_array"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.355"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextDuda"
-                app:layout_constraintVertical_bias="0.243" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_user_curse"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="96dp"
-            android:layout_marginEnd="8dp"
-            android:background="@color/white"
-            android:text="@string/curso"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!--<Spinner
-                android:id="@+id/spinnerAsignaturasProfile"
-                android:layout_width="345dp"
-                android:layout_height="48dp"
-                android:entries="@array/asiganturas_array"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.355"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextDuda"
-                app:layout_constraintVertical_bias="0.243" />-->
-
-
-        <LinearLayout
-            android:id="@+id/ll_user_asignaturas"
-            android:layout_width="370dp"
-            android:layout_height="96dp"
-            android:layout_margin="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/text_view_profile"
-            android:orientation="vertical"
-            android:padding="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.758"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.772">
-
-
-            <ScrollView
-                android:id="@+id/scrollView2"
-                android:layout_width="371dp"
-                android:layout_height="69dp"
-                android:contentDescription="@string/Título"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.676">
-
-
-                <LinearLayout
-                    android:id="@+id/ll_dentroscroll"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"></LinearLayout>
-
-
-            </ScrollView>
-
-
-        </LinearLayout>
-
-
-        <TextView
-            android:id="@+id/tv_asignaturas"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="200dp"
-            android:layout_marginEnd="8dp"
-            android:background="@color/white"
-            android:text="@string/asignaturasProfile"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/bt_guardar_perfil"
-            android:layout_width="156dp"
-            android:layout_height="40dp"
-            android:background="@drawable/button_rounded_corners_primary"
+            android:layout_width="401dp"
+            android:layout_height="381dp"
+            android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0"
-            tools:ignore="MissingConstraints">
+            app:layout_constraintVertical_bias="0.724">
+
+            <LinearLayout
+                android:id="@+id/ll_user_name"
+                android:layout_width="369dp"
+                android:layout_height="68dp"
+                android:layout_margin="16dp"
+                android:background="@drawable/text_view_profile"
+                android:orientation="vertical"
+                android:padding="15dp"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp">
+
+                    <EditText
+                        android:id="@+id/tv_user_name"
+                        android:layout_width="280dp"
+                        android:layout_height="32dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginEnd="54dp"
+                        android:layout_marginBottom="9dp"
+                        android:background="@color/white"
+                        android:minHeight="48dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="26dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginBottom="15dp"
+                        android:contentDescription="@string/editicon"
+                        app:srcCompat="@drawable/edit_icon"
+                        app:tint="#646464" />
+                </RelativeLayout>
+
+
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/tx_bt_guardar_perfil"
+                android:id="@+id/tv_user_name_title"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_medium"
-                android:gravity="center"
-                android:text="@string/guardar"
-                android:textColor="@color/white"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@color/white"
+                android:text="@string/nombre_completo"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- ASIGNATURAS -->
+
+
+            <LinearLayout
+                android:id="@+id/ll_user_asignaturas"
+                android:layout_width="368dp"
+                android:layout_height="178dp"
+                android:layout_margin="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/text_view_profile"
+                android:orientation="vertical"
+                android:padding="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.655">
+
+
+                <ScrollView
+                    android:id="@+id/scrollView2"
+                    android:layout_width="371dp"
+                    android:layout_height="157dp"
+                    android:contentDescription="@string/Título"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.676">
+
+
+                    <LinearLayout
+                        android:id="@+id/ll_dentroscroll"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"></LinearLayout>
+
+
+                </ScrollView>
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_asignaturas"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="116dp"
+                android:layout_marginEnd="8dp"
+                android:background="@color/white"
+                android:text="@string/asignaturasProfile"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/bt_guardar_perfil"
+                android:layout_width="156dp"
+                android:layout_height="40dp"
+                android:background="@drawable/button_rounded_corners_primary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"
+                tools:ignore="MissingConstraints">
+
+                <TextView
+                    android:id="@+id/tx_bt_guardar_perfil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center"
+                    android:text="@string/guardar"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

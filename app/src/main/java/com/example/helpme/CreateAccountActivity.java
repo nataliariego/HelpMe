@@ -5,8 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -18,9 +16,7 @@ import com.example.helpme.model.Alumno;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
+import java.util.HashMap;
 
 import auth.Authentication;
 import controller.AlumnoController;
@@ -29,22 +25,17 @@ import dto.AlumnoDto;
 import util.FormValidator;
 
 public class CreateAccountActivity extends AppCompatActivity {
-    public static final String TAG = "CREATE_ACCOUNT_ACTIVITY";
 
     private EditText txEmail;
     private EditText txCompleteName;
     private EditText txUo;
     private TextInputEditText txPassword;
     private TextInputEditText txRepeatPassword;
-    private AutoCompleteTextView txSelectorAsignaturasDominadas;
-    private Button btAddAsignatura;
 
     private Button btCreateAccount;
     private Button btRedirectToLogin;
 
     private static AlumnoController alumnoController = new AlumnoController();
-
-    private Set<String> asignaturasDominadasSeleccionadas = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +64,6 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     private void initFields() {
-        asignaturasDominadasSeleccionadas.clear();
-
         txUo = (EditText) findViewById(R.id.text_uo_create_account);
         txEmail = (EditText) findViewById(R.id.text_email_create_account);
         txCompleteName = (EditText) findViewById(R.id.text_nombre_completo_create_account);
@@ -82,29 +71,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         txRepeatPassword = (TextInputEditText) findViewById(R.id.text_repeat_password_create_account);
         btCreateAccount = (Button) findViewById(R.id.button_signup_create_account);
         btRedirectToLogin = (Button) findViewById(R.id.button_login_create_account);
-        txSelectorAsignaturasDominadas = (AutoCompleteTextView) findViewById(R.id.text_asignaturas_dominadas_create_account);
-        btAddAsignatura = (Button) findViewById(R.id.button_add_asignatura_create_account);
-
-        // Autocompletado para el textView de asignaturas
-        ArrayAdapter asignaturasAutoCompleteAdapter = ArrayAdapter.createFromResource(this, R.array.asignaturas_array, android.R.layout.simple_spinner_dropdown_item);
-        txSelectorAsignaturasDominadas.setAdapter(asignaturasAutoCompleteAdapter);
-
-        btAddAsignatura.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(String.valueOf(txSelectorAsignaturasDominadas.getText()).trim().toLowerCase(Locale.ROOT) != "null" &&
-                        !String.valueOf(txSelectorAsignaturasDominadas.getText()).isEmpty() &&
-                        String.valueOf(txSelectorAsignaturasDominadas.getText()).trim() != ""){
-                    asignaturasDominadasSeleccionadas.add(txSelectorAsignaturasDominadas.getText().toString());
-                    txSelectorAsignaturasDominadas.setText("");
-                    for (String a : asignaturasDominadasSeleccionadas) {
-                        Log.i(TAG, a);
-                    }
-
-                }
-            }
-        });
-
     }
 
     /**
@@ -124,8 +90,8 @@ public class CreateAccountActivity extends AppCompatActivity {
             alumno.email = txEmail.getText().toString();
             alumno.password = txPassword.getText().toString();
             alumno.urlFoto = "https://ui-avatars.com/api/?name=" + alumno.nombre;
-            alumno.asignaturasDominadas = new ArrayList<>();
-
+            alumno.asignaturasDominadas = new HashMap<>();
+            Log.i("nnn",alumno.toString());
             Authentication.getInstance().signUp(alumno, new GenericCallback<String>() {
                 @Override
                 public void callback(String msg) {
