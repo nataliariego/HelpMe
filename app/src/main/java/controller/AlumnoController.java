@@ -148,6 +148,7 @@ public class AlumnoController {
                         Alumno alumno = getPayloadWithUrl(doc.getId(), doc.getString(Alumno.UO), doc.getString(Alumno.NOMBRE), doc.getString(Alumno.URL_FOTO));
                         //alumno.setUo(doc.getString(Alumno.UO));
                         alumno.setEmail(doc.getString("email"));
+                        alumno.setAsignaturasDominadas((Map<String,Object>)doc.get("asignaturasDominadas"));
                         alumno.setId(doc.getId());
                         callback.callback(alumno);
                     }
