@@ -1,10 +1,13 @@
 package assembler;
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.example.helpme.model.Alumno;
+import com.google.protobuf.Any;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,9 +49,6 @@ public class AlumnoAssembler {
         hashMapAlumnoResult.put(Alumno.UO, alumno.uo);
         hashMapAlumnoResult.put(Alumno.EMAIL, alumno.email);
         hashMapAlumnoResult.put(Alumno.URL_FOTO, alumno.urlFoto);
-        if (alumno.asignaturasDominadas.size() > 0) {
-            hashMapAlumnoResult.put(Alumno.ASIGNATURAS_DOMINADAS, alumno.asignaturasDominadas);
-        }
 
         return hashMapAlumnoResult;
     }
@@ -60,12 +60,9 @@ public class AlumnoAssembler {
         alumnoResult.nombre = String.valueOf(alumnoHashMap.get(Alumno.NOMBRE));
         alumnoResult.uo = String.valueOf(alumnoHashMap.get(Alumno.UO));
         alumnoResult.urlFoto = String.valueOf(alumnoHashMap.get(Alumno.URL_FOTO));
+        alumnoResult.asignaturasDominadas = (Map<String, Object>) alumnoHashMap.get("asignaturasDominadas");
 
         Log.i(TAG, alumnoHashMap.get(Alumno.ASIGNATURAS_DOMINADAS).toString());
-
-//        if (alumnoHashMap.get(Alumno.ASIGNATURAS_DOMINADAS) != null) {
-//            alumnoResult.asignaturasDominadas = (Map<String, Object>) alumnoHashMap.get(Alumno.ASIGNATURAS_DOMINADAS);
-//        }
 
         return alumnoResult;
     }

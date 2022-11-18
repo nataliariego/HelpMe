@@ -17,7 +17,7 @@ public class AsignaturaDto {
     @Override
     public boolean equals(Object o) {
         AsignaturaDto a = (AsignaturaDto) o;
-        if (this.nombre.equals(a.nombre)) return true;
+        if (this.id.equals(a.id)) return true;
         return false;
     }
 
