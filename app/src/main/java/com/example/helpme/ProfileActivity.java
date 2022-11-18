@@ -1,5 +1,7 @@
 package com.example.helpme;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -24,7 +26,10 @@ import android.widget.Toast;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 import assembler.MateriaAssembler;
 import controller.AlumnoController;
@@ -38,12 +43,22 @@ import viewmodel.CursoViewModel;
 
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Asignatura;
+import com.example.helpme.model.Duda;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 public class ProfileActivity extends AppCompatActivity {
+
+
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private static final String TAG = "profile_activity";
     private List<AsignaturaDto> asignaturaList = new ArrayList<AsignaturaDto>();
@@ -98,7 +113,7 @@ public class ProfileActivity extends AppCompatActivity {
                         System.out.println("aver"+alumno.toString());
                         textViewUO.setText(alumno.getNombre());
                         textViewEmail.setText(alumno.getNombre()+"@uniovi.es");
-                        nombreCompleto.setText(alumno.getNombre());
+                        nombreCompleto.setText(alumno.getUo());
                         if (alumno.getUrl_foto()!=null &&  alumno.getUrl_foto()!="")
                             Picasso.get().load(alumno.getUrl_foto()).into(img_persona);
                     }
@@ -108,7 +123,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         cargarAsignaturas();
-        cargarCursos();
+        //cargarCursos();
 
 
         //navegacion
@@ -144,17 +159,26 @@ public class ProfileActivity extends AppCompatActivity {
 
         String uo = userInSession.getEmail().split("@")[0].toUpperCase();
 
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             alumnoController.findByUOWithPhoto(uo, new AlumnoController.AlumnoCallback() {
                 @Override
                 public void callback(Alumno alumno) {
                     if (alumno != null) {
-                        AlumnoDto a = new AlumnoDto();
+                        Map<String, Object> docData = new HashMap<>();
+                        docData.put("email", alumno.getEmail());
+                        docData.put("nombre",nombreCompleto.getText().toString());
+                        docData.put("uo", alumno.getNombre());
+                        docData.put("url_foto", alumno.getUrl_foto());
+
+                        /*AlumnoDto a = new AlumnoDto();
                         a.email=alumno.getEmail();
                         a.uo=alumno.getNombre();
-                        a.urlFoto=alumno.getEmail();
+                        a.urlFoto=alumno.getUrl_foto();
                         a.nombre=nombreCompleto.getText().toString();
                         a.id=alumno.getId();
+                        a.asignaturasDominadas=alumno.getAsignaturasDominadas();*/
+                        //a.asignaturasDominadas=alumno.getAsignaturasDominadas();
                         for (CheckBox c: cB
                              ) {
                             if (c.isChecked())
@@ -162,13 +186,47 @@ public class ProfileActivity extends AppCompatActivity {
                                 crearAsignaturaDuda(c.getText().toString());
                             }
                         }
+                        Map<String, Object> mapAsi = new HashMap<>();
+
+                        int i=1;
                         for (AsignaturaDto as: asignaturaDuda
                              ) {
-                            a.asignaturasDominadas.add(MateriaAssembler.toHashMap(as.materia).get("abreviatura").toString());
+                            //System.out.println("-->"+as.toString());
+                            mapAsi.put(String.valueOf(i), as);
+                            i++;
                         }
+
+                        docData.put("asignaturasDominadas", mapAsi);
+
+                        System.out.println(docData.toString());
+
+                        /*myFirebase.collection(Alumno.COLLECTION).document()
+                                .set(docData)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "DocumentSnapshot successfully actualizao!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error actualizando document", e);
+                                    }
+                                });
+                        /*Log.i("*",a.toString());
                         asignaturaDuda.clear();
                         System.out.println(a.asignaturasDominadas);
-                        alumnoController.update(a, a.id);
+                        alumnoController.update(a, a.id);*/
+
+                        db.collection(Alumno.COLLECTION).document(alumno.getId()).update(docData).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    Log.d(TAG, "Alumno actualizado");
+                                }
+                            }
+                        });
                     }
 
 
@@ -200,6 +258,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    /*
     private void cargarCursos() {
         cursoViewModel.getAllCursos().observe(this, dudasResult -> {
             if (dudasResult != null) {
@@ -219,11 +278,10 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
 
-            spinnerCursos = findViewById(R.id.spinnerCurso);
             spinnerCursos.setAdapter(new ArrayAdapter<>(ProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, numeroCursos));
 
         });
-    }
+    }*/
 
     private void cargarAsignaturas() {
         asignaturaViewModel.getAllDudas().observe(this, dudasResult -> {
@@ -233,6 +291,9 @@ public class ProfileActivity extends AppCompatActivity {
                         Log.i(TAG, d.getNombre());
                         AsignaturaDto a = new AsignaturaDto();
                         a.nombre = d.getNombre();
+                        a.curso=d.getCurso();
+                        a.materia=d.getMateria();
+                        a.id=d.getId();
 
                         asignaturaList.add(a);
                     });
@@ -244,15 +305,72 @@ public class ProfileActivity extends AppCompatActivity {
             LinearLayout ll = findViewById(R.id.ll_dentroscroll);
 
 
+
             for (AsignaturaDto a : asignaturaList) {
                 CheckBox opcion = new CheckBox(this);
                 opcion.setText(a.nombre);
                 opcion.setLayoutParams(
                         new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+
+                //Seleccionar si ya la tengo
+
+                String uo = userInSession.getEmail().split("@")[0].toUpperCase();
+
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    alumnoController.findByUOWithPhoto(uo, new AlumnoController.AlumnoCallback() {
+                                @Override
+                                public void callback(Alumno alumno) {
+                                    if (alumno != null) {
+
+
+                                        List<AsignaturaDto> asignaturasAlumno = crearAsignaturas(alumno.getAsignaturasDominadas());
+
+
+                                        System.out.println("Las de el**"+ asignaturasAlumno);
+                                        System.out.println("Todas**"+asignaturaList);
+
+                                        for (AsignaturaDto as: asignaturasAlumno) {
+                                            if (a.equals(as)) opcion.setChecked(true);
+                                        }
+
+
+
+
+                                    }
+                                }
+                    });
+                }
+
+
+
+
                 ll.addView(opcion);
                 cB.add(opcion);
             }
         });
+    }
+
+    private List<AsignaturaDto> crearAsignaturas(Map<String, Object> asignaturasDominadas) {
+
+        List<AsignaturaDto> asignaturas = new ArrayList<>();
+        Object[] asigs = asignaturasDominadas.values().toArray();
+        for (Object nombre: asigs) {
+            AsignaturaDto a = new AsignaturaDto();
+            String linea = nombre.toString();
+            System.out.println("pa" + nombre);
+            a.curso=linea.split("curso=")[1].split(Pattern.quote("}")+",")[0]+"}";
+            a.materia=linea.split("materia=")[1].split(Pattern.quote("}")+",")[0]+"}";
+            a.id=linea.split("id=")[1].split(",")[0].split(Pattern.quote("}"))[0];
+            //esta nal el id
+            a.nombre=linea.split("nombre=")[1].split(",")[0].split(Pattern.quote("}"))[0];
+            asignaturas.add(a);
+        }
+
+
+        return asignaturas;
+
     }
 
 

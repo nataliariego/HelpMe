@@ -69,7 +69,7 @@ public class AlumnoController {
                             alumno.setNombre(documentSnapshot.getString(Alumno.NOMBRE));
                             alumno.setUo(documentSnapshot.getString(Alumno.UO));
                             alumno.setUrl_foto(documentSnapshot.getString(Alumno.URL_FOTO));
-                            alumno.setAsignaturasDominadas(new ArrayList<Asignatura>());
+                            alumno.setAsignaturasDominadas(new HashMap<>());
 
                             alumnos.add(alumno);
                         }
@@ -81,6 +81,7 @@ public class AlumnoController {
 
         return liveAlumnos;
     }
+
 
     /**
      * Obtiene un alumno por su referencia.
@@ -145,8 +146,9 @@ public class AlumnoController {
                         DocumentSnapshot doc = docs.get(0);
 
                         Alumno alumno = getPayloadWithUrl(doc.getId(), doc.getString(Alumno.UO), doc.getString(Alumno.NOMBRE), doc.getString(Alumno.URL_FOTO));
-                        alumno.setUo(doc.getString(Alumno.UO));
+                        //alumno.setUo(doc.getString(Alumno.UO));
                         alumno.setEmail(doc.getString("email"));
+                        alumno.setAsignaturasDominadas((Map<String,Object>)doc.get("asignaturasDominadas"));
                         alumno.setId(doc.getId());
                         callback.callback(alumno);
                     }
