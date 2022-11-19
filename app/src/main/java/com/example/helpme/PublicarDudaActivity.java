@@ -259,7 +259,6 @@ public class PublicarDudaActivity extends AppCompatActivity {
                         Log.i(TAG, d.getNombre());
                         AsignaturaDto a = new AsignaturaDto();
                         a.nombre = d.getNombre();
-
                         asignaturaList.add(a);
                     });
                 }
