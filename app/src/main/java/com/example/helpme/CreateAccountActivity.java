@@ -167,7 +167,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 @Override
                 public void callback(String msg) {
                     if (msg.equals(GenericCallback.SUCCESS_CODE)) {
-                        //redirectToHomeView();
+                        redirectToHomeView();
                         Log.i(TAG, "SUCCESS");
                     } else {
                         Log.i(TAG, "ERROR");

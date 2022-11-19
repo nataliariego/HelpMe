@@ -75,7 +75,7 @@ public class DudaController {
                         for (DocumentSnapshot documentSnapshot : snapshot.getDocuments()) {
                             Duda duda = documentSnapshot.toObject(Duda.class);
 
-                            AlumnoDto aRes = AlumnoAssembler.fromHashMapToDto((Map<String, Object>) documentSnapshot.get(Duda.REF_ALUMNO));
+                            //AlumnoDto aRes = AlumnoAssembler.fromHashMapToDto((Map<String, Object>) documentSnapshot.get(Duda.REF_ALUMNO));
 
                             duda.setTitulo(documentSnapshot.getString(Duda.TITULO));
                             duda.setDescripcion(documentSnapshot.getString(Duda.DESCRIPCION));
