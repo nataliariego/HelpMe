@@ -85,6 +85,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     private ConstraintLayout btnGuardar;
 
+    private Button btnAmigos;
+
     private List<AsignaturaDto> asignaturaDuda = new ArrayList<>();
 
     @Override
@@ -97,6 +99,7 @@ public class ProfileActivity extends AppCompatActivity {
         img_persona = findViewById(R.id.img_persona_duda);
         nombreCompleto = findViewById(R.id.tv_user_name);
         btnGuardar = findViewById(R.id.bt_guardar_perfil);
+        btnAmigos = findViewById(R.id.buttonVerAmigos);
 
         //Pongo los datos del usuario que está autenticado
         String uo = userInSession.getEmail().split("@")[0].toUpperCase();
@@ -153,6 +156,22 @@ public class ProfileActivity extends AppCompatActivity {
                 actualizarPerfil();
             }
         });
+
+        //Boton guardar
+        btnAmigos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ventanaAmigos();
+            }
+        });
+    }
+
+    private void ventanaAmigos(){
+        Intent listadoDudasIntent = new Intent(ProfileActivity.this, FriendsActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
     }
 
     private void actualizarPerfil() {

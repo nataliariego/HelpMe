@@ -62,7 +62,7 @@ public class AlumnoAssembler {
         alumnoResult.urlFoto = String.valueOf(alumnoHashMap.get(Alumno.URL_FOTO));
         //alumnoResult.asignaturasDominadas = (Map<String, Object>) alumnoHashMap.get("asignaturasDominadas");
 
-        Log.i(TAG, alumnoHashMap.get(Alumno.ASIGNATURAS_DOMINADAS).toString());
+        //Log.i(TAG, alumnoHashMap.get(Alumno.ASIGNATURAS_DOMINADAS).toString());
 
         return alumnoResult;
     }
