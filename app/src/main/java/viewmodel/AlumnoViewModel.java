@@ -26,6 +26,14 @@ public class AlumnoViewModel extends ViewModel {
         return alumnos;
     }
 
+    public MutableLiveData<List<Alumno>> getAllAlumnosFriendsActivity() {
+        if (alumnos == null) {
+            alumnos = AlumnoController.getInstance().findAllFriendsActivity();
+        }
+
+        return alumnos;
+    }
+
     public void addDuda(){
 
     }

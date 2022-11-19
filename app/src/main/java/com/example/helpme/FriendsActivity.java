@@ -117,7 +117,7 @@ public class FriendsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        cargarAmigos();
+        //cargarAmigos();
     }
 
 
@@ -125,7 +125,7 @@ public class FriendsActivity extends AppCompatActivity {
     private void cargarAmigos() {
         amigos.clear();
         String uo = userInSession.getEmail().split("@")[0].toUpperCase();
-        alumnoViewModel.getAllAlumnos().observe(this, alumnosResult -> {
+        alumnoViewModel.getAllAlumnosFriendsActivity().observe(this, alumnosResult -> {
             if (alumnosResult != null) {
                 alumnosResult.forEach(d -> {
                     if (!d.getUo().toUpperCase().equals(uo)) {
@@ -134,7 +134,7 @@ public class FriendsActivity extends AppCompatActivity {
                         newDuda.nombre = d.getNombre();
                         newDuda.uo = d.getUo();
                         newDuda.urlFoto = d.getUrl_foto();
-
+                        newDuda.asignaturasDominadas = d.getAsignaturasDominadas();
                         amigos.add(newDuda);
                     }
                 });
