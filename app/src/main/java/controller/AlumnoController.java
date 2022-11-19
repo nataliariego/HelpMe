@@ -195,6 +195,8 @@ public class AlumnoController {
 
         //Map<String, Object> alHash = AlumnoAssembler.toHashMap(alumno);
 
+        alumno.password = "";
+
         db.collection(Alumno.COLLECTION).document(uid).set(alumno).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
