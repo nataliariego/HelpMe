@@ -82,6 +82,40 @@ public class AlumnoController {
         return liveAlumnos;
     }
 
+    public MutableLiveData<List<Alumno>> findAllFriendsActivity() {
+        MutableLiveData<List<Alumno>> liveAlumnos = new MutableLiveData<List<Alumno>>();
+
+        db.collection(Alumno.COLLECTION)
+                .addSnapshotListener((snapshot, e) -> {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+
+                    List<Alumno> alumnos = new ArrayList<>();
+                    if (snapshot != null && !snapshot.isEmpty()) {
+                        for (DocumentSnapshot documentSnapshot : snapshot.getDocuments()) {
+                            Alumno alumno = documentSnapshot.toObject(Alumno.class);
+
+//                            AlumnoDto aRes = AlumnoAssembler.toDto(documentSnapshot.get(Duda.REF_ALUMNO).toString());
+//                            Log.i(TAG, "ALUMNO CONTROLLER: " + aRes.nombre + " " + aRes.uo);
+
+                            alumno.setNombre(documentSnapshot.getString(Alumno.NOMBRE));
+                            alumno.setUo(documentSnapshot.getString(Alumno.UO));
+                            alumno.setUrl_foto(documentSnapshot.getString(Alumno.URL_FOTO));
+                            alumno.setAsignaturasDominadas((Map<String,Object>)documentSnapshot.get("asignaturasDominadas"));
+
+                            alumnos.add(alumno);
+                        }
+                    }
+                    liveAlumnos.postValue(alumnos);
+
+                });
+
+
+        return liveAlumnos;
+    }
+
 
     /**
      * Obtiene un alumno por su referencia.

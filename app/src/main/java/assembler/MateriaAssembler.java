@@ -13,13 +13,21 @@ public class MateriaAssembler {
 
     public static Map<String, Object> toHashMap(String materiStringHash) {
         Map<String, Object> hashMapcursoResult = new HashMap<>();
+        String denominacion="";
+        String abreviatura="";
 
-        System.out.println(materiStringHash);
         String[] lista = materiStringHash.split(",");
 
-        String denominacion = lista[0].split("=")[1];
-
-        String abreviatura = lista[1].split("=")[1];
+        if (lista[0].split("=")[0].contains("denominacion")){
+            denominacion = lista[0].split("=")[1];
+        }else{
+            abreviatura = lista[0].split("=")[1];
+        }
+        if (lista[1].split("=")[0].contains("denominacion")){
+            denominacion = lista[1].split("=")[1];
+        }else{
+            abreviatura = lista[1].split("=")[1];
+        }
 
         String[] listaId = lista[2].split("=");
         int tamañoId = listaId[1].length();

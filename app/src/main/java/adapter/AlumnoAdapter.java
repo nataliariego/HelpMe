@@ -71,6 +71,7 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
         @RequiresApi(api = Build.VERSION_CODES.O)
         public void bindAlumno(final AlumnoDto alumno) {
             nombreAlumno.setText(alumno.nombre);
+            System.out.println("Cadenaaaaaa:"+alumno.asignaturasDominadas);
             asiganturas.setText("hola");
             Picasso.get().load(alumno.urlFoto).into(imagen_alumno);
 
