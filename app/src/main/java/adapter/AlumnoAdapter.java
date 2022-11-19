@@ -17,9 +17,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import assembler.AlumnoAssembler;
+import assembler.MateriaAssembler;
 import dto.AlumnoDto;
+import dto.AsignaturaDto;
 import dto.DudaDto;
 import util.StringUtils;
 
@@ -71,8 +74,26 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
         @RequiresApi(api = Build.VERSION_CODES.O)
         public void bindAlumno(final AlumnoDto alumno) {
             nombreAlumno.setText(alumno.nombre);
-            System.out.println("Cadenaaaaaa:"+alumno.asignaturasDominadas);
-            asiganturas.setText("hola");
+            String cadena ="";
+            Object[] asigs = alumno.asignaturasDominadas.values().toArray();
+            int contador = 0;
+            for (Object nombre: asigs) {
+                contador ++;
+                AsignaturaDto a = new AsignaturaDto();
+                String linea = nombre.toString();
+                Map<Object, String> prueba = (Map<Object, String>) nombre;
+                Map<String, Object> materia= MateriaAssembler.toHashMap(prueba.get("materia"));
+                if (contador == 5){
+                    cadena+="...";
+                    break;
+                }
+                cadena+=materia.get("abreviatura")+" ";
+            }
+            if (cadena.length()==0){
+                asiganturas.setText("Sin asignaturas");
+            }else{
+                asiganturas.setText(cadena);
+            }
             Picasso.get().load(alumno.urlFoto).into(imagen_alumno);
 
             //fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha));
