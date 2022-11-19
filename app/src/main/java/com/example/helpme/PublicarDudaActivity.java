@@ -185,7 +185,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
                         alumnoMap.put("id", alumno.getId());
                         alumnoMap.put("uo", alumno.getNombre());
                         alumnoMap.put("url_foto", alumno.getUrl_foto());
-                        alumnoMap.put("asignaturasDominadas", new ArrayList<>());
+                        alumnoMap.put("asignaturasDominadas", alumno.getAsignaturasDominadas());
                         Map<String, Object> asignaturaMap = new HashMap<>();
                         String nAsignatura = spinner.getSelectedItem().toString();
                         crearAsignaturaDuda(nAsignatura);
