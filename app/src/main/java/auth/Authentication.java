@@ -1,11 +1,9 @@
 package auth;
 
-import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.helpme.HomeActivity;
 import com.example.helpme.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -41,7 +39,7 @@ public class Authentication {
      * @param alumno
      */
     public void signUp(AlumnoDto alumno, GenericCallback callback) {
-        Log.i(TAG, "ALUMNO. AUTHENTICATION: " +alumno.toString());
+        Log.i(TAG, "ALUMNO. AUTHENTICATION: " + alumno.toString());
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(alumno.email, alumno.password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -74,7 +72,9 @@ public class Authentication {
      * @param email    Correo electrónico del usuario.
      * @param password Contraseña
      */
-    public void signIn(final String email, final String password, LoginActivity.LoginCallback callback) {
+    public void signIn(final String email, final String password,
+                       LoginActivity.LoginCallback callback,
+                       LoginActivity.LoginCallback failureCallback) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -85,6 +85,12 @@ public class Authentication {
                         } else {
                             Log.w(TAG, "login:failure", task.getException());
                         }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        failureCallback.callback();
                     }
                 });
     }
@@ -119,7 +125,7 @@ public class Authentication {
                 });
     }
 
-    public void showStatus(){
+    public void showStatus() {
 
     }
 
@@ -150,13 +156,15 @@ public class Authentication {
                 });
     }
 
-    public void sendEmailVerification(){
-        userInSession.sendEmailVerification()
+    public void sendEmailVerification() {
+        FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "Email sent.");
+                            FirebaseUser current = FirebaseAuth.getInstance().getCurrentUser();
+                            current.reload();
                         }
                     }
                 });
@@ -166,14 +174,15 @@ public class Authentication {
      * Elimina la cuenta del usuario en sesión.
      */
     public void deleteAccount() {
-        // TODO: Al eliminar la cuenta se eliminarán las dudas publicadas
-        // del usuario
-        userInSession.delete()
+        FirebaseAuth.getInstance().getCurrentUser().delete()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "Cuenta de usuario eliminada.");
+
+                            alumnoController.delete();
+
                         }
                     }
                 });
@@ -181,10 +190,11 @@ public class Authentication {
 
     /**
      * Comprueba si hay un usuario logeado.
+     *
      * @return
      */
-    public boolean isSigned(){
-        return userInSession != null;
+    public boolean isSigned() {
+        return FirebaseAuth.getInstance().getCurrentUser() != null;
     }
 
     public static Authentication getInstance() {

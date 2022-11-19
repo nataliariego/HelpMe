@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,9 +32,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         setTitle("Iniciar sesión");
 
-//        if(Authentication.getInstance().isSigned()){
-//            redirectToHomeView();
-//        }
+        if(Authentication.getInstance().isSigned()){
+            redirectToHomeView();
+        }
 
         initFields();
 
@@ -70,6 +71,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void callback() {
                 redirectToHomeView();
+            }
+        }, new LoginCallback() {
+            @Override
+            public void callback() {
+                // Failure
+                Toast.makeText(getApplicationContext(), "Las credenciales no son correctas", Toast.LENGTH_SHORT).show();
             }
         });
     }

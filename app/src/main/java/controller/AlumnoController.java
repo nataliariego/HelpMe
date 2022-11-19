@@ -205,6 +205,10 @@ public class AlumnoController {
         });
     }
 
+    public void delete(){
+
+    }
+
     private Alumno getPayload(String id, String uo, String nombre) {
         return new Alumno(id, uo, nombre);
     }

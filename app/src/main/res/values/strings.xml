@@ -93,5 +93,10 @@
     <string name="hint_asignatura_dominada_seleccionada">ASIGNATURA DOMINADA</string>
     <string name="contentDescription_boton_eliminar_asignatura_dominada">Eliminar la asignatura dominada</string>
     <string name="asignaturas_sheet_explicacion_eliminacion">Pulsa sobre el botón para eliminar las asignaturas</string>
+    <string name="verificar_correo">Verificar correo electrónico</string>
+    <string name="eliminar_cuenta">Eliminar cuenta</string>
+    <string name="cerrar_sesion">Cerrar sesión</string>
+    <string name="email_verificado">Correo electrónico verificado</string>
+    <string name="icono_verificacion_contentDescripcion">El email ha sido verificado</string>
 
 </resources>
