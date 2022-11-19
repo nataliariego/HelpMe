@@ -193,8 +193,9 @@ public class AlumnoController {
 
     public void update(AlumnoDto alumno, String uid){
 
-        Map<String, Object> alHash = AlumnoAssembler.toHashMap(alumno);
-        db.collection(Alumno.COLLECTION).document(uid).set(alHash).addOnCompleteListener(new OnCompleteListener<Void>() {
+        //Map<String, Object> alHash = AlumnoAssembler.toHashMap(alumno);
+
+        db.collection(Alumno.COLLECTION).document(uid).set(alumno).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
