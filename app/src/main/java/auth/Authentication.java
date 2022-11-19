@@ -41,17 +41,15 @@ public class Authentication {
      * @param alumno
      */
     public void signUp(AlumnoDto alumno, GenericCallback callback) {
+        Log.i(TAG, "ALUMNO. AUTHENTICATION: " +alumno.toString());
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(alumno.email, alumno.password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
                             userInSession = FirebaseAuth.getInstance().getCurrentUser();
-
                             alumnoController.update(alumno, userInSession.getUid());
-                            Log.d(TAG, "createUserWithEmail:success");
 
                             callback.callback(GenericCallback.SUCCESS_CODE);
 

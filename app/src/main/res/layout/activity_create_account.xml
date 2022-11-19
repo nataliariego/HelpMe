@@ -94,11 +94,10 @@
                 android:layout_height="64dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/rounded_corners_publicarduda"
-                app:endIconMode="password_toggle"
-                app:endIconDrawable="@drawable/show_password_24"
                 android:textColorHint="@color/text_color_hint"
                 android:tooltipText="Introduce una contraseña de al menos 6 caracteres alfanuméricos."
-                >
+                app:endIconDrawable="@drawable/show_password_24"
+                app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/text_password_ca"
@@ -109,8 +108,7 @@
                     android:inputType="textPassword"
                     android:shadowColor="@color/transparent"
                     android:textColorHint="@color/text_color_hint"
-                    android:textSize="16sp"
-                    />
+                    android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -119,11 +117,10 @@
                 android:layout_height="64dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/rounded_corners_publicarduda"
-                app:endIconMode="password_toggle"
-                app:endIconDrawable="@drawable/show_password_24"
                 android:textColorHint="@color/text_color_hint"
                 android:tooltipText="Introduce una contraseña de al menos 6 caracteres alfanuméricos."
-                >
+                app:endIconDrawable="@drawable/show_password_24"
+                app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/text_repeat_password_create_account"
@@ -134,9 +131,64 @@
                     android:inputType="textPassword"
                     android:shadowColor="@color/transparent"
                     android:textColorHint="@color/text_color_hint"
-                    android:textSize="16sp"
-                    />
+                    android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/menu_asignaturas_dominadas_alumno_create_account"
+                    style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    android:layout_width="300dp"
+                    android:layout_height="64dp"
+                    android:hint="@string/asignaturas_dominadas_hint"
+                    app:boxStrokeWidth="0dp"
+                    app:endIconMode="custom">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/text_asignaturas_dominadas_create_account"
+                        style="@style/Widget.Material3.AutoCompleteTextView.FilledBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/tertiary_light"
+                        android:fontFamily="@font/roboto"
+                        android:inputType="textAutoCorrect|none|textFilter" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/button_add_asignatura_create_account"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    app:cornerRadius="10dp"
+                    app:icon="@drawable/ic_round_playlist_add_24"
+                    app:iconTint="@color/secondary"
+                    app:iconTintMode="src_in" />
+
+            </LinearLayout>
+
+            <!-- Selector asignaturas dominadas por el alumno -->
+
+            <Button
+                android:id="@+id/buttonVerAsignaturasSeleccionadasCreateAccount"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:backgroundTint="@color/secondary"
+                android:text="@string/ver_asignaturas_create_account"
+                android:textColor="@color/primary"
+                android:textSize="16sp"
+                app:strokeColor="@color/primary" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"></LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_signup_create_account"
@@ -149,7 +201,8 @@
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 app:cornerRadius="50dp"
-                app:strokeColor="@color/primary" />
+                app:strokeColor="@color/primary"
+                tools:ignore="DuplicateSpeakableTextCheck" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_login_create_account"

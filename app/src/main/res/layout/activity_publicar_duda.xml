@@ -105,7 +105,7 @@
             android:id="@+id/spinnerAsignaturas"
             android:layout_width="366dp"
             android:layout_height="37dp"
-            android:entries="@array/asiganturas_array"
+            android:entries="@array/asignaturas_array"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.355"

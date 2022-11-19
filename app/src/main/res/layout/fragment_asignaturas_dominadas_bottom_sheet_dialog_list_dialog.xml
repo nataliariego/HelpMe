@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_sheet_dialog_asignaturas_dominadas"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/text_titulo_sheet_asignaturas_dominadas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="132dp"
+        android:layout_marginTop="37dp"
+        android:layout_marginEnd="132dp"
+        android:layout_marginBottom="65dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="@string/asignaturas_dominadas"
+        android:textAlignment="center"
+        android:textColor="@color/primary"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/divider_sheet_asignaturas_dominadas"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_subtitulo_sheet_asignaturas_dominadas2"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginBottom="625dp"
+        android:fontFamily="@font/roboto"
+        android:text="@string/asignaturas_sheet_explicacion_eliminacion"
+        android:textAlignment="center"
+        android:textColor="@color/primary"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_titulo_sheet_asignaturas_dominadas" />
+
+    <View
+        android:id="@+id/divider_sheet_asignaturas_dominadas"
+        android:layout_width="80dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="592dp"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/secondary"
+        android:backgroundTintMode="add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_titulo_sheet_asignaturas_dominadas" />
+
+    <LinearLayout
+        android:id="@+id/layout_wrapper_recycler_asignaturas_dominadas_sheet"
+        android:layout_width="409dp"
+        android:layout_height="573dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/transparent"
+        android:orientation="vertical"
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/divider_sheet_asignaturas_dominadas">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_asignaturas_dominadas_sheet_createAccount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/transparent" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
