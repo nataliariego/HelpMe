@@ -68,6 +68,11 @@ public class HomeActivity extends AppCompatActivity {
 
         //initCalendarData();
 
+        if(!Authentication.getInstance().isSigned()){
+            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+            finish();
+        }
+
         btVerTodasDudas = (Button) findViewById(R.id.btVerTodasDudas);
         btNuevaDuda = (Button) findViewById(R.id.bt_nueva_duda_home); // Es un layout no un boton
         listadoDudasHomeRecycler = (RecyclerView) findViewById(R.id.listado_dudas_home_recycler);

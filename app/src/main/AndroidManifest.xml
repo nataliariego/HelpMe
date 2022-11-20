@@ -68,7 +68,6 @@
         <activity
             android:name=".HomeActivity"
             android:exported="true"
-            android:noHistory = "true"
             >
 
             <meta-data
