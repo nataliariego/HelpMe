@@ -53,7 +53,8 @@ public class Alumno implements Parcelable {
         this(id, nombre, uo, null, null);
     }
     public Alumno(String id, String nombre, String uo, String url_foto) {
-        this(id, nombre, uo, url_foto, new HashMap<>());
+        this(id, nombre, uo);
+        this.url_foto = url_foto;
     }
 
     public Alumno(Parcel in) {

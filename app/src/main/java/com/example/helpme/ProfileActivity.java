@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
@@ -89,6 +90,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private List<AsignaturaDto> asignaturaDuda = new ArrayList<>();
 
+    @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,16 +106,21 @@ public class ProfileActivity extends AppCompatActivity {
         //Pongo los datos del usuario que está autenticado
         String uo = userInSession.getEmail().split("@")[0].toUpperCase();
 
+        Log.i(TAG, "UO: " + uo + " ; email: " + userInSession.getEmail());
+
        // Log.i("patatita: " , uo);
         //Tengo que buscar el alumno que tenga ese email para poner después los datos
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            alumnoController.findByUOWithPhoto(uo, new AlumnoController.AlumnoCallback() {
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            alumnoController.findByUOWithPhoto(userInSession.getEmail(), new AlumnoController.AlumnoCallback() {
                 @Override
                 public void callback(Alumno alumno) {
                     if (alumno != null) {
                         //Esto tdo no está bien porque en la base de datos
                         //Se guardan raro los datos, faltan cosas...etc
-                        System.out.println("aver"+alumno.toString());
+
+//                        textViewUO.setText(uo);
+//                        textViewEmail.setText(userInSession.getEmail());
+
                         textViewUO.setText(alumno.getNombre());
                         textViewEmail.setText(alumno.getNombre()+"@uniovi.es");
                         nombreCompleto.setText(alumno.getUo());
@@ -122,7 +129,7 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 }
             });
-        }
+        //}
 
 
         cargarAsignaturas();
@@ -180,7 +187,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            alumnoController.findByUOWithPhoto(uo, new AlumnoController.AlumnoCallback() {
+            alumnoController.findByUOWithPhoto(userInSession.getEmail(), new AlumnoController.AlumnoCallback() {
                 @Override
                 public void callback(Alumno alumno) {
                     if (alumno != null) {

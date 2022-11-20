@@ -158,9 +158,6 @@ public class CreateAccountActivity extends AppCompatActivity {
             alumno.urlFoto = "https://ui-avatars.com/api/?name=" + alumno.nombre;
             alumno.asignaturasDominadas = asignaturasDominadasSeleccionadas;
 
-            Log.i(TAG, bottomSheetAsignaturasDominadasFragment.getAsignaturasDominadas().toString());
-
-
             Log.i(TAG, "ALUMNO ANTES SIGNUP: " + alumno.toString());
 
             Authentication.getInstance().signUp(alumno, new GenericCallback<String>() {

@@ -12,6 +12,7 @@ import com.example.helpme.model.Asignatura;
 import com.example.helpme.model.Duda;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -165,8 +166,8 @@ public class AlumnoController {
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void findByUOWithPhoto(String uo, AlumnoCallback callback) {
-        Task<QuerySnapshot> document = db.collection(Alumno.COLLECTION).whereEqualTo("uo", uo).get();
+    public void findByUOWithPhoto(String email, AlumnoCallback callback) {
+        Task<QuerySnapshot> document = db.collection(Alumno.COLLECTION).whereEqualTo("email", email).get();
 
 
 
@@ -176,14 +177,22 @@ public class AlumnoController {
                 if (task.isSuccessful()) {
                     List<DocumentSnapshot> docs = task.getResult().getDocuments();
 
+                    Log.i(TAG, "DOCS: " + docs.toString());
+
                     if(docs.size() > 0){
                         DocumentSnapshot doc = docs.get(0);
 
                         Alumno alumno = getPayloadWithUrl(doc.getId(), doc.getString(Alumno.UO), doc.getString(Alumno.NOMBRE), doc.getString(Alumno.URL_FOTO));
                         //alumno.setUo(doc.getString(Alumno.UO));
-                        alumno.setEmail(doc.getString("email"));
-                        alumno.setAsignaturasDominadas((Map<String,Object>)doc.get("asignaturasDominadas"));
+                        alumno.setEmail(doc.getString(Alumno.EMAIL));
+                        alumno.setAsignaturasDominadas((Map<String,Object>)doc.get(Alumno.ASIGNATURAS_DOMINADAS));
                         alumno.setId(doc.getId());
+                        alumno.setUrl_foto(doc.getString(Alumno.URL_FOTO));
+
+                        Log.i(TAG, "USUARIO EN SESION: " + FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                        Log.i(TAG, "USER SES METADATA: " + FirebaseAuth.getInstance().getCurrentUser().getMetadata());
+                        Log.i(TAG, "FOTO: " + doc.getString(Alumno.URL_FOTO));
+
                         callback.callback(alumno);
                     }
                 }
