@@ -3,6 +3,15 @@ package com.example.helpme.model;
 import java.time.LocalDateTime;
 
 public class Mensaje {
+
+    /* Atributos de la base de datos Realtime - Chat */
+    public static final String SENDER = "sender";
+    public static final String RECEIVER = "receiver";
+    public static final String CREATED_AT = "created_at";
+    public static final String CONTENT = "content";
+    public static final String CHAT_ID = "chat-id";
+    /* ---- */
+
     private String msg;
     private String idAlumno;
     private String nombreAlumno;
