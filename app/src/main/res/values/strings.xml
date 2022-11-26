@@ -98,5 +98,9 @@
     <string name="cerrar_sesion">Cerrar sesión</string>
     <string name="email_verificado">Correo electrónico verificado</string>
     <string name="icono_verificacion_contentDescripcion">El email ha sido verificado</string>
+    <string name="enviar_mensaje">Enviar el mensaje</string>
+    <string name="hint_mensaje_chat">Mensaje</string>
+    <string name="mensaje_contenido_prueba">Hola, qué tal ?</string>
+    <string name="hora_envio_mensaje_default">Hace 2 segundos</string>
 
 </resources>

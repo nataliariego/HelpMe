@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_chat"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/tertiary"
+    tools:context=".ChatActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.144">
+
+        <ImageView
+            android:id="@+id/img_receiver_user_chat"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginRight="20dp"
+            app:srcCompat="@drawable/button_rounded_corners_primary" />
+
+        <TextView
+            android:id="@+id/text_user_receiver_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scroll_conversacion_chat"
+        android:layout_width="match_parent"
+        android:layout_height="475dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.648">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_conversacion_chat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+
+    <EditText
+        android:id="@+id/text_mensaje_enviar_chat"
+        style="@style/Widget.Material3.TextInputEditText.OutlinedBox.Dense"
+        android:layout_width="309dp"
+        android:layout_height="55dp"
+        android:autofillHints=""
+        android:background="@drawable/rectangle_rounded_shadow"
+        android:cursorVisible="false"
+        android:elegantTextHeight="false"
+        android:elevation="2dp"
+        android:ellipsize="none"
+        android:ems="10"
+        android:fontFamily="@font/roboto"
+        android:freezesText="false"
+        android:gravity="center_vertical"
+        android:inputType="textPersonName"
+        android:paddingStart="25dp"
+        android:singleLine="false"
+        android:text="@string/hint_mensaje_chat"
+        android:textAllCaps="false"
+        android:textColor="@color/primary"
+        android:textColorHighlight="@color/primary"
+        android:textColorHint="@color/text_color_hint"
+        android:textDirection="ltr"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.156"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.974" />
+
+    <ImageButton
+        android:id="@+id/button_enviar_mensaje_chat"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="663dp"
+        android:layout_marginBottom="17dp"
+        android:background="@drawable/button_rounded_corners_primary"
+        android:contentDescription="@string/enviar_mensaje"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.955"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_baseline_send_24" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
