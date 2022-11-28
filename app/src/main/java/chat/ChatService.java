@@ -52,18 +52,19 @@ public class ChatService {
      * @param msg
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void sendMessage(final String msg) {
-        String temp_chat_uid = "451f3380-6dbd-11ed-a1eb-0242ac120002";
+    public void sendMessage(final String msg, final String receiverUid) {
+        String msg_id = UUID.randomUUID().toString();
 
         Map<String, Object> payload = new HashMap<>();
-        payload.put(Mensaje.CHAT_ID, temp_chat_uid);
-        payload.put(Mensaje.SENDER, "sender-uid");
-        payload.put(Mensaje.RECEIVER, "receiver-uid");
-        payload.put(Mensaje.CREATED_AT, LocalDateTime.now());
+        //payload.put(Mensaje.CHAT_ID, msg_id);
+        payload.put(Mensaje.SENDER, userInSession.getUid());
+        payload.put(Mensaje.RECEIVER, receiverUid);
         payload.put(Mensaje.CONTENT, msg);
+        payload.put(Mensaje.MESSAGE_TYPE, Mensaje.DEFAULT_TYPE);
+        payload.put(Mensaje.CREATED_AT, LocalDateTime.now());
 
         db.getReference().child(MSG_REFERENCE)
-                .child(UUID.randomUUID().toString())
+                .child(msg_id)
                 .updateChildren(payload).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

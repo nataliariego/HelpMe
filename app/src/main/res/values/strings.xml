@@ -102,5 +102,11 @@
     <string name="hint_mensaje_chat">Mensaje</string>
     <string name="mensaje_contenido_prueba">Hola, qué tal ?</string>
     <string name="hora_envio_mensaje_default">Hace 2 segundos</string>
+    <string name="add_chat">Iniciar una nueva conversación</string>
+    <string name="chats">Chats</string>
+    <string name="img_receiver_chat">Imagen de perfil del usuario del chat</string>
+    <string name="placeholder_chat_receiver_name">Nombre del alumno (receiver)</string>
+    <string name="placeholder_ultimo_mensaje_chat">último mensaje del chat...</string>
+    <string name="placeholder_hora_envio_ultimo_mensaje_chat">11:30</string>
 
 </resources>

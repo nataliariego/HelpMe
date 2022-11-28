@@ -19,6 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.helpme.model.Chat;
 import com.example.helpme.model.Duda;
 import com.example.helpme.navigation.ActivityNavigation;
 import com.example.helpme.navigation.impl.ActivityNavigationImpl;
@@ -92,7 +93,7 @@ public class HomeActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.nav_chat:
-
+                        redirectChatActivity();
                         return true;
                     case R.id.nav_cuenta:
                         redirectPantallaCuenta();
@@ -164,6 +165,13 @@ public class HomeActivity extends AppCompatActivity {
          startActivity(publicarDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
         //startActivity(publicarDudasIntent);
+    }
+
+    /**
+     * Redirecciona al Activity del chat.
+     */
+    private void redirectChatActivity(){
+        startActivity(new Intent(HomeActivity.this, ListarChatsActivity.class));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

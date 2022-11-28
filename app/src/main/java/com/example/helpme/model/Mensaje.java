@@ -1,7 +1,5 @@
 package com.example.helpme.model;
 
-import java.time.LocalDateTime;
-
 public class Mensaje {
 
     /* Atributos de la base de datos Realtime - Chat */
@@ -10,18 +8,29 @@ public class Mensaje {
     public static final String CREATED_AT = "created_at";
     public static final String CONTENT = "content";
     public static final String CHAT_ID = "chat-id";
+    public static final String RESOURCE_URL = "resource_url";
+    public static final String MESSAGE_TYPE = "type";
     /* ---- */
+
+    public static final String DEFAULT_TYPE = "text";
 
     private String msg;
     private String idAlumno;
     private String nombreAlumno;
+    private String tipo; /* text, image, pdf... --> Diferencia MIME Type */
+    private String resourceUrl;
     private String createdAt;
 
     public Mensaje(String msg, String idAlumno, String nombreAlumno, String createdAt) {
+        this(msg, idAlumno, nombreAlumno, DEFAULT_TYPE, createdAt);
+    }
+
+    public Mensaje(String msg, String idAlumno, String nombreAlumno, String tipo, String createdAt) {
         this.msg = msg;
         this.idAlumno = idAlumno;
         this.nombreAlumno = nombreAlumno;
         this.createdAt = createdAt;
+        this.tipo = tipo;
     }
 
     public String getMsg() {
@@ -54,5 +63,13 @@ public class Mensaje {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 }

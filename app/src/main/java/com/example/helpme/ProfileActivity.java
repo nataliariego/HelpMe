@@ -104,9 +104,9 @@ public class ProfileActivity extends AppCompatActivity {
         btnAmigos = findViewById(R.id.buttonVerAmigos);
 
         //Pongo los datos del usuario que está autenticado
-        String uo = userInSession.getEmail().split("@")[0].toUpperCase();
+        //String uo = userInSession.getEmail().split("@")[0].toUpperCase();
 
-        Log.i(TAG, "UO: " + uo + " ; email: " + userInSession.getEmail());
+        //Log.i(TAG, "UO: " + uo + " ; email: " + userInSession.getEmail());
 
        // Log.i("patatita: " , uo);
         //Tengo que buscar el alumno que tenga ese email para poner después los datos
@@ -341,11 +341,11 @@ public class ProfileActivity extends AppCompatActivity {
 
                 //Seleccionar si ya la tengo
 
-                String uo = userInSession.getEmail().split("@")[0].toUpperCase();
+                String email = userInSession.getEmail();
 
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    alumnoController.findByUOWithPhoto(uo, new AlumnoController.AlumnoCallback() {
+                    alumnoController.findByUOWithPhoto(email, new AlumnoController.AlumnoCallback() {
                                 @Override
                                 public void callback(Alumno alumno) {
                                     if (alumno != null) {
@@ -394,7 +394,7 @@ public class ProfileActivity extends AppCompatActivity {
             Map<Object, String> prueba = (Map<Object, String>) nombre;
 
             prueba.get("id");
-            System.out.println("prueba " + prueba.get("curso"));
+            //System.out.println("prueba " + prueba.get("curso"));
             a.curso=prueba.get("curso");
             a.materia=prueba.get("materia");
             a.nombre=prueba.get("nombre");
