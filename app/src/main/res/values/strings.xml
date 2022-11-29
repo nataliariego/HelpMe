@@ -108,5 +108,9 @@
     <string name="placeholder_chat_receiver_name">Nombre del alumno (receiver)</string>
     <string name="placeholder_ultimo_mensaje_chat">último mensaje del chat...</string>
     <string name="placeholder_hora_envio_ultimo_mensaje_chat">11:30</string>
+    <string name="chat_listado_alumnos">Alumnos</string>
+    <string name="img_profile_alumno_chat">Imagen de perfil del alumno</string>
+    <string name="placeholder_nombre_alumno_chat">Nombre del alumno</string>
+    <string name="uo_alumno_chat">UO112233</string>
 
 </resources>

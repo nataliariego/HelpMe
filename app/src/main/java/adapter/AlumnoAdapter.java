@@ -25,21 +25,9 @@ import dto.AsignaturaDto;
 public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoViewHolder> {
 
     private List<AlumnoDto> alumnos = new ArrayList<>();
-//    private final AdapterView.OnItemClickListener listener;
-
-    public interface OnClickListener {
-        void clickOnItem(AlumnoDto alumno);
-    }
-
-    private OnClickListener listener;
 
     public AlumnoAdapter(List<AlumnoDto> alumnos) {
         this.alumnos = alumnos;
-    }
-
-    public AlumnoAdapter(List<AlumnoDto> alumnos, OnClickListener listener) {
-        this(alumnos);
-        this.listener = listener;
     }
 
     @NonNull
@@ -104,18 +92,6 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
             Picasso.get().load(alumno.urlFoto).into(imagen_alumno);
 
             //fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha));
-
-
-            /* Utilizado en el chat */
-            if(listener != null){
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        listener.clickOnItem(alumno);
-                    }
-                });
-            }
-            /*----------------------*/
 
         }
     }

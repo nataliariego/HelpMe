@@ -23,12 +23,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.144">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_receiver_user_chat"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginRight="20dp"
-            app:srcCompat="@drawable/button_rounded_corners_primary" />
+            app:srcCompat="@drawable/button_rounded_corners_primary"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            />
 
         <TextView
             android:id="@+id/text_user_receiver_chat"
@@ -72,7 +74,7 @@
         android:background="@drawable/rectangle_rounded_shadow"
         android:cursorVisible="false"
         android:elegantTextHeight="false"
-        android:elevation="2dp"
+        android:elevation="10dp"
         android:ellipsize="none"
         android:ems="10"
         android:fontFamily="@font/roboto"
@@ -100,16 +102,15 @@
         android:id="@+id/button_enviar_mensaje_chat"
         android:layout_width="55dp"
         android:layout_height="55dp"
-        android:layout_marginTop="663dp"
-        android:layout_marginBottom="17dp"
         android:background="@drawable/button_rounded_corners_primary"
         android:contentDescription="@string/enviar_mensaje"
+        android:elevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.955"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.976"
         app:srcCompat="@drawable/ic_baseline_send_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -61,17 +61,9 @@ public class ListarChatsActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                AlumnoController.getInstance().findAll().observe(ListarChatsActivity.this, alumnos -> {
-
-                    if (alumnos != null) {
-                        for (int i = 0; i < alumnos.size(); i++) {
-                            Log.d(TAG, "ALUMNO: " + alumnos.get(i).getNombre());
-                        }
-                    }
-                });
+                startActivity(new Intent(ListarChatsActivity.this, ListadoAlumnosChatActivity.class));
             }
         });
-
     }
 
     @Override
