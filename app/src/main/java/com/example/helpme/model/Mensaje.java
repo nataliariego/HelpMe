@@ -3,6 +3,7 @@ package com.example.helpme.model;
 public class Mensaje {
 
     /* Atributos de la base de datos Realtime - Chat */
+    public static final String REFERENCE = "messages";
     public static final String SENDER = "sender";
     public static final String RECEIVER = "receiver";
     public static final String CREATED_AT = "created_at";

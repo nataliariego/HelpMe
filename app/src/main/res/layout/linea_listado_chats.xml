@@ -5,6 +5,8 @@
     android:id="@+id/layout_linea_listado_chats"
     android:layout_width="match_parent"
     android:layout_height="60dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingStart="15dp"
@@ -14,7 +16,7 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_perfil_alumno_receiver_chat"
         android:layout_width="48dp"
         android:layout_height="48dp"

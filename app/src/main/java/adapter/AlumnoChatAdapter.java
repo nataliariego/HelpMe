@@ -68,8 +68,8 @@ public class AlumnoChatAdapter extends RecyclerView.Adapter<AlumnoChatAdapter.Al
             txUoAlumno.setText(alumno.uo);
             txNombreAlumno.setText(alumno.nombre);
 
-            String profileImgUrl = alumno.urlFoto == null || alumno.urlFoto.isEmpty()
-                    ? "https://ui-avatars.com/api/?name=" + alumno.nombre
+            String profileImgUrl = alumno.urlFoto == null
+                    ? "https://ui-avatars.com/api/?name=" + String.join(alumno.nombre)
                     : alumno.urlFoto;
 
             Picasso.get().load(profileImgUrl).into(imgPerfilAlumno);

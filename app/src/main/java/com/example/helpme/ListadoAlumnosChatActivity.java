@@ -49,6 +49,8 @@ public class ListadoAlumnosChatActivity extends AppCompatActivity {
 
     private RecyclerView recyclerAlumnosChat;
 
+    private AlumnoChatAdapter alumnoChatAdapter;
+
     private List<AlumnoDto> alumnos = new ArrayList<>();
 
     @Override
@@ -100,7 +102,7 @@ public class ListadoAlumnosChatActivity extends AppCompatActivity {
                 });
             }
 
-            AlumnoChatAdapter adapter = new AlumnoChatAdapter(alumnos, new AlumnoChatAdapter.OnClickListener() {
+            alumnoChatAdapter = new AlumnoChatAdapter(alumnos, new AlumnoChatAdapter.OnClickListener() {
                 @Override
                 public void goToChat(AlumnoDto alumno) {
                     // TODO: Crear registro chat con id en realtime database
@@ -143,7 +145,7 @@ public class ListadoAlumnosChatActivity extends AppCompatActivity {
                             });
                 }
             });
-            recyclerAlumnosChat.setAdapter(adapter);
+            recyclerAlumnosChat.setAdapter(alumnoChatAdapter);
         });
     }
 }
