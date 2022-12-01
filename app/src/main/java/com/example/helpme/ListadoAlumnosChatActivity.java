@@ -1,5 +1,7 @@
 package com.example.helpme;
 
+import static com.example.helpme.extras.IntentExtras.CHAT_SELECCIONADO;
+
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,6 +35,7 @@ import java.util.UUID;
 import adapter.AlumnoChatAdapter;
 import chat.ChatService;
 import dto.AlumnoDto;
+import dto.ChatSummaryDto;
 import viewmodel.AlumnoViewModel;
 
 public class ListadoAlumnosChatActivity extends AppCompatActivity {
@@ -105,12 +108,10 @@ public class ListadoAlumnosChatActivity extends AppCompatActivity {
             alumnoChatAdapter = new AlumnoChatAdapter(alumnos, new AlumnoChatAdapter.OnClickListener() {
                 @Override
                 public void goToChat(AlumnoDto alumno) {
-                    // TODO: Crear registro chat con id en realtime database
                     String chatUUID = UUID.randomUUID().toString();
-
                     Map<String, Object> payload = new HashMap<>();
 
-                    payload.put("alumnoA", userInSession.getUid());
+                    payload.put(Chat.ALUMNO_A, userInSession.getUid());
 
                     Task<QuerySnapshot> alumnoBData = dbStore.collection(Alumno.COLLECTION).whereEqualTo(Alumno.EMAIL, alumno.email).get();
 
@@ -125,14 +126,19 @@ public class ListadoAlumnosChatActivity extends AppCompatActivity {
 
                                             String uidAlumnoB = res.get(0).getId();
 
-                                            payload.put("alumnoB", uidAlumnoB);
-                                            //payload.put("messages", new HashMap<>());
-                                            //dbReference.child(Chat.REFERENCE).child(chatUUID).updateChildren(payload);
+                                            payload.put(Chat.ALUMNO_B, uidAlumnoB);
+                                            dbReference.child(Chat.REFERENCE).child(chatUUID).updateChildren(payload);
+
+                                            /* Contenido que recibirá el chat creado */
+                                            ChatSummaryDto summary = new ChatSummaryDto();
+                                            summary.chatId = chatUUID;
+                                            summary.receiverName = res.get(0).get(Alumno.NOMBRE).toString();
+                                            summary.receiverProfileImage = res.get(0).get(Alumno.URL_FOTO).toString();
+                                            summary.receiverUid = res.get(0).get(Alumno.USER_ID).toString();
 
                                             Intent intent = new Intent(ListadoAlumnosChatActivity.this, ChatActivity.class);
-                                            intent.putExtra(ALUMNO_SELECCIONADO_CHAT, alumno);
+                                            intent.putExtra(CHAT_SELECCIONADO, summary);
                                             startActivity(intent);
-
                                         }
                                     }
                                 }

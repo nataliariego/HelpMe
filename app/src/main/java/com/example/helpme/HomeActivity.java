@@ -67,7 +67,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        //initCalendarData();
+        initCalendarData();
 
         if(!Authentication.getInstance().isSigned()){
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));

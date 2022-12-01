@@ -19,12 +19,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import util.StringUtils;
+import dto.ChatSummaryDto;
+import dto.MensajeDto;
 
 public class ChatService {
 
@@ -38,10 +38,6 @@ public class ChatService {
 
     private static ChatService instance;
 
-    public static final String USER_REFERENCE = "users";
-    public static final String CHAT_REFERENCE = "chats";
-    public static final String MSG_REFERENCE = "messages";
-
     public static final String TAG = "CHAT_SERVICE";
 
     private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
@@ -52,18 +48,22 @@ public class ChatService {
      * @param msg
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void sendMessage(final String msg, final String receiverUid) {
+    public void sendMessage(final MensajeDto msg, final ChatSummaryDto summary) {
         String msg_id = UUID.randomUUID().toString();
 
         Map<String, Object> payload = new HashMap<>();
-        //payload.put(Mensaje.CHAT_ID, msg_id);
-        payload.put(Mensaje.SENDER, userInSession.getUid());
-        payload.put(Mensaje.RECEIVER, receiverUid);
-        payload.put(Mensaje.CONTENT, msg);
-        payload.put(Mensaje.MESSAGE_TYPE, Mensaje.DEFAULT_TYPE);
-        payload.put(Mensaje.CREATED_AT, LocalDateTime.now());
 
-        db.getReference().child(MSG_REFERENCE)
+        payload.put(Mensaje.SENDER, userInSession.getUid());
+        payload.put(Mensaje.RECEIVER, summary.receiverUid);
+        payload.put(Mensaje.CONTENT, msg.contenido);
+        // TODO: Cambiar a tipo enviado
+        payload.put(Mensaje.MESSAGE_TYPE, Mensaje.DEFAULT_TYPE);
+        payload.put(Mensaje.CREATED_AT, msg.fechaEnvio);
+
+        db.getReference()
+                .child(Chat.REFERENCE)
+                .child(summary.chatId)
+                .child(Mensaje.REFERENCE)
                 .child(msg_id)
                 .updateChildren(payload).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -77,21 +77,6 @@ public class ChatService {
                         Log.i(TAG, "ERROR AL ENVIAR EL MENSAJE");
                     }
                 });
-
-//        db.getReference().child(CHAT_REFERENCE)
-//                .child(temp_chat_uid)
-//                .child(userInSession.getUid()).setValue(msg).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        Log.i(TAG, "MENSAJE ENVIADO");
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.i(TAG, "ERROR AL ENVIAR EL MENSAJE");
-//                    }
-//                });
     }
 
     public void receiveMessage() {

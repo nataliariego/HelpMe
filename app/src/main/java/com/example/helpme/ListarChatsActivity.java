@@ -1,5 +1,7 @@
 package com.example.helpme;
 
+import static com.example.helpme.extras.IntentExtras.CHAT_SELECCIONADO;
+
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,22 +33,20 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import adapter.AlumnoAdapter;
 import adapter.ChatAdapter;
 import chat.ChatService;
 import dto.ChatSummaryDto;
 
 public class ListarChatsActivity extends AppCompatActivity {
     public static final String TAG = "LISTAR_CHATS_ACTIVITY";
-    private static final String CHAT_SELECCIONADO = "chat_seleccionado";
 
     private DatabaseReference dbReference = FirebaseDatabase.getInstance(ChatService.DB_URL).getReference();
     private FirebaseFirestore dbStore = FirebaseFirestore.getInstance();
     private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
 
     private ChatAdapter chatAdapter;
-    private AlumnoAdapter alumnoAdapter;
 
     private RecyclerView recyclerListadoChats;
     private List<ChatSummaryDto> chats = new ArrayList<>();
@@ -59,13 +59,25 @@ public class ListarChatsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_listar_chats);
         setTitle("Chats");
 
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         initFields();
+
+        chatAdapter = new ChatAdapter(chats, new ChatAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(ChatSummaryDto item) {
+                Intent intent = new Intent(ListarChatsActivity.this, ChatActivity.class);
+                intent.putExtra(CHAT_SELECCIONADO, item);
+                startActivity(intent);
+            }
+        });
+
+        recyclerListadoChats.setAdapter(chatAdapter);
 
     }
 
     private void initFields() {
         recyclerListadoChats = findViewById(R.id.recycler_listado_chats);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
         recyclerListadoChats.setLayoutManager(layoutManager);
 
         fabNuevoChat = (FloatingActionButton) findViewById(R.id.fab_nuevo_chat);
@@ -85,7 +97,6 @@ public class ListarChatsActivity extends AppCompatActivity {
         super.onResume();
 
         cargarChats();
-        recyclerListadoChats.setAdapter(chatAdapter);
     }
 
     private void cargarChats() {
@@ -95,13 +106,20 @@ public class ListarChatsActivity extends AppCompatActivity {
                 chats.clear();
                 if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        if (((HashMap<String, Object>) ds.getValue()).get(Mensaje.REFERENCE) != null) {
+                        //if (((HashMap<String, Object>) ds.getValue()).get(Mensaje.REFERENCE) != null) {
                             ChatSummaryDto summary = new ChatSummaryDto();
                             summary.chatId = ds.getKey();
-                            String uidAlumnoA = ((HashMap<String, Object>) ds.getValue()).get("alumnoA").toString();
-                            String uidAlumnoB = ((HashMap<String, Object>) ds.getValue()).get("alumnoB").toString();
+                            String uidAlumnoA = ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_A).toString();
+                            String uidAlumnoB = ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_B).toString();
+
+                            summary.receiverUid = uidAlumnoB;
 
                             String otherUserUid = uidAlumnoB == userInSession.getUid() ? uidAlumnoA : uidAlumnoB;
+
+                            /* Mensajes del chat */
+                            if (((HashMap<String, Object>) ds.getValue()).get(Mensaje.REFERENCE) != null) {
+                                summary.messages = (Map<String, Object>) ((HashMap<String, Object>) ds.getValue()).get(Mensaje.REFERENCE);
+                            }
 
                             dbStore.collection(Alumno.COLLECTION).document(otherUserUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
@@ -122,21 +140,14 @@ public class ListarChatsActivity extends AppCompatActivity {
 
                                         chats.add(summary);
 
+                                        chatAdapter.notifyDataSetChanged();
+
                                         Log.d(TAG, nombre + " -- " + urlFoto);
                                     }
                                 }
                             });
-                        }
+                        //}
                     }
-
-                    chatAdapter = new ChatAdapter(chats, new ChatAdapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(ChatSummaryDto item) {
-                            Intent intent = new Intent(ListarChatsActivity.this, ChatActivity.class);
-                            intent.putExtra(CHAT_SELECCIONADO, item);
-                            startActivity(intent);
-                        }
-                    });
                 }
             }
 

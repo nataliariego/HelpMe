@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Chat {
     public static final String REFERENCE = "chats";
+    public static final String ALUMNO_A = "alumnoA";
+    public static final String ALUMNO_B = "alumnoB";
 
     private String id;
     private Alumno alumnoA;
