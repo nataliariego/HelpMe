@@ -2,15 +2,18 @@ package com.example.helpme;
 
 import static com.example.helpme.extras.IntentExtras.CHAT_SELECCIONADO;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -62,14 +65,16 @@ public class ListarChatsActivity extends AppCompatActivity {
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         initFields();
 
-        chatAdapter = new ChatAdapter(chats, new ChatAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(ChatSummaryDto item) {
-                Intent intent = new Intent(ListarChatsActivity.this, ChatActivity.class);
-                intent.putExtra(CHAT_SELECCIONADO, item);
-                startActivity(intent);
-            }
-        });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            chatAdapter = new ChatAdapter(chats, new ChatAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(ChatSummaryDto item) {
+                    Intent intent = new Intent(ListarChatsActivity.this, ChatActivity.class);
+                    intent.putExtra(CHAT_SELECCIONADO, item);
+                    startActivity(intent);
+                }
+            });
+        }
 
         recyclerListadoChats.setAdapter(chatAdapter);
 
@@ -106,7 +111,7 @@ public class ListarChatsActivity extends AppCompatActivity {
                 chats.clear();
                 if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        //if (((HashMap<String, Object>) ds.getValue()).get(Mensaje.REFERENCE) != null) {
+                        if (((HashMap<String, Object>) ds.getValue()).get(Mensaje.REFERENCE) != null) {
                             ChatSummaryDto summary = new ChatSummaryDto();
                             summary.chatId = ds.getKey();
                             String uidAlumnoA = ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_A).toString();
@@ -146,7 +151,7 @@ public class ListarChatsActivity extends AppCompatActivity {
                                     }
                                 }
                             });
-                        //}
+                        }
                     }
                 }
             }

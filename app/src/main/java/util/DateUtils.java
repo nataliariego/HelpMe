@@ -23,7 +23,7 @@ import java.util.Map;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class DateUtils {
 
-    public static final String DEFAULT_DATETIME_PATTERN = "dd/MM/yyyy HH:mm:ss";
+    public static final String DEFAULT_DATETIME_PATTERN = "yyy-MM-dd HH:mm:ss.SSS";
     public static final ZoneId DEFAULT_ZONE_ID = ZoneId.of("Europe/Madrid");
     private static PrettyTime prettyTime = new PrettyTime();
 
@@ -40,8 +40,8 @@ public class DateUtils {
 
     /**
      * Convierte una fecha en formato hashmap de firebase a LocaldateTime.
-     * @param date
      *
+     * @param date
      * @return
      */
     public static LocalDateTime convertHashMapToLocalDateTime(Map<String, Object> date) {
@@ -88,5 +88,30 @@ public class DateUtils {
         String resPrettyDate = prettyTime.format(localDateTime, DEFAULT_ZONE_ID);
         return resPrettyDate.substring(0, 1).toUpperCase()
                 .concat(resPrettyDate.substring(1));
+    }
+
+    /**
+     * Hora en formato HH:mm
+     *
+     * @param date Fecha de tipo LocalDateTime
+     * @return Ejemplo: 2022-12-02 12:14:57.670 --> 12:14
+     */
+    public static String getSimplifiedDate(final String date) {
+        if (date == null) {
+            return "no-date";
+        }
+
+        LocalDateTime dateTime = convertStringToLocalDateTime(date);
+
+        return String.valueOf(dateTime.getHour())
+                .concat(":")
+                .concat(String.valueOf(dateTime.getMinute()));
+    }
+
+    /**
+     * @return Hora actual con el formato establecido para la aplicación.
+     */
+    public static String getNowWithPredefinedFormat() {
+        return String.valueOf(LocalDateTime.now().format(DateTimeFormatter.ofPattern(DEFAULT_DATETIME_PATTERN)));
     }
 }

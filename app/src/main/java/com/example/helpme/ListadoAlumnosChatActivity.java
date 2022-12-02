@@ -123,8 +123,9 @@ public class ListadoAlumnosChatActivity extends AppCompatActivity {
                                         List<DocumentSnapshot> res = task.getResult().getDocuments();
 
                                         if (res.size() > 0) {
+                                            DocumentSnapshot doc = res.get(0);
 
-                                            String uidAlumnoB = res.get(0).getId();
+                                            String uidAlumnoB = doc.getId();
 
                                             payload.put(Chat.ALUMNO_B, uidAlumnoB);
                                             dbReference.child(Chat.REFERENCE).child(chatUUID).updateChildren(payload);
@@ -132,9 +133,13 @@ public class ListadoAlumnosChatActivity extends AppCompatActivity {
                                             /* Contenido que recibirá el chat creado */
                                             ChatSummaryDto summary = new ChatSummaryDto();
                                             summary.chatId = chatUUID;
-                                            summary.receiverName = res.get(0).get(Alumno.NOMBRE).toString();
-                                            summary.receiverProfileImage = res.get(0).get(Alumno.URL_FOTO).toString();
-                                            summary.receiverUid = res.get(0).get(Alumno.USER_ID).toString();
+                                            summary.receiverName = doc.get(Alumno.NOMBRE).toString();
+
+                                            if (doc.get(Alumno.URL_FOTO) != null) {
+                                                summary.receiverProfileImage = doc.get(Alumno.URL_FOTO).toString();
+                                            }
+
+                                            summary.receiverUid = doc.getId();
 
                                             Intent intent = new Intent(ListadoAlumnosChatActivity.this, ChatActivity.class);
                                             intent.putExtra(CHAT_SELECCIONADO, summary);

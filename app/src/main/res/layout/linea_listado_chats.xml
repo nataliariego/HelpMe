@@ -63,7 +63,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto"
-            android:maxLength="50"
             android:text="@string/placeholder_ultimo_mensaje_chat"
             android:textColor="@color/text_color_hint"
             android:textSize="11sp" />

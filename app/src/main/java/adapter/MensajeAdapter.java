@@ -1,10 +1,24 @@
 package adapter;
 
+import static chat.ChatService.DEFAULT_MIME_IMG;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,12 +26,18 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.ByteArrayOutputStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
+import chat.ChatService;
 import dto.MensajeDto;
 import util.DateUtils;
 
@@ -32,6 +52,16 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
     private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
 
     public MensajeAdapter(List<MensajeDto> mensajes) {
+        Comparator<MensajeDto> msgComparator = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            msgComparator = (m1, m2) -> DateUtils.convertStringToLocalDateTime(m2.createdAt)
+                    .compareTo(DateUtils.convertStringToLocalDateTime(m1.createdAt));
+
+            mensajes.sort(msgComparator);
+
+            Log.d(TAG, "MENSAJES ORD: " + mensajes);
+        }
+
         this.mensajes = mensajes;
     }
 
@@ -40,8 +70,8 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
     public MensajeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(viewType == RECEIVER_POSITION
-                        ? R.layout.mensaje_chat_receiver
-                        : R.layout.mensaje_chat_sender
+                                ? R.layout.mensaje_chat_receiver
+                                : R.layout.mensaje_chat_sender
                         , parent, false);
 
         return new MensajeViewHolder(itemView);
@@ -61,31 +91,114 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
 
     @Override
     public int getItemViewType(int position) {
-        if (mensajes.get(position).userUid != userInSession.getUid()) {
-            return SENDER_POSITION;
-        } else {
-            return RECEIVER_POSITION;
-        }
+        return mensajes.get(position).userUid.equals(userInSession.getUid()) ? RECEIVER_POSITION : SENDER_POSITION;
     }
 
     class MensajeViewHolder extends RecyclerView.ViewHolder {
 
+        private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
+
         private TextView txContenidoMensaje;
         private TextView txFechaEnvioMensaje;
-        private LinearLayout layoutMensaje;
+        private ImageView imgContenidoImagen;
 
         public MensajeViewHolder(@NonNull View itemView) {
             super(itemView);
 
             txContenidoMensaje = itemView.findViewById(R.id.text_contenido_mensaje_conversacion);
             txFechaEnvioMensaje = itemView.findViewById(R.id.text_hora_envio_mensaje_conversacion);
-            layoutMensaje = itemView.findViewById(R.id.layout_mensaje_chat);
+            imgContenidoImagen = itemView.findViewById(R.id.img_imagen_mensaje);
+        }
+
+
+        /**
+         * Carga la URI de la imagen almacenada en el campo contenido del mensaje.
+         *
+         * @param path
+         * @param callback
+         * @return
+         */
+        private void loadImage(final String path, final ImageMessageCallback callback) {
+            //13MB
+            long MAX_BYTES = (long) Math.pow(1024, 13);
+
+            Log.d(TAG, ChatService.getInstance().getCloudStorage().getReference(path.substring(1)).toString());
+
+            ChatService.getInstance().getCloudStorage().getReference(path.substring(1))
+                    .getBytes(MAX_BYTES).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+                            Log.d(TAG, "Imagen cargada!");
+
+
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            //imgContenidoImagen.setImageBitmap(bitmap);
+
+                            imgContenidoImagen.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                            imgContenidoImagen.setImageBitmap(Bitmap.createScaledBitmap(bitmap, 600, 900, false));
+                            //Picasso.get().load(getImageUri(itemView.getContext(), bitmap)).into(imgContenidoImagen);
+                            //callback.callback();
+                        }
+
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            Log.d(TAG, "Error al cargar la imagen del mensaje");
+                        }
+                    });
+        }
+
+        public Uri getImageUri(Context inContext, Bitmap inImage) {
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+
+            String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+            return Uri.parse(path);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
         public void bindMensaje(final MensajeDto msg) {
             txContenidoMensaje.setText(msg.contenido);
-            txFechaEnvioMensaje.setText(DateUtils.prettyDate(msg.fechaEnvio));
+//            txFechaEnvioMensaje.setText(DateUtils.prettyDate(msg.fechaEnvio));
+            LocalDateTime timestamp = DateUtils.convertStringToLocalDateTime(msg.createdAt);
+            String hour = String.valueOf(timestamp.getHour());
+            String minutes = String.valueOf(timestamp.getMinute());
+
+            String timeAsString = hour.concat(":").concat(minutes);
+
+            /* Si el contenido del mensaje a mostrar es una imagen */
+            if (msg.mimeType.equals(DEFAULT_MIME_IMG)) {
+                txContenidoMensaje.setVisibility(View.GONE);
+
+                /* Cargar la imagen */
+                loadImage(msg.contenido, new ImageMessageCallback() {
+                    @Override
+                    public void callback() {
+//                        Log.d(TAG, "IMAGEN TEMP: " + tempImage.getAbsolutePath());
+//                        final Transformation transformation = new RoundedCornersTransformation(5, 0);
+//                        Picasso.get().load(tempImage.getAbsolutePath()).into(imgContenidoImagen);
+                        imgContenidoImagen.setVisibility(View.VISIBLE);
+                    }
+                });
+
+
+            } else {
+                if (imgContenidoImagen != null) {
+                    imgContenidoImagen.setVisibility(View.GONE);
+                }
+                txContenidoMensaje.setVisibility(View.VISIBLE);
+            }
+
+//            if(ChronoUnit.SECONDS.between(timestamp, LocalDateTime.now()) < 60){
+//                timeAsString = "justo ahora";
+//            }
+
+            txFechaEnvioMensaje.setText(timeAsString);
         }
+    }
+
+    public interface ImageMessageCallback {
+        void callback();
     }
 }

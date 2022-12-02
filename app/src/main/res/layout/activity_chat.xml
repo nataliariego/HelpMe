@@ -5,7 +5,7 @@
     android:id="@+id/layout_chat"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/tertiary"
+    android:background="@color/white"
     tools:context=".ChatActivity">
 
     <LinearLayout
@@ -21,36 +21,63 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.144">
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageButton
+            android:id="@+id/button_back_to_chat_list"
+            style="@style/Widget.AppCompat.ImageButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="5dp"
+            android:backgroundTint="@color/transparent"
+            app:srcCompat="@drawable/ic_round_arrow_back_ios_24" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_receiver_user_chat"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginRight="20dp"
-            app:srcCompat="@drawable/button_rounded_corners_primary"
             android:windowSoftInputMode="stateVisible|adjustResize"
-            />
+            app:srcCompat="@drawable/button_rounded_corners_primary" />
 
         <TextView
             android:id="@+id/text_user_receiver_chat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView" />
+
+        <RelativeLayout
+            android:id="@+id/layout_wrapper_phone_toolbar_chat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/button_call_alumno_receiver"
+                style="@style/Widget.AppCompat.ImageButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="end"
+                android:backgroundTint="@color/transparent"
+                app:srcCompat="@drawable/ic_round_email_24" />
+        </RelativeLayout>
+
     </LinearLayout>
 
     <ScrollView
         android:id="@+id/scroll_conversacion_chat"
         android:layout_width="match_parent"
-        android:layout_height="475dp"
+        android:layout_height="567dp"
+        android:layout_marginBottom="10dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
+        android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.648">
+        app:layout_constraintTop_toTopOf="@+id/linearLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -62,6 +89,7 @@
                 android:id="@+id/recycler_conversacion_chat"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
         </LinearLayout>
     </ScrollView>
 
@@ -99,6 +127,22 @@
         app:layout_constraintVertical_bias="0.974" />
 
     <ImageButton
+        android:id="@+id/button_upload_file_chat"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:backgroundTint="@color/transparent"
+        android:elevation="10dp"
+        android:rotation="10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.663"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.969"
+        app:srcCompat="@drawable/ic_round_attach_file_24" />
+
+    <ImageButton
         android:id="@+id/button_enviar_mensaje_chat"
         android:layout_width="55dp"
         android:layout_height="55dp"
@@ -112,5 +156,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.976"
         app:srcCompat="@drawable/ic_baseline_send_24" />
+
+    <ImageButton
+        android:id="@+id/button_camera_chat"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:backgroundTint="@color/transparent"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.743"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.969"
+        app:srcCompat="@drawable/ic_round_camera_alt_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -112,5 +112,6 @@
     <string name="img_profile_alumno_chat">Imagen de perfil del alumno</string>
     <string name="placeholder_nombre_alumno_chat">Nombre del alumno</string>
     <string name="uo_alumno_chat">UO112233</string>
+    <string name="estado_envio_mensaje_chat" >ENVIADO</string>
 
 </resources>
