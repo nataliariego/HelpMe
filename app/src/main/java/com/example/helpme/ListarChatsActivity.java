@@ -65,6 +65,7 @@ public class ListarChatsActivity extends AppCompatActivity {
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         initFields();
 
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             chatAdapter = new ChatAdapter(chats, new ChatAdapter.OnItemClickListener() {
                 @Override
