@@ -2,18 +2,15 @@ package com.example.helpme;
 
 import static com.example.helpme.extras.IntentExtras.CHAT_SELECCIONADO;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -65,6 +62,8 @@ public class ListarChatsActivity extends AppCompatActivity {
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         initFields();
 
+        Log.i(TAG, "USUARIO EN SESIÓN: " + userInSession.getEmail());
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             chatAdapter = new ChatAdapter(chats, new ChatAdapter.OnItemClickListener() {
@@ -106,61 +105,64 @@ public class ListarChatsActivity extends AppCompatActivity {
     }
 
     private void cargarChats() {
-        dbReference.child(Chat.REFERENCE).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                chats.clear();
-                if (snapshot.exists()) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        if (((HashMap<String, Object>) ds.getValue()).get(Mensaje.REFERENCE) != null) {
-                            ChatSummaryDto summary = new ChatSummaryDto();
-                            summary.chatId = ds.getKey();
-                            String uidAlumnoA = ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_A).toString();
-                            String uidAlumnoB = ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_B).toString();
+        dbReference.child(Chat.REFERENCE)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        chats.clear();
+                        if (snapshot.exists()) {
+                            for (DataSnapshot ds : snapshot.getChildren()) {
+                                if (((HashMap<String, Object>) ds.getValue()).get(Mensaje.REFERENCE) != null) {
+                                    ChatSummaryDto summary = new ChatSummaryDto();
+                                    summary.chatId = ds.getKey();
+                                    String uidAlumnoA = ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_A).toString();
+                                    String uidAlumnoB = ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_B).toString();
 
-                            summary.receiverUid = uidAlumnoB;
+                                    summary.receiverUid = uidAlumnoB;
 
-                            String otherUserUid = uidAlumnoB == userInSession.getUid() ? uidAlumnoA : uidAlumnoB;
+                                    String otherUserUid = uidAlumnoB.equals(userInSession.getUid()) ? uidAlumnoA : uidAlumnoB;
 
-                            /* Mensajes del chat */
-                            if (((HashMap<String, Object>) ds.getValue()).get(Mensaje.REFERENCE) != null) {
-                                summary.messages = (Map<String, Object>) ((HashMap<String, Object>) ds.getValue()).get(Mensaje.REFERENCE);
-                            }
+                                    /* Mensajes del chat */
+                                    if (((HashMap<String, Object>) ds.getValue()).get(Mensaje.REFERENCE) != null) {
+                                        summary.messages = (Map<String, Object>) ((HashMap<String, Object>) ds.getValue()).get(Mensaje.REFERENCE);
+                                    }
 
-                            dbStore.collection(Alumno.COLLECTION).document(otherUserUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (task.isSuccessful()) {
+                                    if (userInSession.getUid().equalsIgnoreCase(uidAlumnoA) || userInSession.getUid().equalsIgnoreCase(uidAlumnoB)) {
+                                        dbStore.collection(Alumno.COLLECTION).document(otherUserUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
 
-                                        DocumentSnapshot res = task.getResult();
+                                                    DocumentSnapshot res = task.getResult();
 
-                                        String nombre = res.get(Alumno.NOMBRE).toString();
+                                                    String nombre = res.get(Alumno.NOMBRE).toString();
 
-                                        String urlFoto = res.get(Alumno.URL_FOTO) != null
-                                                ? res.get(Alumno.URL_FOTO).toString()
-                                                : res.get("urlFoto") != null
-                                                ? res.get("urlFoto").toString() : "https://ui-avatars.com/api/?name=" + String.join(nombre);
+                                                    String urlFoto = res.get(Alumno.URL_FOTO) != null
+                                                            ? res.get(Alumno.URL_FOTO).toString()
+                                                            : res.get("urlFoto") != null
+                                                            ? res.get("urlFoto").toString() : "https://ui-avatars.com/api/?name=" + String.join(nombre);
 
-                                        summary.receiverProfileImage = urlFoto;
-                                        summary.receiverName = nombre;
+                                                    summary.receiverProfileImage = urlFoto;
+                                                    summary.receiverName = nombre;
 
-                                        chats.add(summary);
+                                                    chats.add(summary);
 
-                                        chatAdapter.notifyDataSetChanged();
+                                                    chatAdapter.notifyDataSetChanged();
 
-                                        Log.d(TAG, nombre + " -- " + urlFoto);
+                                                    Log.d(TAG, nombre + " -- " + urlFoto);
+                                                }
+                                            }
+                                        });
                                     }
                                 }
-                            });
+                            }
                         }
                     }
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                    }
+                });
     }
 }

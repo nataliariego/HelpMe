@@ -169,7 +169,6 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         msgAdapter = new MensajeAdapter(chatMessages);
-
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
         recyclerConversacionChat.setLayoutManager(layoutManager);
 
@@ -185,6 +184,7 @@ public class ChatActivity extends AppCompatActivity {
         if (originChatDataDto != null &&
                 originChatDataDto.messages != null) {
             paintChatMessages();
+
             Log.d(TAG, "Número chats: " + chatMessages.size());
         }
     }
@@ -264,7 +264,6 @@ public class ChatActivity extends AppCompatActivity {
                         chatMessages.clear();
                         if (snapshot.exists()) {
                             for (DataSnapshot ds : snapshot.getChildren()) {
-                                Log.i(TAG, "CONTENIDO MSG: " + ds.getValue());
 
                                 Map<String, Object> resData = ((HashMap<String, Object>) ds.getValue());
 
@@ -273,17 +272,19 @@ public class ChatActivity extends AppCompatActivity {
                                 String content = resData.get(Mensaje.CONTENT).toString();
                                 String createdAt = resData.get(Mensaje.CREATED_AT).toString();
 
-                                Log.d(TAG, "MENSAJE CHAT: " + content + " " + createdAt.toString());
-
                                 newMessage.contenido = content;
                                 newMessage.createdAt = createdAt;
                                 newMessage.mimeType = resData.get(Mensaje.MESSAGE_TYPE).toString();
                                 newMessage.userUid = resData.get(Mensaje.SENDER).toString();
 
                                 chatMessages.add(newMessage);
-                            }
 
-                            msgAdapter.notifyDataSetChanged();
+                            }
+                            msgAdapter.sortMessages();
+                            for(MensajeDto msg : chatMessages){
+                                Log.d(TAG, "MSG LOADED: " + msg.contenido);
+                            }
+                            //msgAdapter.notifyDataSetChanged();
                         }
                     }
 

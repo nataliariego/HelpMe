@@ -2,18 +2,9 @@ package adapter;
 
 import static chat.ChatService.DEFAULT_MIME_IMG;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.net.Uri;
 import android.os.Build;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,10 +22,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import chat.ChatService;
@@ -52,17 +41,18 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
     private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
 
     public MensajeAdapter(List<MensajeDto> mensajes) {
-        Comparator<MensajeDto> msgComparator = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            msgComparator = (m1, m2) -> DateUtils.convertStringToLocalDateTime(m2.createdAt)
-                    .compareTo(DateUtils.convertStringToLocalDateTime(m1.createdAt));
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            Log.d(TAG, "MENSAJES ORDENADOS: " + ChatService.getInstance().getSortedMessages(mensajes));
+//            this.mensajes = ChatService.getInstance().getSortedMessages(mensajes);
+//        }else{
+//        }
+            this.mensajes = mensajes;
+    }
 
-            mensajes.sort(msgComparator);
-
-            Log.d(TAG, "MENSAJES ORD: " + mensajes);
+    public void sortMessages(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            this.mensajes = ChatService.getInstance().getSortedMessages(this.mensajes);
         }
-
-        this.mensajes = mensajes;
     }
 
     @NonNull
@@ -146,15 +136,6 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
                             Log.d(TAG, "Error al cargar la imagen del mensaje");
                         }
                     });
-        }
-
-        public Uri getImageUri(Context inContext, Bitmap inImage) {
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-
-            String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-            return Uri.parse(path);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)

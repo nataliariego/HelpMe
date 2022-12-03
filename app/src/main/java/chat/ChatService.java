@@ -17,17 +17,17 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -63,7 +63,7 @@ public class ChatService {
 
     private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
 
-    public StorageReference getChatStorageRef(){
+    public StorageReference getChatStorageRef() {
         return chatStorageRef;
     }
 
@@ -71,7 +71,7 @@ public class ChatService {
         return cloudStorage;
     }
 
-    public StorageReference getDefaultStorage(){
+    public StorageReference getDefaultStorage() {
         return storageRef;
     }
 
@@ -173,24 +173,18 @@ public class ChatService {
 
     }
 
-    public void receiveMessage() {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public List<MensajeDto> getSortedMessages(final List<MensajeDto> messages) {
+        if (messages == null) {
+            return null;
+        }
 
-    }
+        Comparator<MensajeDto> msgComparator = Comparator.comparing(msg -> DateUtils.convertStringToLocalDateTime(msg.createdAt));
 
-    public void showAllChats() {
-        db.getReference(Chat.REFERENCE).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot data : snapshot.getChildren()) {
-                    String uid = data.getKey();
-                }
-            }
+        messages.sort(msgComparator);
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+        return messages;
     }
 
     public static ChatService getInstance() {

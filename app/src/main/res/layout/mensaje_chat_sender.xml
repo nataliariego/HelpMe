@@ -16,6 +16,15 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
+    <ImageView
+        android:id="@+id/img_imagen_mensaje"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_wrapper_contenido_mensaje"
         android:layout_width="wrap_content"
