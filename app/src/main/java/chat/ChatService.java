@@ -2,6 +2,7 @@ package chat;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 import android.widget.ImageView;
@@ -24,7 +25,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -139,38 +139,101 @@ public class ChatService {
 
                 if (taskSnapshot.getTask().isSuccessful()) {
                     Log.d(TAG, "Imagen subida: " + taskSnapshot.getMetadata());
+                    Map<String, Object> payload = new HashMap<>();
+
+                    payload.put(Mensaje.SENDER, userInSession.getUid());
+                    payload.put(Mensaje.RECEIVER, summary.receiverUid);
+                    payload.put(Mensaje.CONTENT, chatStorageRef.child(imageName).getPath());
+                    payload.put(Mensaje.MESSAGE_TYPE, "image/jpeg");
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        payload.put(Mensaje.CREATED_AT, DateUtils.getNowWithPredefinedFormat());
+                    }
+
+                    db.getReference().child(Chat.REFERENCE)
+                            .child(summary.chatId)
+                            .child(Mensaje.REFERENCE)
+                            .child(imgUid)
+                            .updateChildren(payload).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    callback.callback();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.e(TAG, "ERROR al subir la imagen al servidor. " + e.getMessage());
+                                }
+                            });
                 }
 
-                Map<String, Object> payload = new HashMap<>();
-
-                payload.put(Mensaje.SENDER, userInSession.getUid());
-                payload.put(Mensaje.RECEIVER, summary.receiverUid);
-                payload.put(Mensaje.CONTENT, chatStorageRef.child(imageName).getPath());
-                payload.put(Mensaje.MESSAGE_TYPE, "image/jpeg");
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    payload.put(Mensaje.CREATED_AT, DateUtils.getNowWithPredefinedFormat());
-                }
-
-                db.getReference().child(Chat.REFERENCE)
-                        .child(summary.chatId)
-                        .child(Mensaje.REFERENCE)
-                        .child(imgUid)
-                        .updateChildren(payload).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                callback.callback();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.i(TAG, "ERROR al subir la imagen al servidor. " + e.getMessage());
-                            }
-                        });
             }
         });
 
+    }
+
+    /**
+     * Subida de un archivo seleccionado en el chat al storage de Firebase.
+     *
+     * @param fileUri
+     * @param summary
+     */
+    public void uploadFile(final Uri fileUri, final ChatSummaryDto summary, final MensajeCallback callback) {
+        //String refPath = "chats/" + summary.chatId + fileUri.getLastPathSegment();
+        String docUid = UUID.randomUUID().toString();
+        StorageReference uploadRef = chatStorageRef.child(summary.chatId).child(docUid);
+        UploadTask uploadTask = uploadRef.putFile(fileUri);
+
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                Log.e(TAG, "Error al subir el archivo a Firebase. " + exception.getMessage());
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                Uri downloadUrl = taskSnapshot.getUploadSessionUri();
+                Log.d(TAG, "DOWNLOAD URL: " + downloadUrl.getPath());
+
+                if (taskSnapshot.getTask().isSuccessful()) {
+                    Log.d(TAG, "Imagen subida: " + taskSnapshot.getMetadata());
+                    Map<String, Object> payload = new HashMap<>();
+
+                    payload.put(Mensaje.SENDER, userInSession.getUid());
+                    payload.put(Mensaje.RECEIVER, summary.receiverUid);
+                    payload.put(Mensaje.CONTENT, chatStorageRef.child(docUid).getPath());
+
+                    payload.put(Mensaje.MESSAGE_TYPE, taskSnapshot.getMetadata().getContentType());
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        payload.put(Mensaje.CREATED_AT, DateUtils.getNowWithPredefinedFormat());
+                    }
+
+                    db.getReference().child(Chat.REFERENCE)
+                            .child(summary.chatId)
+                            .child(Mensaje.REFERENCE)
+                            .child(docUid)
+                            .updateChildren(payload).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    callback.callback();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.e(TAG, "ERROR al subir la imagen al servidor. " + e.getMessage());
+                                }
+                            });
+
+                    callback.callback();
+                }
+
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
