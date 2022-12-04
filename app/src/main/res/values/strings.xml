@@ -112,6 +112,12 @@
     <string name="img_profile_alumno_chat">Imagen de perfil del alumno</string>
     <string name="placeholder_nombre_alumno_chat">Nombre del alumno</string>
     <string name="uo_alumno_chat">UO112233</string>
-    <string name="estado_envio_mensaje_chat" >ENVIADO</string>
+    <string name="estado_envio_mensaje_chat">ENVIADO</string>
+    <string name="button_subir_archivo_chat">Subir un documento al chatpara enviar</string>
+    <string name="button_camera_chat">Abrir la cámara para enviar una foto al chat</string>
+    <string name="text_mensaje_contentDescription">Escribe aquí el mensaje que quieres enviar al otro usuario</string>
+    <string name="button_call_alumno_chat">Llamar al alumno del chat</string>
+    <string name="sin_conexion_titulo">Sin conexión</string>
+    <string name="sin_conexion_descripcion">No es posible conectarse con el servidor, revisa los ajustes de conexión de tu dispositivo. Perdona las molestias</string>
 
 </resources>

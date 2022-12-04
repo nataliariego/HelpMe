@@ -5,6 +5,7 @@ import static com.example.helpme.extras.IntentExtras.CHAT_SELECCIONADO;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,6 +52,7 @@ public class ChatActivity extends AppCompatActivity {
 
     /* Identicar intent que accede a la cámara del dispositivo */
     public static final int CAMERA_IMAGE_CHAT = 1000;
+    public static final int ADJUNTO_CHAT_REQUEST_CODE = 1001;
 
     private EditText txMensajeAEnviar;
     private ImageButton btEnviarMensaje;
@@ -122,6 +124,11 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "BT-ADJUNTAR ARCHIVO: ");
+
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");
+                startActivityForResult(intent, ADJUNTO_CHAT_REQUEST_CODE);
+
             }
         });
 
@@ -166,6 +173,10 @@ public class ChatActivity extends AppCompatActivity {
         if (originChatDataDto != null) {
             /* Mostrar img perfil y nombre del alumnoB */
             paintReceiverData();
+
+            if (originChatDataDto.messages != null) {
+                paintChatMessages();
+            }
         }
 
         msgAdapter = new MensajeAdapter(chatMessages);
@@ -173,20 +184,7 @@ public class ChatActivity extends AppCompatActivity {
         recyclerConversacionChat.setLayoutManager(layoutManager);
 
         recyclerConversacionChat.setAdapter(msgAdapter);
-    }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        /* Mostrar los mensajes */
-        if (originChatDataDto != null &&
-                originChatDataDto.messages != null) {
-            paintChatMessages();
-
-            Log.d(TAG, "Número chats: " + chatMessages.size());
-        }
     }
 
     @Override
@@ -201,6 +199,16 @@ public class ChatActivity extends AppCompatActivity {
             ImageView selected = new ImageView(getApplicationContext());
             selected.setImageBitmap(selectedImageToSend);
             uploadImage(selected);
+
+        } else if (requestCode == ADJUNTO_CHAT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            /* Documento o imagen seleccionado del dispositivo */
+            Log.d(TAG, "Documento recibido...");
+            Log.d(TAG, data.getData().toString());
+            Uri selectedMediaUri = data.getData();
+//            String Fpath = selectedMediaUri.getPath();
+
+            /* Subir el archivo seleccionado a Firebase */
+            uploadFile(selectedMediaUri);
         }
     }
 
@@ -213,6 +221,20 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void callback() {
                 Log.d(TAG, "Imagen subida al servidor!");
+                msgAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void uploadFile(Uri fileUri) {
+        if (originChatDataDto == null) {
+            return;
+        }
+
+        ChatService.getInstance().uploadFile(fileUri, originChatDataDto, new ChatService.MensajeCallback() {
+            @Override
+            public void callback() {
+                Log.d(TAG, "Cambio recibido !");
                 msgAdapter.notifyDataSetChanged();
             }
         });
@@ -281,10 +303,7 @@ public class ChatActivity extends AppCompatActivity {
 
                             }
                             msgAdapter.sortMessages();
-                            for(MensajeDto msg : chatMessages){
-                                Log.d(TAG, "MSG LOADED: " + msg.contenido);
-                            }
-                            //msgAdapter.notifyDataSetChanged();
+                            msgAdapter.notifyDataSetChanged();
                         }
                     }
 

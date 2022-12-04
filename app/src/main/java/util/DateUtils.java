@@ -1,6 +1,7 @@
 package util;
 
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -23,8 +24,11 @@ import java.util.Map;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class DateUtils {
 
+    public static final String TAG = "DATE_UTILS";
+
     public static final String DEFAULT_DATETIME_PATTERN = "yyy-MM-dd HH:mm:ss.SSS";
     public static final ZoneId DEFAULT_ZONE_ID = ZoneId.of("Europe/Madrid");
+    public static final Locale DEFAULT_LOCALE = new Locale("ES", "es");
     private static PrettyTime prettyTime = new PrettyTime();
 
     /**
@@ -112,6 +116,10 @@ public class DateUtils {
      * @return Hora actual con el formato establecido para la aplicación.
      */
     public static String getNowWithPredefinedFormat() {
-        return String.valueOf(LocalDateTime.now().format(DateTimeFormatter.ofPattern(DEFAULT_DATETIME_PATTERN)));
+        Instant now = Instant.now();
+        LocalDateTime nowDateTime =  LocalDateTime.ofInstant(now, DEFAULT_ZONE_ID);
+
+        return String.valueOf(nowDateTime
+                .format(DateTimeFormatter.ofPattern(DEFAULT_DATETIME_PATTERN, DEFAULT_LOCALE)));
     }
 }

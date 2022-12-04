@@ -4,9 +4,9 @@
     <!-- Permisos de la aplicacion -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BODY_SENSORS"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -21,6 +21,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HelpMe"
         tools:targetApi="31">
+        <activity
+            android:name=".NoWifiConnectionActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".ListadoAlumnosChatActivity"
             android:exported="false">
@@ -37,7 +44,8 @@
         </activity>
         <activity
             android:name=".ChatActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

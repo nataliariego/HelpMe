@@ -13,9 +13,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import auth.Authentication;
+import network.NetworkStatusChecker;
+import network.NetworkStatusHandler;
 import util.FormValidator;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements NetworkStatusHandler {
+
+    public static final String TAG = "LOGIN_ACTIVITY";
 
     public static final String USER_IN_SESSION = "login_usuario_sesion";
 
@@ -24,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btLogin;
     private Button btCreateAnAccount;
 
+
     private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
@@ -31,10 +36,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setTitle("Iniciar sesión");
-
-        if(Authentication.getInstance().isSigned()){
-            redirectToHomeView();
-        }
 
         initFields();
 
@@ -59,6 +60,13 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        checkConnection();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkConnection();
     }
 
     /**
@@ -138,6 +146,28 @@ public class LoginActivity extends AppCompatActivity {
         txEmail = (TextInputEditText) findViewById(R.id.text_email_login);
         txPassword = (TextInputEditText) findViewById(R.id.text_password_login);
         btCreateAnAccount = (Button) findViewById(R.id.button_create_account_login);
+    }
+
+    @Override
+    public void checkConnection() {
+        NetworkStatusChecker.getInstance().handleConnection(getApplicationContext(), new NetworkStatusChecker.ConnectionCallback() {
+            @Override
+            public void callback(boolean isConnected) {
+                handleConnection(isConnected);
+            }
+        });
+    }
+
+    @Override
+    public void handleConnection(boolean isConnected) {
+        if (!isConnected) {
+            startActivity(new Intent(LoginActivity.this, NoWifiConnectionActivity.class));
+            finish();
+
+        } else if (userInSession != null) {
+            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            finish();
+        }
     }
 
     public interface LoginCallback {
