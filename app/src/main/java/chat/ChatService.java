@@ -38,6 +38,7 @@ import util.DateUtils;
 public class ChatService {
 
     public static final String DEFAULT_MIME_IMG = "image/jpeg";
+    public static final String PDF_MIME_TYPE = "application/pdf";
 
     /* Firebase FireStore */
     public static final String DB_URL = "https://helpme-app-435b7-default-rtdb.europe-west1.firebasedatabase.app";
@@ -46,8 +47,7 @@ public class ChatService {
     public static final String CLOUD_STORAGE_URL = "gs://helpme-app-435b7.appspot.com/";
     public static final String BASE_PATH_CLOUD_STORAGE = "chats";
 
-    /* Gestionar todas las conversaciones */
-    FirebaseDatabase db = FirebaseDatabase.getInstance(DB_URL);
+    /* Gestionar todas las conversaciones */ FirebaseDatabase db = FirebaseDatabase.getInstance(DB_URL);
 
     /* Firebase Store, se obtendrá la información de los usuarios */
     private FirebaseFirestore store = FirebaseFirestore.getInstance();
@@ -93,24 +93,18 @@ public class ChatService {
         payload.put(Mensaje.MESSAGE_TYPE, Mensaje.DEFAULT_TYPE);
         payload.put(Mensaje.CREATED_AT, msg.createdAt);
 
-        db.getReference()
-                .child(Chat.REFERENCE)
-                .child(summary.chatId)
-                .child(Mensaje.REFERENCE)
-                .child(msg_id)
-                .updateChildren(payload).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Log.i(TAG, "MENSAJE ENVIADO");
-                        callback.callback();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.i(TAG, "ERROR AL ENVIAR EL MENSAJE");
-                    }
-                });
+        db.getReference().child(Chat.REFERENCE).child(summary.chatId).child(Mensaje.REFERENCE).child(msg_id).updateChildren(payload).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.i(TAG, "MENSAJE ENVIADO");
+                callback.callback();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.i(TAG, "ERROR AL ENVIAR EL MENSAJE");
+            }
+        });
     }
 
     public void uploadImage(ImageView imageView, ChatSummaryDto summary, MensajeCallback callback) {
@@ -150,22 +144,17 @@ public class ChatService {
                         payload.put(Mensaje.CREATED_AT, DateUtils.getNowWithPredefinedFormat());
                     }
 
-                    db.getReference().child(Chat.REFERENCE)
-                            .child(summary.chatId)
-                            .child(Mensaje.REFERENCE)
-                            .child(imgUid)
-                            .updateChildren(payload).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    callback.callback();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.e(TAG, "ERROR al subir la imagen al servidor. " + e.getMessage());
-                                }
-                            });
+                    db.getReference().child(Chat.REFERENCE).child(summary.chatId).child(Mensaje.REFERENCE).child(imgUid).updateChildren(payload).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            callback.callback();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e(TAG, "ERROR al subir la imagen al servidor. " + e.getMessage());
+                        }
+                    });
                 }
 
             }
@@ -195,43 +184,38 @@ public class ChatService {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                Uri downloadUrl = taskSnapshot.getUploadSessionUri();
-                Log.d(TAG, "DOWNLOAD URL: " + downloadUrl.getPath());
+                Map<String, Object> payload = new HashMap<>();
 
-                if (taskSnapshot.getTask().isSuccessful()) {
-                    Log.d(TAG, "Imagen subida: " + taskSnapshot.getMetadata());
-                    Map<String, Object> payload = new HashMap<>();
+                payload.put(Mensaje.SENDER, userInSession.getUid());
+                payload.put(Mensaje.RECEIVER, summary.receiverUid);
+                payload.put(Mensaje.CONTENT, chatStorageRef.child(docUid).getPath());
 
-                    payload.put(Mensaje.SENDER, userInSession.getUid());
-                    payload.put(Mensaje.RECEIVER, summary.receiverUid);
-                    payload.put(Mensaje.CONTENT, chatStorageRef.child(docUid).getPath());
+                payload.put(Mensaje.MESSAGE_TYPE, taskSnapshot.getMetadata().getContentType());
 
-                    payload.put(Mensaje.MESSAGE_TYPE, taskSnapshot.getMetadata().getContentType());
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        payload.put(Mensaje.CREATED_AT, DateUtils.getNowWithPredefinedFormat());
-                    }
-
-                    db.getReference().child(Chat.REFERENCE)
-                            .child(summary.chatId)
-                            .child(Mensaje.REFERENCE)
-                            .child(docUid)
-                            .updateChildren(payload).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    callback.callback();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.e(TAG, "ERROR al subir la imagen al servidor. " + e.getMessage());
-                                }
-                            });
-
-                    callback.callback();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    payload.put(Mensaje.CREATED_AT, DateUtils.getNowWithPredefinedFormat());
                 }
 
+                Log.d(TAG, "payload: " + payload.toString());
+
+                db.getReference()
+                        .child(Chat.REFERENCE)
+                        .child(summary.chatId)
+                        .child(Mensaje.REFERENCE)
+                        .child(docUid).updateChildren(payload).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    callback.callback();
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e(TAG, "Error al subir el archivo");
+                            }
+                        });
             }
         });
     }

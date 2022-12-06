@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_document_message"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="15dp"
+    android:layout_marginTop="15dp"
+
+    android:layout_marginRight="15dp"
+    android:gravity="right"
+    android:orientation="vertical"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="67dp"
+        android:background="@drawable/message_document_background_rounded"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:id="@+id/text_mime_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/placeholder_mime_message"
+            android:textAllCaps="true"
+            android:textColor="@color/primary"
+            android:textColorHighlight="@color/primary"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:id="@+id/layout_document_message_details"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_message_document_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="@string/placeholder_message_document_name"
+                android:textAllCaps="false"
+                android:textColor="@color/primary"
+                android:textColorHighlight="@color/primary"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/text_message_document_metadata"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/roboto"
+                android:text="@string/placeholder_document_message_metadata"
+                android:textAllCaps="false"
+                android:textColor="@color/primary"
+                android:textColorHighlight="@color/primary"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/img_download_document_message"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@color/transparent"
+            android:contentDescription="@string/contentDescripcion_mime_type"
+            android:scaleType="center"
+            app:srcCompat="@drawable/ic_round_file_download_24" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text_hora_envio_documento_conversacion"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/roboto"
+        android:text="@string/hora_envio_mensaje_default"
+        android:textAlignment="textEnd"
+        android:textColor="@color/primary"
+        android:textSize="12sp" />
+</LinearLayout>

@@ -226,7 +226,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void uploadFile(Uri fileUri) {
+    private void uploadFile(final Uri fileUri) {
         if (originChatDataDto == null) {
             return;
         }
