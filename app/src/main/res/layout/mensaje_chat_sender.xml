@@ -73,7 +73,7 @@
             app:srcCompat="@drawable/ic_round_done_24" />
 
         <TextView
-            android:id="@+id/text_hora_envio_mensaje_conversacion"
+            android:id="@+id/text_hora_envio_documento_conversacion"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"

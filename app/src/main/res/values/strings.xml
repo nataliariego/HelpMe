@@ -119,5 +119,9 @@
     <string name="button_call_alumno_chat">Llamar al alumno del chat</string>
     <string name="sin_conexion_titulo">Sin conexión</string>
     <string name="sin_conexion_descripcion">No es posible conectarse con el servidor, revisa los ajustes de conexión de tu dispositivo. Perdona las molestias</string>
+    <string name="placeholder_mime_message">pdf</string>
+    <string name="placeholder_message_document_name">nombre_documento.pdf</string>
+    <string name="placeholder_document_message_metadata">1 página · 12kB</string>
+    <string name="contentDescripcion_mime_type">Tipo de contenido del documento</string>
 
 </resources>
