@@ -152,6 +152,21 @@
         app:srcCompat="@drawable/ic_baseline_send_24" />
 
     <ImageButton
+        android:id="@+id/button_parar_grabacion_audio"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:background="@drawable/button_rounded_corners_primary"
+        android:contentDescription="@string/enviar_mensaje"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.955"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.878"
+        app:srcCompat="@drawable/button_rounded_corners_red" />
+
+    <ImageButton
         android:id="@+id/button_camera_chat"
         style="@style/Widget.AppCompat.ImageButton"
         android:layout_width="48dp"

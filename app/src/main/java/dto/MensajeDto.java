@@ -19,4 +19,10 @@ public class MensajeDto {
 
     @PropertyName("type")
     public String mimeType;
+
+
+    public String prettyType; // Ej: word, pdf, etc.
+    public String filename;
+    public String prettySize; // Ej. 14KB, 1MB, etc.
+
 }

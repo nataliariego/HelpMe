@@ -5,7 +5,6 @@ import static chat.ChatService.DEFAULT_MIME_IMG;
 
 import android.app.DownloadManager;
 import android.content.Context;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -24,13 +23,13 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.R;
+import com.example.helpme.model.Mensaje;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.StorageMetadata;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -165,8 +164,6 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
             txMetadatosDocumento = itemView.findViewById(R.id.text_message_document_metadata);
             btDescargarDocumento = itemView.findViewById(R.id.img_download_document_message);
             txHoraEnvioDocumento = itemView.findViewById(R.id.text_hora_envio_documento_conversacion);
-
-
         }
 
 
@@ -226,9 +223,9 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
 
                             Map<String, Object> documentPayload = new HashMap<>();
 
-                            documentPayload.put("size", StringUtils.prettyBytesSize(storageMetadata.getSizeBytes()));
-                            documentPayload.put("name", StringUtils.shortWordMaxCharacters(storageMetadata.getName(), 20));
-                            documentPayload.put("type", StringUtils.extractSubtypeFromContentType(storageMetadata.getContentType()));
+                            documentPayload.put(Mensaje.FILE_SIZE, StringUtils.prettyBytesSize(storageMetadata.getSizeBytes()));
+                            documentPayload.put(Mensaje.FILE_NAME, StringUtils.shortWordMaxCharacters(storageMetadata.getName(), 20));
+                            documentPayload.put(Mensaje.MESSAGE_TYPE, String.valueOf(storageMetadata.getContentType()));
 
                             callback.callback(documentPayload);
                         }
@@ -257,7 +254,7 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
                         imgContenidoImagen.setVisibility(View.VISIBLE);
                     }
                 });
-            } else if (msg.mimeType.contains("application")  ||
+            } else if (msg.mimeType.contains("application") ||
                     msg.mimeType.equals("text/plain")) {
 
                 loadDocument(msg.contenido, new DocumentMessageCallback() {
@@ -265,16 +262,16 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
                     public void callback(Map<String, Object> payload) {
                         Log.d(TAG, String.valueOf(payload));
 
-                        if (txMimeDocumento != null && payload.get("type") != null) {
-                            txMimeDocumento.setText(payload.get("type").toString());
-                        }
+                        String docMime = msg.mimeType;
+                        String docType = msg.prettyType;
+                        String docSize = msg.prettySize;
+                        String docFilename = msg.filename;
 
-                        if (txNombreDocumento != null && payload.get("name") != null) {
-                            txNombreDocumento.setText(payload.get("name").toString());
-                        }
+                        txMimeDocumento.setText(docType != null ? docType : docMime);
+                        txNombreDocumento.setText(StringUtils.shortWordMaxCharacters(docFilename, 10));
 
-                        if (txMetadatosDocumento != null && payload.get("size") != null) {
-                            txMetadatosDocumento.setText(payload.get("size").toString());
+                        if (docSize != null) {
+                            txMetadatosDocumento.setText(docSize);
                         }
 
                         if (txHoraEnvioDocumento != null) {

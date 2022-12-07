@@ -33,7 +33,9 @@ import java.util.UUID;
 
 import dto.ChatSummaryDto;
 import dto.MensajeDto;
+import util.ContentTypeUtils;
 import util.DateUtils;
+import util.StringUtils;
 
 public class ChatService {
 
@@ -168,7 +170,7 @@ public class ChatService {
      * @param fileUri
      * @param summary
      */
-    public void uploadFile(final Uri fileUri, final ChatSummaryDto summary, final MensajeCallback callback) {
+    public void uploadFile(final Uri fileUri, final ChatSummaryDto summary, final String filename, final MensajeCallback callback) {
         //String refPath = "chats/" + summary.chatId + fileUri.getLastPathSegment();
         String docUid = UUID.randomUUID().toString();
         StorageReference uploadRef = chatStorageRef.child(summary.chatId).child(docUid);
@@ -186,12 +188,25 @@ public class ChatService {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                 Map<String, Object> payload = new HashMap<>();
 
+                String contentType = taskSnapshot.getMetadata().getContentType();
+
                 payload.put(Mensaje.SENDER, userInSession.getUid());
                 payload.put(Mensaje.RECEIVER, summary.receiverUid);
-                payload.put(Mensaje.CONTENT, chatStorageRef.child(docUid).getPath());
+                payload.put(Mensaje.CONTENT, "/chats/" + summary.chatId + "/" + docUid);
 
                 payload.put(Mensaje.MESSAGE_TYPE, taskSnapshot.getMetadata().getContentType());
+                payload.put(Mensaje.FILE_SIZE, StringUtils.prettyBytesSize(taskSnapshot.getTotalByteCount()));
+                payload.put(Mensaje.FILE_NAME, filename);
 
+                /* Ejemplo: application/msword --> word */
+                if (ContentTypeUtils.getAvailableTypes().containsKey(contentType)) {
+                    payload.put(Mensaje.FILE_PRETTY_TYPE, ContentTypeUtils.getAvailableTypes().get(contentType));
+                }
+
+                /* Metadatos para los PDF */
+//                if (taskSnapshot.getMetadata().getContentType().equals("application/pdf")) {
+//                    Uri tempUri = taskSnapshot.getUploadSessionUri();
+//                }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     payload.put(Mensaje.CREATED_AT, DateUtils.getNowWithPredefinedFormat());
@@ -227,7 +242,6 @@ public class ChatService {
         }
 
         Comparator<MensajeDto> msgComparator = Comparator.comparing(msg -> DateUtils.convertStringToLocalDateTime(msg.createdAt));
-
         messages.sort(msgComparator);
 
 
