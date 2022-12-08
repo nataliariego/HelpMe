@@ -82,7 +82,7 @@ public class Authentication {
                             callback.onSuccess();
                             Log.d(TAG, "login:success");
                         } else {
-                            Log.w(TAG, "login:failure", task.getException());
+                            Log.w(TAG, "login:failure. ", task.getException());
                         }
                     }
                 })

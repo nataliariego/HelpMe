@@ -131,7 +131,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         btVerAsignaturasDominadasSeleccionadas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 AsignaturasDominadasBottomSheetDialogFragment fragment = AsignaturasDominadasBottomSheetDialogFragment.newInstance(asignaturasDominadasSeleccionadas);
                 fragment.show(getSupportFragmentManager(), fragment.getTag());
 

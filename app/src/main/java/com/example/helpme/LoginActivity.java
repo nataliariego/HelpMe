@@ -72,8 +72,8 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
      * Inicio de sesión.
      */
     private void signIn() {
-        String email = txEmail.getText().toString();
-        String pass = txPassword.getText().toString();
+        String email = txEmail.getText().toString().trim().toLowerCase();
+        String pass = txPassword.getText().toString().trim();
         Authentication.getInstance().signIn(email, pass, new LoginCallback() {
             @Override
             public void onSuccess() {
@@ -83,6 +83,9 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
             @Override
             public void onFailure() {
                 Toast.makeText(getApplicationContext(), "Las credenciales no son correctas", Toast.LENGTH_SHORT).show();
+                txEmail.setText("");
+                txPassword.setText("");
+                txEmail.requestFocus();
             }
         });
     }
@@ -138,6 +141,9 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
         txEmail = (TextInputEditText) findViewById(R.id.text_email_login);
         txPassword = (TextInputEditText) findViewById(R.id.text_password_login);
         btCreateAnAccount = (Button) findViewById(R.id.button_create_account_login);
+
+        /* Iniciar foco en el campo Email */
+        txEmail.requestFocus();
     }
 
     @Override
