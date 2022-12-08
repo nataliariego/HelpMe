@@ -73,14 +73,13 @@ public class Authentication {
      * @param password Contraseña
      */
     public void signIn(final String email, final String password,
-                       LoginActivity.LoginCallback callback,
-                       LoginActivity.LoginCallback failureCallback) {
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                       LoginActivity.LoginCallback callback) {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email.trim(), password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            callback.callback();
+                            callback.onSuccess();
                             Log.d(TAG, "login:success");
                         } else {
                             Log.w(TAG, "login:failure", task.getException());
@@ -90,7 +89,7 @@ public class Authentication {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        failureCallback.callback();
+                        callback.onFailure();
                     }
                 });
     }

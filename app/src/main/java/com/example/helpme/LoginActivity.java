@@ -77,13 +77,12 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
         String pass = txPassword.getText().toString();
         Authentication.getInstance().signIn(email, pass, new LoginCallback() {
             @Override
-            public void callback() {
+            public void onSuccess() {
                 redirectToHomeView();
             }
-        }, new LoginCallback() {
+
             @Override
-            public void callback() {
-                // Failure
+            public void onFailure() {
                 Toast.makeText(getApplicationContext(), "Las credenciales no son correctas", Toast.LENGTH_SHORT).show();
             }
         });
@@ -106,25 +105,29 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
     private boolean validateFields() {
         boolean isValid = true;
 
-        if (!FormValidator.isNotEmpty(txEmail.getText().toString())) {
+        /* Email no vacío */
+        if (!FormValidator.isNotEmpty(txEmail.getText().toString().trim())) {
             txEmail.setError(getText(R.string.email_empty));
             isValid = false;
         }
 
+        /* Contraseña no vacía */
         if (!FormValidator.isNotEmpty(txPassword.getText().toString())) {
             txPassword.setError(getText(R.string.password_empty));
             isValid = false;
         }
 
-        if (!FormValidator.isEmailValid(txEmail.getText().toString())) {
+        /* Email válido */
+        if (FormValidator.isEmailValid(txEmail.getText().toString())) {
             txEmail.setError(getText(R.string.email_invalid));
             isValid = false;
         }
 
-/*        if (!FormValidator.isPasswordValid(txPassword.getText().toString())) {
+        /* Contraseña válida */
+        if (!FormValidator.isPasswordValid(txPassword.getText().toString())) {
             txPassword.setError(getText(R.string.password_invalid));
             isValid = false;
-        }*/
+        }
 
         return isValid;
     }
@@ -133,9 +136,7 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
      * Redireccionamiento a la página de crear una cuenta.
      */
     private void redirectToCreateAnAccountView() {
-        Intent intent = new Intent(LoginActivity.this, CreateAccountActivity.class);
-
-        startActivity(intent);
+        startActivity(new Intent(LoginActivity.this, CreateAccountActivity.class));
     }
 
     /**
@@ -171,6 +172,8 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
     }
 
     public interface LoginCallback {
-        void callback();
+        void onSuccess();
+
+        void onFailure();
     }
 }
