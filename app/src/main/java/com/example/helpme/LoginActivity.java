@@ -28,7 +28,6 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
     private Button btLogin;
     private Button btCreateAnAccount;
 
-
     private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
@@ -103,33 +102,25 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
      * @return true si todos los campos son válidos y false en caso contrario.
      */
     private boolean validateFields() {
-        boolean isValid = true;
-
         /* Email no vacío */
         if (!FormValidator.isNotEmpty(txEmail.getText().toString().trim())) {
             txEmail.setError(getText(R.string.email_empty));
-            isValid = false;
+            return false;
         }
 
         /* Contraseña no vacía */
         if (!FormValidator.isNotEmpty(txPassword.getText().toString())) {
             txPassword.setError(getText(R.string.password_empty));
-            isValid = false;
+           return false;
         }
 
         /* Email válido */
         if (FormValidator.isEmailValid(txEmail.getText().toString())) {
             txEmail.setError(getText(R.string.email_invalid));
-            isValid = false;
+            return false;
         }
 
-        /* Contraseña válida */
-        if (!FormValidator.isPasswordValid(txPassword.getText().toString())) {
-            txPassword.setError(getText(R.string.password_invalid));
-            isValid = false;
-        }
-
-        return isValid;
+        return true;
     }
 
     /**

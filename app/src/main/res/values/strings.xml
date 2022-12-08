@@ -123,5 +123,6 @@
     <string name="placeholder_message_document_name">nombre_documento.pdf</string>
     <string name="placeholder_document_message_metadata">1 página · 12kB</string>
     <string name="contentDescripcion_mime_type">Tipo de contenido del documento</string>
+    <string name="hit_password">Contraseña</string>
 
 </resources>
