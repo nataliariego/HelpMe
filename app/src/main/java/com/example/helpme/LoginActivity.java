@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
         }
 
         /* Email válido */
-        if (FormValidator.isEmailValid(txEmail.getText().toString())) {
+        if (!FormValidator.isEmailValid(txEmail.getText().toString().trim())) {
             txEmail.setError(getText(R.string.email_invalid));
             return false;
         }
