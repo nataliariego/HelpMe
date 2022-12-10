@@ -15,6 +15,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import auth.Authentication;
+import chat.AlumnoStatus;
+import chat.ChatService;
 
 public class AjustesCuentaActivity extends AppCompatActivity {
 
@@ -41,16 +43,21 @@ public class AjustesCuentaActivity extends AppCompatActivity {
         btDeleteAccount = (Button) findViewById(R.id.button_eliminar_cuenta);
         btResetPasswordLink = (Button) findViewById(R.id.button_reset_password);
         btVerifyAccount = (Button) findViewById(R.id.button_verificar_email);
-        layoutVerificacionEmailLabel = ( LinearLayout) findViewById(R.id.layout_correo_verificado_ajustes);
+        layoutVerificacionEmailLabel = (LinearLayout) findViewById(R.id.layout_correo_verificado_ajustes);
 
         /* Cerrar sesión */
         btLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Authentication.getInstance().signOut();
-
-                redirectToLogin();
-                finish();
+                /* Cambiar estado a OFFLINE */
+                ChatService.getInstance().changeCurrentUserStatus(AlumnoStatus.OFFLINE.toString().toLowerCase(), new ChatService.AlumnoStatusCallback() {
+                    @Override
+                    public void callback() {
+                        Authentication.getInstance().signOut();
+                        redirectToLogin();
+                        finish();
+                    }
+                });
             }
         });
 
@@ -89,7 +96,7 @@ public class AjustesCuentaActivity extends AppCompatActivity {
         });
 
         /* Verificar cuenta */
-        if(FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()){
+        if (FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
             layoutVerificacionEmailLabel.setVisibility(View.VISIBLE);
             btVerifyAccount.setVisibility(View.INVISIBLE);
         }

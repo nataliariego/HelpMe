@@ -71,11 +71,11 @@
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
 
-    <!-- Messages Preferences -->
+    <!-- Messages AppCustomPreferences -->
     <string name="signature_title">Your signature</string>
     <string name="reply_title">Default reply action</string>
 
-    <!-- Sync Preferences -->
+    <!-- Sync AppCustomPreferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
@@ -124,5 +124,6 @@
     <string name="placeholder_document_message_metadata">1 página · 12kB</string>
     <string name="contentDescripcion_mime_type">Tipo de contenido del documento</string>
     <string name="hit_password">Contraseña</string>
+    <string name="chat_alumno_receiver_status">online</string>
 
 </resources>

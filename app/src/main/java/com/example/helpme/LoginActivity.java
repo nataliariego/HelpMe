@@ -13,6 +13,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import auth.Authentication;
+import chat.AlumnoStatus;
+import chat.ChatService;
 import network.NetworkStatusChecker;
 import network.NetworkStatusHandler;
 import util.FormValidator;
@@ -62,12 +64,6 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
         checkConnection();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        checkConnection();
-    }
-
     /**
      * Inicio de sesión.
      */
@@ -77,7 +73,13 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
         Authentication.getInstance().signIn(email, pass, new LoginCallback() {
             @Override
             public void onSuccess() {
-                redirectToHomeView();
+                /* Cambiar estado a ONLINE */
+                ChatService.getInstance().changeCurrentUserStatus(AlumnoStatus.ONLINE.toString().toLowerCase(), new ChatService.AlumnoStatusCallback() {
+                    @Override
+                    public void callback() {
+                        redirectToHomeView();
+                    }
+                });
             }
 
             @Override
@@ -114,7 +116,7 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
         /* Contraseña no vacía */
         if (!FormValidator.isNotEmpty(txPassword.getText().toString())) {
             txPassword.setError(getText(R.string.password_empty));
-           return false;
+            return false;
         }
 
         /* Email válido */

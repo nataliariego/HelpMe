@@ -11,15 +11,20 @@ import java.util.List;
 import java.util.Map;
 
 public class Alumno implements Parcelable {
-    //    Nombre de los campos de la base de datos
+    /* Colección de referencia en Realtime database */
+    public static final String REFERENCE = "alumnos";
+    public static final String STATUS = "status";
+    /* ---- */
+
+    // Colección en FireStore
     public static final String COLLECTION = "ALUMNO";
+
     public static final String NOMBRE = "nombre";
     public static final String UO = "uo";
     public static final String URL_FOTO = "url_foto";
     public static final String EMAIL = "email";
     public static final String ASIGNATURAS_DOMINADAS = "asignaturasDominadas";
     public static final String USER_ID = "user_id";
-
 
     private String id;
     private String nombre;

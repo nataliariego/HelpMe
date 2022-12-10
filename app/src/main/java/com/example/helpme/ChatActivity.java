@@ -16,8 +16,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.PersistableBundle;
 import android.provider.OpenableColumns;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -34,8 +35,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Chat;
 import com.example.helpme.model.Mensaje;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -53,7 +56,9 @@ import java.util.List;
 import java.util.Map;
 
 import adapter.MensajeAdapter;
+import chat.AlumnoStatus;
 import chat.ChatService;
+import chat.MensajeStatus;
 import dto.AlumnoDto;
 import dto.ChatSummaryDto;
 import dto.MensajeDto;
@@ -74,14 +79,12 @@ public class ChatActivity extends AppCompatActivity {
 
     private ImageView imgPerfilUsuarioReceiver;
     private TextView txNombreUsuarioReceiver;
+    private TextView txStatusUsuarioReceiver;
 
     private ImageButton btSubirArchivoChat;
     private ImageButton btVolverListaChats;
     private ImageButton btLlamarReceiver;
     private ImageButton btCamera;
-
-    // TODO. Eliminar - temp
-    private ImageButton btPararGrabacion;
 
     private RecyclerView recyclerConversacionChat;
 
@@ -110,17 +113,24 @@ public class ChatActivity extends AppCompatActivity {
 
     private String audioOutputFileName = null;
 
+    /* Online, Offline, Escribiendo...*/
+    private static final String ONLINE_STATUS = AlumnoStatus.ONLINE.toString().toLowerCase();
+    private static final String OFFLINE_STATUS = AlumnoStatus.OFFLINE.toString().toLowerCase();
+    private static final String TYPING_STATUS = AlumnoStatus.ESCRIBIENDO.toString().toLowerCase();
+    private String status = ONLINE_STATUS;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
 
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null && userInSession != null) {
             Bundle info = getIntent().getExtras();
             processIntentExtras(info);
 
         } else {
+            Toast.makeText(this, "Inicia sesión", Toast.LENGTH_SHORT).show();
 
             //AlumnoDto alumno = (AlumnoDto) savedInstanceState.getSerializable(ListadoAlumnosChatActivity.ALUMNO_SELECCIONADO_CHAT);
             //Log.i(TAG, "ALUMNO-DTO-SAVED-INSTANCE-NN: " + alumno.toString());
@@ -136,20 +146,26 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.i(TAG, "Enviando mensaje...");
 
-                if(grabandoAudio == false){
-                    startRecording();
-                }
+//                if (grabandoAudio == false) {
+//                    startRecording();
+//                }
 
-//                MensajeDto newMsgDto = new MensajeDto();
-//                newMsgDto.contenido = txMensajeAEnviar.getText().toString();
-//                newMsgDto.createdAt = DateUtils.getNowWithPredefinedFormat();
-//
-//                ChatService.getInstance().sendMessage(newMsgDto, originChatDataDto, new ChatService.MensajeCallback() {
-//                    @Override
-//                    public void callback() {
-//                        txMensajeAEnviar.setText("");
-//                    }
-//                });
+                MensajeDto newMsgDto = new MensajeDto();
+                newMsgDto.contenido = txMensajeAEnviar.getText().toString();
+                newMsgDto.createdAt = DateUtils.getNowWithPredefinedFormat();
+                newMsgDto.status = MensajeStatus.ENVIADO;
+
+                Log.d(TAG, originChatDataDto.receiverUid + " " + userInSession.getUid());
+
+                if (originChatDataDto != null) {
+                    ChatService.getInstance().sendMessage(newMsgDto, originChatDataDto, userInSession.getUid(), new ChatService.MensajeCallback() {
+                        @Override
+                        public void callback() {
+                            txMensajeAEnviar.setText("");
+                            recyclerConversacionChat.smoothScrollToPosition(View.FOCUS_DOWN);
+                        }
+                    });
+                }
             }
         });
 
@@ -182,15 +198,6 @@ public class ChatActivity extends AppCompatActivity {
 //                return false;
 //            }
 //        });
-
-        btPararGrabacion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(grabandoAudio == true){
-                    detenerGrabacionAudio();
-                }
-            }
-        });
 
         /* Accion seleccionar archivo para enviar */
         btSubirArchivoChat.setOnClickListener(new View.OnClickListener() {
@@ -258,6 +265,45 @@ public class ChatActivity extends AppCompatActivity {
 
         recyclerConversacionChat.setAdapter(msgAdapter);
 
+        actualizarEstadoAlumnoReceiver();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    /**
+     * Actualiza en tiempo real el estado del alumnoB (Otro usuario) del chat.
+     */
+    private void actualizarEstadoAlumnoReceiver() {
+        dbReference.child(Alumno.REFERENCE)
+                .child(originChatDataDto.receiverUid)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            Map<String, Object> resData = ((HashMap<String, Object>) snapshot.getValue());
+                            String remoteStatus = resData.get(Alumno.STATUS).toString();
+
+                            if (remoteStatus.equals(ONLINE_STATUS)) {
+                                txStatusUsuarioReceiver.setText("online");
+
+                            } else if (remoteStatus.equals(TYPING_STATUS)) {
+                                txStatusUsuarioReceiver.setText("escribiendo...");
+
+                            } else {
+                                txStatusUsuarioReceiver.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e(TAG, "ACTUALIZAR ESTADO ALUMNO-B. " + error.getMessage());
+                    }
+                });
     }
 
     @Override
@@ -352,7 +398,7 @@ public class ChatActivity extends AppCompatActivity {
             player = null;
         }
 
-        if(grabandoAudio){
+        if (grabandoAudio) {
             stopRecording();
         }
     }
@@ -435,7 +481,7 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         originChatDataDto = (ChatSummaryDto) bundle.get(CHAT_SELECCIONADO);
-        Log.d(TAG, "CHAT_ENTRADA: " + originChatDataDto.chatId + " " + originChatDataDto.receiverProfileImage);
+
     }
 
     /**
@@ -480,6 +526,40 @@ public class ChatActivity extends AppCompatActivity {
                                 newMessage.mimeType = resData.get(Mensaje.MESSAGE_TYPE).toString();
                                 newMessage.userUid = resData.get(Mensaje.SENDER).toString();
 
+                                Object status = resData.get(Mensaje.STATUS);
+
+                                if (status != null) {
+                                    MensajeStatus msgStatus = MensajeStatus.valueOf(status.toString());
+
+                                    /* Si el mensaje no está leido, cambiar su estado a LEIDO */
+                                    if (msgStatus.equals(MensajeStatus.RECIBIDO)
+                                            || msgStatus.equals(MensajeStatus.ENVIADO)
+                                            && resData.get(Mensaje.SENDER) == userInSession.getUid()) {
+
+                                        Map<String, Object> statusPayload = new HashMap<>();
+                                        statusPayload.put(Mensaje.STATUS, MensajeStatus.LEIDO);
+
+                                        dbReference.child(Chat.REFERENCE)
+                                                .child(originChatDataDto.chatId)
+                                                .child(Mensaje.REFERENCE)
+                                                .child(ds.getKey())
+                                                .updateChildren(statusPayload).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void unused) {
+                                                        newMessage.status = MensajeStatus.LEIDO;
+                                                    }
+                                                });
+                                    }
+
+                                    newMessage.status = msgStatus;
+                                } else {
+                                    newMessage.status = MensajeStatus.LEIDO;
+                                }
+
+                                newMessage.status = resData.get(Mensaje.STATUS) != null
+                                        ? MensajeStatus.valueOf(resData.get(Mensaje.STATUS).toString())
+                                        : MensajeStatus.LEIDO;
+
 
                                 if (resData.get(Mensaje.FILE_PRETTY_TYPE) != null) {
                                     newMessage.prettyType = resData.get(Mensaje.FILE_PRETTY_TYPE).toString();
@@ -495,9 +575,11 @@ public class ChatActivity extends AppCompatActivity {
 
                                 chatMessages.add(newMessage);
 
+
                             }
                             msgAdapter.sortMessages();
                             msgAdapter.notifyDataSetChanged();
+                            recyclerConversacionChat.smoothScrollToPosition(View.FOCUS_DOWN);
                         }
                     }
 
@@ -517,19 +599,60 @@ public class ChatActivity extends AppCompatActivity {
         recyclerConversacionChat = (RecyclerView) findViewById(R.id.recycler_conversacion_chat);
         imgPerfilUsuarioReceiver = (ImageView) findViewById(R.id.img_receiver_user_chat);
         txNombreUsuarioReceiver = (TextView) findViewById(R.id.text_user_receiver_chat);
+        txStatusUsuarioReceiver = (TextView) findViewById(R.id.text_user_receiver_status);
         btSubirArchivoChat = (ImageButton) findViewById(R.id.button_upload_file_chat);
         btVolverListaChats = (ImageButton) findViewById(R.id.button_back_to_chat_list);
         btLlamarReceiver = (ImageButton) findViewById(R.id.button_call_alumno_receiver);
         btCamera = (ImageButton) findViewById(R.id.button_camera_chat);
 
-        btPararGrabacion = findViewById(R.id.button_parar_grabacion_audio);
-
         /* Completar dinámicamente la imagen de perfil y el nombre del alumno receiver */
         txNombreUsuarioReceiver.setText(alumnoB.nombre);
         Picasso.get().load(alumnoB.urlFoto).into(imgPerfilUsuarioReceiver);
 
+
+        txMensajeAEnviar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (status.equals(ONLINE_STATUS)) {
+                    ChatService.getInstance().changeCurrentUserStatus(AlumnoStatus.ESCRIBIENDO.toString().toLowerCase(), new ChatService.AlumnoStatusCallback() {
+                        @Override
+                        public void callback() {
+                            status = TYPING_STATUS;
+                        }
+                    });
+                }
+            }
+        });
+
+        txMensajeAEnviar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (status.equals(TYPING_STATUS) && txMensajeAEnviar.getText().length() > 0) {
+                        ChatService.getInstance().changeCurrentUserStatus(AlumnoStatus.ONLINE.toString().toLowerCase(), new ChatService.AlumnoStatusCallback() {
+                            @Override
+                            public void callback() {
+                                status = ONLINE_STATUS;
+                            }
+                        });
+
+                    }
+                }
+            }
+        });
     }
 
+    // TODO: Completar
     private void iniciarGrabacionAudio() {
         if (!grabandoAudio) {
             startRecording();

@@ -17,6 +17,7 @@ import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Chat;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,6 +34,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import adapter.AlumnoChatAdapter;
+import chat.AlumnoStatus;
 import chat.ChatService;
 import dto.AlumnoDto;
 import dto.ChatSummaryDto;
@@ -139,11 +141,36 @@ public class ListadoAlumnosChatActivity extends AppCompatActivity {
                                                 summary.receiverProfileImage = doc.get(Alumno.URL_FOTO).toString();
                                             }
 
-                                            summary.receiverUid = doc.getId();
+                                            if (!dbReference.child(Alumno.REFERENCE).child(uidAlumnoB).get().isSuccessful()) {
 
-                                            Intent intent = new Intent(ListadoAlumnosChatActivity.this, ChatActivity.class);
-                                            intent.putExtra(CHAT_SELECCIONADO, summary);
-                                            startActivity(intent);
+                                                Map<String, Object> payloadAlumno = new HashMap<>();
+                                                payloadAlumno.put(Alumno.NOMBRE, doc.get(Alumno.NOMBRE).toString());
+                                                payloadAlumno.put(Alumno.STATUS, AlumnoStatus.OFFLINE.toString().toLowerCase());
+
+                                                dbReference.child(Alumno.REFERENCE).child(uidAlumnoB).updateChildren(payloadAlumno).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void unused) {
+                                                                summary.receiverUid = doc.getId();
+
+                                                                Intent intent = new Intent(ListadoAlumnosChatActivity.this, ChatActivity.class);
+                                                                intent.putExtra(CHAT_SELECCIONADO, summary);
+                                                                startActivity(intent);
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Log.e(TAG, "No se ha podido registrar el alumno. " + e.getMessage());
+                                                                dbReference.child(Chat.REFERENCE).child(chatUUID).removeValue();
+                                                            }
+                                                        });
+                                            }else{
+                                                // Alumno ya registrado en la base de datos en tiempo real.
+
+                                                Intent intent = new Intent(ListadoAlumnosChatActivity.this, ChatActivity.class);
+                                                intent.putExtra(CHAT_SELECCIONADO, summary);
+                                                startActivity(intent);
+                                            }
                                         }
                                     }
                                 }

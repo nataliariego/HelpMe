@@ -20,7 +20,7 @@
         android:id="@+id/img_imagen_mensaje"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
+        android:layout_gravity="end"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         tools:srcCompat="@tools:sample/avatars" />
@@ -29,6 +29,7 @@
         android:id="@+id/layout_wrapper_contenido_mensaje"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="end"
         android:layout_marginBottom="5dp">
 
         <TextView
@@ -37,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/message_background_rounded"
-            android:backgroundTint="@color/secondary"
+            android:backgroundTint="@color/primary"
             android:fontFamily="@font/roboto"
             android:gravity="center_vertical"
             android:minHeight="48dp"
@@ -47,9 +48,8 @@
             android:paddingBottom="5dp"
             android:text="@string/mensaje_contenido_prueba"
             android:textAlignment="gravity"
-            android:textColor="@color/primary"
+            android:textColor="@color/white"
             android:textSize="14sp"
-            app:autoSizeTextType="none"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,14 +60,13 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
+        android:layout_gravity="right|end"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/img_estado_envio_mensaje"
             android:layout_width="32dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:contentDescription="@string/estado_envio_mensaje_chat"
             android:visibility="gone"
             app:srcCompat="@drawable/ic_round_done_24" />
@@ -78,7 +77,6 @@
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
-            android:layout_weight="1"
             android:fontFamily="@font/roboto"
             android:text="@string/hora_envio_mensaje_default"
             android:textAlignment="textStart"

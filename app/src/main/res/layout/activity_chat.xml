@@ -39,15 +39,28 @@
             android:id="@+id/img_receiver_user_chat"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
             android:windowSoftInputMode="stateVisible|adjustResize"
             app:srcCompat="@drawable/button_rounded_corners_primary" />
 
-        <TextView
-            android:id="@+id/text_user_receiver_chat"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_user_receiver_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_nombre_completo" />
+
+            <TextView
+                android:id="@+id/text_user_receiver_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/chat_alumno_receiver_status" />
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/layout_wrapper_phone_toolbar_chat"
@@ -60,7 +73,7 @@
                 style="@style/Widget.AppCompat.ImageButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_gravity="end"
                 android:backgroundTint="@color/transparent"
                 android:contentDescription="@string/button_call_alumno_chat"
@@ -88,6 +101,7 @@
         android:hint="@string/hint_mensaje_chat"
         android:inputType="textPersonName"
         android:paddingStart="25dp"
+        android:paddingEnd="25dp"
         android:singleLine="false"
         android:textAllCaps="false"
         android:textColor="@color/primary"
@@ -150,21 +164,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.976"
         app:srcCompat="@drawable/ic_baseline_send_24" />
-
-    <ImageButton
-        android:id="@+id/button_parar_grabacion_audio"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:background="@drawable/button_rounded_corners_primary"
-        android:contentDescription="@string/enviar_mensaje"
-        android:elevation="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.955"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.878"
-        app:srcCompat="@drawable/button_rounded_corners_red" />
 
     <ImageButton
         android:id="@+id/button_camera_chat"

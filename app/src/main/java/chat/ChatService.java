@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Chat;
 import com.example.helpme.model.Mensaje;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import dto.ChatSummaryDto;
 import dto.MensajeDto;
@@ -83,30 +85,42 @@ public class ChatService {
      * @param msg
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void sendMessage(final MensajeDto msg, final ChatSummaryDto summary, MensajeCallback callback) {
+    public void sendMessage(final MensajeDto msg, final ChatSummaryDto summary, final String userInSessionUid, MensajeCallback callback) {
         String msg_id = UUID.randomUUID().toString();
 
         Map<String, Object> payload = new HashMap<>();
 
-        payload.put(Mensaje.SENDER, userInSession.getUid());
+        if (userInSessionUid == null
+                || userInSessionUid.equals(summary.receiverUid)) {
+            Log.e(TAG, "El mensaje no se puede enviar. " + userInSession.getUid() + " " + summary.receiverUid);
+            return;
+        }
+
+        payload.put(Mensaje.SENDER, userInSessionUid);
         payload.put(Mensaje.RECEIVER, summary.receiverUid);
         payload.put(Mensaje.CONTENT, msg.contenido);
-        // TODO: Cambiar a tipo enviado
+        /* El estado del mensaje pasa a : ENVIADO. */
+        payload.put(Mensaje.STATUS, msg.status);
         payload.put(Mensaje.MESSAGE_TYPE, Mensaje.DEFAULT_TYPE);
         payload.put(Mensaje.CREATED_AT, msg.createdAt);
 
-        db.getReference().child(Chat.REFERENCE).child(summary.chatId).child(Mensaje.REFERENCE).child(msg_id).updateChildren(payload).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Log.i(TAG, "MENSAJE ENVIADO");
-                callback.callback();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.i(TAG, "ERROR AL ENVIAR EL MENSAJE");
-            }
-        });
+        db.getReference().child(Chat.REFERENCE)
+                .child(summary.chatId)
+                .child(Mensaje.REFERENCE)
+                .child(msg_id)
+                .updateChildren(payload)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        callback.callback();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i(TAG, "ERROR AL ENVIAR EL MENSAJE");
+                    }
+                });
     }
 
     public void uploadImage(ImageView imageView, ChatSummaryDto summary, MensajeCallback callback) {
@@ -248,6 +262,60 @@ public class ChatService {
         return messages;
     }
 
+    /**
+     * Obtiene los mensajes del otro alumno (Alumno B) del chat.
+     *
+     * @param messages Lista de todos los mensajes.
+     * @return
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public List<MensajeDto> getReceiverMessages(final List<MensajeDto> messages) {
+        return messages.stream().filter(m -> m.userUid != userInSession.getUid()).collect(Collectors.toList());
+    }
+
+    /**
+     * Cambia el estado en el chat del alumno en sesión.
+     *
+     * @param newStatus Nuevo estado de conexión.
+     * @see #changeCurrentUserStatus(String, AlumnoStatusCallback)
+     */
+    public void changeCurrentUserStatus(final String newStatus, AlumnoStatusCallback callback) {
+        changeAlumnoStatus(userInSession.getUid(), newStatus, callback);
+    }
+
+    /**
+     * Cambia el estado en el chat del alumno indicado.
+     * Si el alumno se logea, su estado cambiará a ONLINE.
+     *
+     * @param alumnoUid Uid del alumno.
+     * @param newStatus Nuevo estado de conexión del alumno.
+     */
+    public void changeAlumnoStatus(final String alumnoUid, final String newStatus, AlumnoStatusCallback callback) {
+        if (alumnoUid == null || newStatus == null) {
+            return;
+        }
+
+        Map<String, Object> alumnoPayload = new HashMap<>();
+        alumnoPayload.put(Alumno.STATUS, newStatus);
+
+        db.getReference()
+                .child(Alumno.REFERENCE)
+                .child(alumnoUid)
+                .updateChildren(alumnoPayload).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d(TAG, "Alumno en línea !");
+                        callback.callback();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                });
+    }
+
     public static ChatService getInstance() {
         if (instance == null) {
             instance = new ChatService();
@@ -259,4 +327,7 @@ public class ChatService {
         void callback();
     }
 
+    public interface AlumnoStatusCallback {
+        void callback();
+    }
 }

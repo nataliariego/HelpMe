@@ -5,6 +5,8 @@ import com.google.firebase.database.PropertyName;
 
 import java.time.LocalDateTime;
 
+import chat.MensajeStatus;
+
 public class MensajeDto {
     public String contenido;
 
@@ -20,6 +22,7 @@ public class MensajeDto {
     @PropertyName("type")
     public String mimeType;
 
+    public MensajeStatus status;
 
     public String prettyType; // Ej: word, pdf, etc.
     public String filename;

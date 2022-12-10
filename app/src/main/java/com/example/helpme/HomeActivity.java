@@ -139,7 +139,8 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
     @Override
     protected void onStart() {
         super.onStart();
-        checkConnection();
+
+        //checkConnection();
     }
 
     /**
@@ -170,15 +171,6 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
      */
     private void redirectChatActivity() {
         startActivity(new Intent(HomeActivity.this, ListarChatsActivity.class));
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        //cargarDudas();
-        checkConnection();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

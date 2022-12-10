@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 import adapter.ChatAdapter;
+import auth.Authentication;
 import chat.ChatService;
 import dto.ChatSummaryDto;
 
@@ -78,6 +79,7 @@ public class ListarChatsActivity extends AppCompatActivity {
 
         recyclerListadoChats.setAdapter(chatAdapter);
 
+
     }
 
     private void initFields() {
@@ -118,41 +120,46 @@ public class ListarChatsActivity extends AppCompatActivity {
                                     String uidAlumnoA = ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_A).toString();
                                     String uidAlumnoB = ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_B).toString();
 
-                                    summary.receiverUid = uidAlumnoB;
 
-                                    String otherUserUid = uidAlumnoB.equals(userInSession.getUid()) ? uidAlumnoA : uidAlumnoB;
 
                                     /* Mensajes del chat */
                                     if (((HashMap<String, Object>) ds.getValue()).get(Mensaje.REFERENCE) != null) {
                                         summary.messages = (Map<String, Object>) ((HashMap<String, Object>) ds.getValue()).get(Mensaje.REFERENCE);
                                     }
 
-                                    if (userInSession.getUid().equalsIgnoreCase(uidAlumnoA) || userInSession.getUid().equalsIgnoreCase(uidAlumnoB)) {
-                                        dbStore.collection(Alumno.COLLECTION).document(otherUserUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                if (task.isSuccessful()) {
+                                    if (userInSession.getUid().equals(uidAlumnoA)
+                                            || userInSession.getUid().equals(uidAlumnoB)) {
+                                        String otherUserUid = uidAlumnoB.equals(userInSession.getUid()) ? uidAlumnoA : uidAlumnoB;
 
-                                                    DocumentSnapshot res = task.getResult();
+                                        dbStore.collection(Alumno.COLLECTION)
+                                                .document(otherUserUid)
+                                                .get()
+                                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                        if (task.isSuccessful()) {
 
-                                                    String nombre = res.get(Alumno.NOMBRE).toString();
+                                                            DocumentSnapshot res = task.getResult();
 
-                                                    String urlFoto = res.get(Alumno.URL_FOTO) != null
-                                                            ? res.get(Alumno.URL_FOTO).toString()
-                                                            : res.get("urlFoto") != null
-                                                            ? res.get("urlFoto").toString() : "https://ui-avatars.com/api/?name=" + String.join(nombre);
+                                                            String nombre = res.get(Alumno.NOMBRE).toString();
 
-                                                    summary.receiverProfileImage = urlFoto;
-                                                    summary.receiverName = nombre;
+                                                            String urlFoto = res.get(Alumno.URL_FOTO) != null
+                                                                    ? res.get(Alumno.URL_FOTO).toString()
+                                                                    : res.get("urlFoto") != null
+                                                                    ? res.get("urlFoto").toString() : "https://ui-avatars.com/api/?name=" + String.join(nombre);
 
-                                                    chats.add(summary);
+                                                            summary.receiverProfileImage = urlFoto;
+                                                            summary.receiverName = nombre;
+                                                            summary.receiverUid = otherUserUid;
 
-                                                    chatAdapter.notifyDataSetChanged();
+                                                            chats.add(summary);
 
-                                                    Log.d(TAG, nombre + " -- " + urlFoto);
-                                                }
-                                            }
-                                        });
+                                                            chatAdapter.notifyDataSetChanged();
+
+                                                            Log.d(TAG, nombre + " -- " + urlFoto);
+                                                        }
+                                                    }
+                                                });
                                     }
                                 }
                             }

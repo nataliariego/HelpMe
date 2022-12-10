@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 import chat.ChatService;
+import chat.MensajeStatus;
 import dto.MensajeDto;
 import util.DateUtils;
 import util.StringUtils;
@@ -92,11 +93,11 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
 
             /* dcha */
         } else if (viewType == RECEIVER_POSITION) {
-            selectedLayout = R.layout.mensaje_chat_receiver;
+            selectedLayout = R.layout.mensaje_chat_sender;
 
             /* izda */
         } else if (viewType == SENDER_POSITION) {
-            selectedLayout = R.layout.mensaje_chat_sender;
+            selectedLayout = R.layout.mensaje_chat_receiver;
         }
         return selectedLayout;
     }
@@ -131,7 +132,7 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
             if (mensajes.get(position).userUid.equals(userInSession.getUid())) {
                 return RECEIVER_POSITION;
             } else {
-                return SENDER_POSITION;
+                return SENDER_POSITION ;
             }
         }
     }
@@ -150,6 +151,7 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
         private TextView txMetadatosDocumento;
         private ImageButton btDescargarDocumento;
         private TextView txHoraEnvioDocumento;
+        private ImageView iconEstadoMensaje;
 
         public MensajeViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -159,11 +161,14 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
             imgContenidoImagen = itemView.findViewById(R.id.img_imagen_mensaje);
 
             /* Metadatos del documento (mensaje) */
-            txMimeDocumento = itemView.findViewById(R.id.text_mime_message);
-            txNombreDocumento = itemView.findViewById(R.id.text_message_document_name);
-            txMetadatosDocumento = itemView.findViewById(R.id.text_message_document_metadata);
-            btDescargarDocumento = itemView.findViewById(R.id.img_download_document_message);
-            txHoraEnvioDocumento = itemView.findViewById(R.id.text_hora_envio_documento_conversacion);
+            txMimeDocumento = (TextView) itemView.findViewById(R.id.text_mime_message);
+            txNombreDocumento = (TextView) itemView.findViewById(R.id.text_message_document_name);
+            txMetadatosDocumento = (TextView) itemView.findViewById(R.id.text_message_document_metadata);
+            btDescargarDocumento = (ImageButton) itemView.findViewById(R.id.img_download_document_message);
+            txHoraEnvioDocumento = (TextView) itemView.findViewById(R.id.text_hora_envio_documento_conversacion);
+            /* Ticks estado mensaje  */
+            iconEstadoMensaje = (ImageView) itemView.findViewById(R.id.img_estado_envio_mensaje);
+
         }
 
 
@@ -185,15 +190,11 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
                         @Override
                         public void onSuccess(byte[] bytes) {
                             Log.d(TAG, "Imagen cargada!");
-
-
                             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                            //imgContenidoImagen.setImageBitmap(bitmap);
-
                             imgContenidoImagen.setScaleType(ImageView.ScaleType.CENTER_CROP);
                             imgContenidoImagen.setImageBitmap(Bitmap.createScaledBitmap(bitmap, 600, 900, false));
-                            //Picasso.get().load(getImageUri(itemView.getContext(), bitmap)).into(imgContenidoImagen);
-                            //callback.callback();
+
+                            callback.callback();
                         }
 
                     }).addOnFailureListener(new OnFailureListener() {
@@ -232,13 +233,43 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
                     });
         }
 
+        /**
+         * Establece el icono del estado del mensaje en función del valor
+         * de éste.
+         *
+         * @param status Estado del mensaje
+         * @see {@link MensajeStatus}
+         */
+        private void setStatusIcon(final MensajeStatus status) {
+            Log.d(TAG, "ADAPT. STATUS = " + status.toString());
+            if (status.equals(MensajeStatus.ENVIADO)) {
+                iconEstadoMensaje.setImageResource(R.drawable.ic_round_done_24);
+                iconEstadoMensaje.setVisibility(View.VISIBLE);
+
+            } else if (status.equals(MensajeStatus.RECIBIDO)) {
+                iconEstadoMensaje.setImageResource(R.drawable.ic_icon_recibido_24);
+                iconEstadoMensaje.setVisibility(View.VISIBLE);
+
+            } else if (status.equals(MensajeStatus.LEIDO)) {
+                iconEstadoMensaje.setImageResource(R.drawable.ic_round_done_all_24);
+                iconEstadoMensaje.setVisibility(View.VISIBLE);
+
+            } else {
+                iconEstadoMensaje.setVisibility(View.GONE);
+            }
+        }
+
         @RequiresApi(api = Build.VERSION_CODES.O)
         public void bindMensaje(final MensajeDto msg) {
 
             LocalDateTime timestamp = DateUtils.convertStringToLocalDateTime(msg.createdAt);
-            String hour = String.valueOf(timestamp.getHour());
-            String minutes = String.valueOf(timestamp.getMinute());
+            String hour = String.format("%02d", timestamp.getHour());
+            String minutes = String.format("%02d", timestamp.getMinute());
             String msgDateFormatted = hour.concat(":").concat(minutes);
+
+            if (msg.status != null && iconEstadoMensaje != null) {
+                setStatusIcon(msg.status);
+            }
 
             /* Si el contenido del mensaje a mostrar es una imagen */
             if (msg.mimeType.equals(DEFAULT_MIME_IMG)) {
@@ -248,10 +279,8 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
                 loadImage(msg.contenido, new ImageMessageCallback() {
                     @Override
                     public void callback() {
-//                        Log.d(TAG, "IMAGEN TEMP: " + tempImage.getAbsolutePath());
-//                        final Transformation transformation = new RoundedCornersTransformation(5, 0);
-//                        Picasso.get().load(tempImage.getAbsolutePath()).into(imgContenidoImagen);
                         imgContenidoImagen.setVisibility(View.VISIBLE);
+                        txFechaEnvioMensaje.setText(msgDateFormatted);
                     }
                 });
             } else if (msg.mimeType.contains("application") ||
