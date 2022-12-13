@@ -57,7 +57,10 @@ dependencies {
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    androidTestImplementation 'androidx.test:rules:1.1.0'
+
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'org.ocpsoft.prettytime:prettytime:5.0.6.Final'
     implementation 'com.squareup.picasso:picasso:2.71828'
@@ -66,5 +69,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
 
     implementation 'androidx.fragment:fragment-ktx:1.5.4'
+
 
 }
