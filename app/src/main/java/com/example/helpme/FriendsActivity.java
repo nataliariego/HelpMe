@@ -117,7 +117,10 @@ public class FriendsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //cargarAmigos();
+        cargarAmigos();
+        alumnoAdapter = new AlumnoAdapter(amigos);
+        listadoAmigos.setAdapter(alumnoAdapter);
+        alumnoAdapter.notifyDataSetChanged();
     }
 
 
