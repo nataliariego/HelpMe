@@ -324,11 +324,13 @@ public class ProfileActivity extends AppCompatActivity {
                         asignaturaList.add(a);
                     });
                 }
+                System.out.println("-->"+asignaturaList);
             }
 
 
 
             LinearLayout ll = findViewById(R.id.ll_dentroscroll);
+            System.out.println("-->"+asignaturaList);
 
 
 
@@ -343,11 +345,15 @@ public class ProfileActivity extends AppCompatActivity {
 
                 String email = userInSession.getEmail();
 
+                System.out.println(".."+Build.VERSION.SDK_INT);
+                System.out.println(".."+Build.VERSION_CODES.N);
+
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    alumnoController.findByUOWithPhoto(email, new AlumnoController.AlumnoCallback() {
+                    alumnoController.findByUOWithPhoto(userInSession.getEmail(), new AlumnoController.AlumnoCallback() {
                                 @Override
                                 public void callback(Alumno alumno) {
+                                    System.out.println("aa"+alumno);
                                     if (alumno != null) {
 
 

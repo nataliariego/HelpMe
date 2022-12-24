@@ -174,7 +174,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
         // Log.i("patatita: " , uo);
         //Tengo que buscar el alumno que tenga ese email para poner después los datos
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            alumnoController.findByUOWithPhoto(email, new AlumnoController.AlumnoCallback() {
+            alumnoController.findByUOWithPhoto(userInSession.getEmail(), new AlumnoController.AlumnoCallback() {
                 @Override
                 public void callback(Alumno alumno) {
                     if (alumno != null) {
@@ -210,6 +210,8 @@ public class PublicarDudaActivity extends AppCompatActivity {
                         docData.put("resuelta", false);
                         docData.put("fecha", fecha);
 
+
+                        System.out.println("Holaaaaaaaaaa");
                         myFirebase.collection(Duda.COLLECTION).document()
                                 .set(docData)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
