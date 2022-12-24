@@ -307,7 +307,6 @@ public class PublicarDudaActivity extends AppCompatActivity {
 
                         AsignaturaDto a = new AsignaturaDto();
                         if (d.getNombre().equals(nombreA)){
-                            System.out.println(d.getNombre());
                             a.nombre = d.getNombre();
                             a.id=d.getId();
                             a.curso=d.getCurso();
