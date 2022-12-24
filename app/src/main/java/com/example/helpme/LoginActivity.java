@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,9 +13,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import auth.Authentication;
+import chat.AlumnoStatus;
+import chat.ChatService;
+import network.NetworkStatusChecker;
+import network.NetworkStatusHandler;
 import util.FormValidator;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements NetworkStatusHandler {
+
+    public static final String TAG = "LOGIN_ACTIVITY";
 
     public static final String USER_IN_SESSION = "login_usuario_sesion";
 
@@ -30,10 +37,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setTitle("Iniciar sesión");
-
-//        if(Authentication.getInstance().isSigned()){
-//            redirectToHomeView();
-//        }
 
         initFields();
 
@@ -58,18 +61,33 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        checkConnection();
     }
 
     /**
      * Inicio de sesión.
      */
     private void signIn() {
-        String email = txEmail.getText().toString();
-        String pass = txPassword.getText().toString();
+        String email = txEmail.getText().toString().trim().toLowerCase();
+        String pass = txPassword.getText().toString().trim();
         Authentication.getInstance().signIn(email, pass, new LoginCallback() {
             @Override
-            public void callback() {
-                redirectToHomeView();
+            public void onSuccess() {
+                /* Cambiar estado a ONLINE */
+                ChatService.getInstance().changeCurrentUserStatus(AlumnoStatus.ONLINE.toString().toLowerCase(), new ChatService.AlumnoStatusCallback() {
+                    @Override
+                    public void callback() {
+                        redirectToHomeView();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(getApplicationContext(), "Las credenciales no son correctas", Toast.LENGTH_SHORT).show();
+                txEmail.setText("");
+                txPassword.setText("");
+                txEmail.requestFocus();
             }
         });
     }
@@ -89,38 +107,32 @@ public class LoginActivity extends AppCompatActivity {
      * @return true si todos los campos son válidos y false en caso contrario.
      */
     private boolean validateFields() {
-        boolean isValid = true;
-
-        if (!FormValidator.isNotEmpty(txEmail.getText().toString())) {
+        /* Email no vacío */
+        if (!FormValidator.isNotEmpty(txEmail.getText().toString().trim())) {
             txEmail.setError(getText(R.string.email_empty));
-            isValid = false;
+            return false;
         }
 
+        /* Contraseña no vacía */
         if (!FormValidator.isNotEmpty(txPassword.getText().toString())) {
             txPassword.setError(getText(R.string.password_empty));
-            isValid = false;
+            return false;
         }
 
-        if (!FormValidator.isEmailValid(txEmail.getText().toString())) {
+        /* Email válido */
+        if (!FormValidator.isEmailValid(txEmail.getText().toString().trim())) {
             txEmail.setError(getText(R.string.email_invalid));
-            isValid = false;
+            return false;
         }
 
-/*        if (!FormValidator.isPasswordValid(txPassword.getText().toString())) {
-            txPassword.setError(getText(R.string.password_invalid));
-            isValid = false;
-        }*/
-
-        return isValid;
+        return true;
     }
 
     /**
      * Redireccionamiento a la página de crear una cuenta.
      */
     private void redirectToCreateAnAccountView() {
-        Intent intent = new Intent(LoginActivity.this, CreateAccountActivity.class);
-
-        startActivity(intent);
+        startActivity(new Intent(LoginActivity.this, CreateAccountActivity.class));
     }
 
     /**
@@ -131,9 +143,36 @@ public class LoginActivity extends AppCompatActivity {
         txEmail = (TextInputEditText) findViewById(R.id.text_email_login);
         txPassword = (TextInputEditText) findViewById(R.id.text_password_login);
         btCreateAnAccount = (Button) findViewById(R.id.button_create_account_login);
+
+        /* Iniciar foco en el campo Email */
+        txEmail.requestFocus();
+    }
+
+    @Override
+    public void checkConnection() {
+        NetworkStatusChecker.getInstance().handleConnection(getApplicationContext(), new NetworkStatusChecker.ConnectionCallback() {
+            @Override
+            public void callback(boolean isConnected) {
+                handleConnection(isConnected);
+            }
+        });
+    }
+
+    @Override
+    public void handleConnection(boolean isConnected) {
+        if (!isConnected) {
+            startActivity(new Intent(LoginActivity.this, NoWifiConnectionActivity.class));
+            finish();
+
+        } else if (userInSession != null) {
+            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            finish();
+        }
     }
 
     public interface LoginCallback {
-        void callback();
+        void onSuccess();
+
+        void onFailure();
     }
 }

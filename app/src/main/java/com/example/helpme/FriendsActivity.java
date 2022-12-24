@@ -124,11 +124,11 @@ public class FriendsActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void cargarAmigos() {
         amigos.clear();
-        String uo = userInSession.getEmail().split("@")[0].toUpperCase();
+        String email = userInSession.getEmail();
         alumnoViewModel.getAllAlumnosFriendsActivity().observe(this, alumnosResult -> {
             if (alumnosResult != null) {
                 alumnosResult.forEach(d -> {
-                    if (!d.getUo().toUpperCase().equals(uo)) {
+                    if (!d.getEmail().equalsIgnoreCase(email)) {
                         Log.i(TAG, d.getNombre() + " " + d.getUo() + " " + d.getUrl_foto());
                         AlumnoDto newDuda = new AlumnoDto();
                         newDuda.nombre = d.getNombre();

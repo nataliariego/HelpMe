@@ -131,7 +131,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         btVerAsignaturasDominadasSeleccionadas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 AsignaturasDominadasBottomSheetDialogFragment fragment = AsignaturasDominadasBottomSheetDialogFragment.newInstance(asignaturasDominadasSeleccionadas);
                 fragment.show(getSupportFragmentManager(), fragment.getTag());
 
@@ -157,9 +156,6 @@ public class CreateAccountActivity extends AppCompatActivity {
             alumno.password = txPassword.getText().toString();
             alumno.urlFoto = "https://ui-avatars.com/api/?name=" + alumno.nombre;
             alumno.asignaturasDominadas = asignaturasDominadasSeleccionadas;
-
-            Log.i(TAG, bottomSheetAsignaturasDominadasFragment.getAsignaturasDominadas().toString());
-
 
             Log.i(TAG, "ALUMNO ANTES SIGNUP: " + alumno.toString());
 

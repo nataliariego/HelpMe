@@ -47,6 +47,7 @@ public class FormValidator {
     public static boolean isEmailValid(final String email) {
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
         Matcher matcher = pattern.matcher(email);
+
         return matcher.matches();
     }
 

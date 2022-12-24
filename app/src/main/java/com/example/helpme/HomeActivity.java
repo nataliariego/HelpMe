@@ -1,12 +1,10 @@
 package com.example.helpme;
 
 import android.app.ActivityOptions;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -15,17 +13,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.helpme.model.Duda;
-import com.example.helpme.navigation.ActivityNavigation;
 import com.example.helpme.navigation.impl.ActivityNavigationImpl;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.button.MaterialButton;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -36,9 +28,11 @@ import java.util.Locale;
 import adapter.DudaAdapter;
 import auth.Authentication;
 import dto.DudaDto;
+import network.NetworkStatusChecker;
+import network.NetworkStatusHandler;
 import viewmodel.DudaViewModel;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements NetworkStatusHandler {
 
     public static final String TAG = "HOME_ACTIVITY";
 
@@ -66,7 +60,12 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        //initCalendarData();
+        initCalendarData();
+
+        if (!Authentication.getInstance().isSigned()) {
+            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+            finish();
+        }
 
         btVerTodasDudas = (Button) findViewById(R.id.btVerTodasDudas);
         btNuevaDuda = (Button) findViewById(R.id.bt_nueva_duda_home); // Es un layout no un boton
@@ -79,15 +78,14 @@ public class HomeActivity extends AppCompatActivity {
         cargarDudas();
 
 
-
         //Navegación
         navegacion = findViewById(R.id.bottomNavigationView);
         navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.nav_chat:
-
+                        redirectChatActivity();
                         return true;
                     case R.id.nav_cuenta:
                         redirectPantallaCuenta();
@@ -138,13 +136,20 @@ public class HomeActivity extends AppCompatActivity {
 //        });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        //checkConnection();
+    }
+
     /**
      * Redirecciona al Activity ListarDudasActivity.
      */
     private void redirectPantallaListadoDudas() {
         Intent listadoDudasIntent = new Intent(HomeActivity.this, ListarDudasActivity.class);
         // Para transiciones
-         startActivity(listadoDudasIntent);
+        startActivity(listadoDudasIntent);
 
         //startActivity(listadoDudasIntent);
     }
@@ -156,19 +161,16 @@ public class HomeActivity extends AppCompatActivity {
         Intent publicarDudasIntent = new Intent(HomeActivity.this, PublicarDudaActivity.class);
 
         // Para transiciones
-         startActivity(publicarDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+        startActivity(publicarDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
         //startActivity(publicarDudasIntent);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        //cargarDudas();
-
-
+    /**
+     * Redirecciona al Activity del chat.
+     */
+    private void redirectChatActivity() {
+        startActivity(new Intent(HomeActivity.this, ListarChatsActivity.class));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -232,5 +234,23 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
         //startActivity(listadoDudasIntent);
+    }
+
+    @Override
+    public void checkConnection() {
+        NetworkStatusChecker.getInstance().handleConnection(getApplicationContext(), new NetworkStatusChecker.ConnectionCallback() {
+            @Override
+            public void callback(boolean isConnected) {
+                handleConnection(isConnected);
+            }
+        });
+    }
+
+    @Override
+    public void handleConnection(boolean isConnected) {
+        if (!isConnected) {
+            startActivity(new Intent(HomeActivity.this, NoWifiConnectionActivity.class));
+            finish();
+        }
     }
 }

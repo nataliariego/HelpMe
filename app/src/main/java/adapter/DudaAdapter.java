@@ -105,7 +105,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
             }
 
 
-            if(!duda.alumno.get(Alumno.URL_FOTO).toString().isEmpty()){
+            if(duda.alumno.get(Alumno.URL_FOTO) != null && !duda.alumno.get(Alumno.URL_FOTO).toString().isEmpty()){
                 siglasAlumno.setVisibility(View.INVISIBLE);
 
                 // https://github.com/wasabeef/picasso-transformations

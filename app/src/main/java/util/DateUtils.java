@@ -1,6 +1,7 @@
 package util;
 
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -13,7 +14,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Utilidades para trabajar con fechas.
@@ -21,8 +24,11 @@ import java.util.Locale;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class DateUtils {
 
-    public static final String DEFAULT_DATETIME_PATTERN = "dd/MM/yyyy HH:mm:ss";
+    public static final String TAG = "DATE_UTILS";
+
+    public static final String DEFAULT_DATETIME_PATTERN = "yyy-MM-dd HH:mm:ss.SSS";
     public static final ZoneId DEFAULT_ZONE_ID = ZoneId.of("Europe/Madrid");
+    public static final Locale DEFAULT_LOCALE = new Locale("ES", "es");
     private static PrettyTime prettyTime = new PrettyTime();
 
     /**
@@ -37,6 +43,33 @@ public class DateUtils {
     }
 
     /**
+     * Convierte una fecha en formato hashmap de firebase a LocaldateTime.
+     *
+     * @param date
+     * @return
+     */
+    public static LocalDateTime convertHashMapToLocalDateTime(Map<String, Object> date) {
+        if (date == null) {
+            return null;
+        }
+
+        Map<String, Object> chronology = ((HashMap<String, Object>) date.get("chronology"));
+
+        int dayOfMonth = ((Long) date.get("dayOfMonth")).intValue();
+        String dayOfWeek = String.valueOf(date.get("dayOfWeek"));
+        int dayOfYear = ((Long) date.get("dayOfYear")).intValue();
+        int hour = ((Long) date.get("hour")).intValue();
+        int minute = ((Long) date.get("minute")).intValue();
+        String month = String.valueOf(date.get("month"));
+        int monthValue = ((Long) date.get("monthValue")).intValue();
+        int nano = ((Long) date.get("nano")).intValue();
+        int second = ((Long) date.get("second")).intValue();
+        int year = ((Long) date.get("year")).intValue();
+
+        return LocalDateTime.of(year, monthValue, dayOfMonth, hour, minute, second, nano);
+    }
+
+    /**
      * Convierte una fecha en formato String a formato LocalDateTime.
      *
      * @param date
@@ -47,10 +80,46 @@ public class DateUtils {
         return LocalDateTime.parse(date, formatter);
     }
 
-//    public static String prettyDate(String dateTimeInStampFormat) {
-//        prettyTime.setLocale(new Locale("es"));
-//        String resPrettyDate = prettyTime.format(convertStringToLocalDateTime(dateTimeInStampFormat), DEFAULT_ZONE_ID);
-//        return resPrettyDate.substring(0, 1).toUpperCase()
-//                .concat(resPrettyDate.substring(1));
-//    }
+    public static String prettyDate(final String dateTimeInStampFormat) {
+        prettyTime.setLocale(new Locale("es"));
+        String resPrettyDate = prettyTime.format(convertStringToLocalDateTime(dateTimeInStampFormat), DEFAULT_ZONE_ID);
+        return resPrettyDate.substring(0, 1).toUpperCase()
+                .concat(resPrettyDate.substring(1));
+    }
+
+    public static String prettyDate(final LocalDateTime localDateTime) {
+        prettyTime.setLocale(new Locale("es"));
+        String resPrettyDate = prettyTime.format(localDateTime, DEFAULT_ZONE_ID);
+        return resPrettyDate.substring(0, 1).toUpperCase()
+                .concat(resPrettyDate.substring(1));
+    }
+
+    /**
+     * Hora en formato HH:mm
+     *
+     * @param date Fecha de tipo LocalDateTime
+     * @return Ejemplo: 2022-12-02 12:14:57.670 --> 12:14
+     */
+    public static String getSimplifiedDate(final String date) {
+        if (date == null) {
+            return "no-date";
+        }
+
+        LocalDateTime dateTime = convertStringToLocalDateTime(date);
+
+        return String.valueOf(dateTime.getHour())
+                .concat(":")
+                .concat(String.valueOf(dateTime.getMinute()));
+    }
+
+    /**
+     * @return Hora actual con el formato establecido para la aplicación.
+     */
+    public static String getNowWithPredefinedFormat() {
+        Instant now = Instant.now();
+        LocalDateTime nowDateTime =  LocalDateTime.ofInstant(now, DEFAULT_ZONE_ID);
+
+        return String.valueOf(nowDateTime
+                .format(DateTimeFormatter.ofPattern(DEFAULT_DATETIME_PATTERN, DEFAULT_LOCALE)));
+    }
 }
