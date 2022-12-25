@@ -39,10 +39,9 @@
             android:layout_height="531dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.636"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewConcetados"
-            app:layout_constraintVertical_bias="0.069" />
+            app:layout_constraintVertical_bias="0.051" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
