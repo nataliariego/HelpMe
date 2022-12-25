@@ -72,17 +72,20 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
             String cadena = "";
             Object[] asigs = alumno.asignaturasDominadas.values().toArray();
             int contador = 0;
+
             for (Object nombre : asigs) {
                 contador++;
                 AsignaturaDto a = new AsignaturaDto();
                 String linea = nombre.toString();
-                Map<Object, String> prueba = (Map<Object, String>) nombre;
-                Map<String, Object> materia = MateriaAssembler.toHashMap(prueba.get("materia"));
+                Map<Object, Object> prueba = (Map<Object, Object>) nombre;
+                Map<Object, String> materia = (Map<Object, String>) prueba.get("materia");
+                String abreviatura = materia.get("abreviatura");
+                System.out.println(abreviatura);
                 if (contador == 5) {
                     cadena += "...";
                     break;
                 }
-                cadena += materia.get("abreviatura") + " ";
+                cadena += abreviatura + " ";
             }
             if (cadena.length() == 0) {
                 asiganturas.setText("Sin asignaturas");

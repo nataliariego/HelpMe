@@ -117,10 +117,7 @@ public class FriendsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        cargarAmigos();
-        alumnoAdapter = new AlumnoAdapter(amigos);
-        listadoAmigos.setAdapter(alumnoAdapter);
-        alumnoAdapter.notifyDataSetChanged();
+
     }
 
 
@@ -132,12 +129,12 @@ public class FriendsActivity extends AppCompatActivity {
             if (alumnosResult != null) {
                 alumnosResult.forEach(d -> {
                     if (!d.getEmail().equalsIgnoreCase(email)) {
-                        Log.i(TAG, d.getNombre() + " " + d.getUo() + " " + d.getUrl_foto());
                         AlumnoDto newDuda = new AlumnoDto();
                         newDuda.nombre = d.getNombre();
                         newDuda.uo = d.getUo();
                         newDuda.urlFoto = d.getUrl_foto();
                         newDuda.asignaturasDominadas = d.getAsignaturasDominadas();
+
                         amigos.add(newDuda);
                     }
                 });
