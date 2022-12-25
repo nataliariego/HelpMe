@@ -32,12 +32,22 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
 
     public static final String TAG = "DUDA_ADAPTER";
 
+    // Interfaz para manejar el evento click sobre un elemento
+    public interface OnItemClickListener {
+        void onItemClick(DudaDto item);
+    }
+
     private List<DudaDto> dudas = new ArrayList<>();
+    private final OnItemClickListener listener;
 //    private final AdapterView.OnItemClickListener listener;
 
-    public DudaAdapter(List<DudaDto> dudas) {
+    public DudaAdapter(List<DudaDto> dudas,OnItemClickListener listener
+    ) {
         this.dudas = dudas;
+        this.listener=listener;
     }
+
+
 
     @NonNull
     @Override
@@ -57,7 +67,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
         holder.fechaPublicacion.setText(duda.fecha);
         holder.nombreAlumno.setText(AlumnoAssembler.toDto(duda.alumno).nombre);
 
-        holder.bindDuda(duda);
+        holder.bindDuda(duda,listener);
     }
 
     @Override
@@ -90,7 +100,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
-        public void bindDuda(final DudaDto duda) {
+        public void bindDuda(final DudaDto duda,final OnItemClickListener listener) {
             titulo.setText(duda.titulo);
             //fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha));
             fechaPublicacion.setText(duda.fecha);
@@ -115,6 +125,12 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
                         .transform(new CropCircleTransformation())
                         .into(imgPerfilAlumno);
             }
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    Log.i("ListaPeliculasAdapter", "Click");
+                    listener.onItemClick(duda);
+                }
+            });
 
 
         }

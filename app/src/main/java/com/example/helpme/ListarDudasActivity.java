@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageButton;
@@ -19,6 +20,7 @@ import com.example.helpme.model.Duda;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +36,7 @@ public class ListarDudasActivity extends AppCompatActivity {
 
     public static final String TAG = "LISTAR_DUDAS_ACTIVITY";
 
-    private static final String DUDA_SELECCIONADA = "duda_seleccionada";
+    public static final String DUDA_SELECCIONADA = "duda_seleccionada";
 
     //Modelo de datos
     private List<Duda> listaDuda = new ArrayList<Duda>();
@@ -74,9 +76,9 @@ public class ListarDudasActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         listaDudaView.setLayoutManager(layoutManager);
 
+
         //Rellenar lista de dudas y en el adapter
         cargarDudas();
-
         //Pasamos la lista de dudas al RecyclerView con el ListaDudaAdapter
         // Instanciamos el adapter con los datos de la petición y lo asignamos a RecyclerView
         // Generar el adaptador, le pasamos la lista de dudas
@@ -107,6 +109,20 @@ public class ListarDudasActivity extends AppCompatActivity {
 
     }
 
+    public void clikonIntem(DudaDto duda) {
+        Duda dudaCreada = crearDuda(duda);
+        //Paso el modo de apertura
+        Intent intent = new Intent(ListarDudasActivity.this,ResolveActivity.class);
+        intent.putExtra(DUDA_SELECCIONADA, dudaCreada);
+        //Transacion de barrido
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+    }
+
+    private Duda crearDuda(DudaDto duda) {
+        Duda d = new Duda(duda.titulo,duda.descripcion,duda.alumno,duda.asignatura,duda.materia,duda.isResuelta,duda.fecha);
+        return d;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
 
     @Override
@@ -116,24 +132,20 @@ public class ListarDudasActivity extends AppCompatActivity {
 
         cargarDudas();
 
-        dudaAdapter = new DudaAdapter(dudas);
+        dudaAdapter = new DudaAdapter(dudas,
+                new DudaAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(DudaDto duda) {
+                        clikonIntem(duda);
+                    }
+                });;
         listaDudaView.setAdapter(dudaAdapter);
 
         dudaAdapter.notifyDataSetChanged();
 
     }
 
-    //click del item del adapter
-    private void clikonIntem(Duda duda) {
-        Log.i("Click adapter", "Item Clicked " + duda.getTitulo());
 
-
-        //Le paso la duda al MainActivity para que la muestre al picnchar en la duda
-        Intent intent = new Intent(ListarDudasActivity.this, ActivityShowDuda.class);
-        intent.putExtra(DUDA_SELECCIONADA, duda);
-
-        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void cargarDudas() {
@@ -158,18 +170,26 @@ public class ListarDudasActivity extends AppCompatActivity {
                     Log.i(TAG, d.getTitulo() + " " + d.getAlumnoId());
                     DudaDto newDuda = new DudaDto();
                     newDuda.titulo = d.getTitulo();
+                    newDuda.descripcion = d.getDescripcion();
                     newDuda.alumno = d.getAlumnoId();
                     newDuda.asignatura = d.getAsignaturaId();
                     newDuda.fecha = d.getFecha();
                     newDuda.id=d.getId();
                     newDuda.materia = d.getMateriaId();
+                    newDuda.isResuelta=d.isResuelta();
 
                     dudas.add(newDuda);
 
                     dudas = dudas.stream().distinct().collect(Collectors.toList());
                 });
             }
-            dudaAdapter = new DudaAdapter(dudas);
+            dudaAdapter = new DudaAdapter(dudas,
+                    new DudaAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(DudaDto duda) {
+                            clikonIntem(duda);
+                        }
+                    });;
             listaDudaView.setAdapter(dudaAdapter);
             dudaAdapter.notifyDataSetChanged();
         });
