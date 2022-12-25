@@ -35,6 +35,7 @@ import viewmodel.DudaViewModel;
 public class HomeActivity extends AppCompatActivity implements NetworkStatusHandler {
 
     public static final String TAG = "HOME_ACTIVITY";
+    public static final String DUDA_SELECCIONADA_2 = "duda_seleccionada";
 
     private TextView txDayOfTheWeek;
     private TextView txDateFormatted;
@@ -193,11 +194,26 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
             }
 
 
-            dudaAdapter = new DudaAdapter(dudas);
+            dudaAdapter = new DudaAdapter(dudas,
+                    new DudaAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(DudaDto duda) {
+                            clikonIntem(duda);
+                        }
+                    });
             listadoDudasHomeRecycler.setAdapter(dudaAdapter);
 
             dudaAdapter.notifyDataSetChanged();
         });
+    }
+
+    public void clikonIntem(DudaDto duda) {
+
+        //Paso el modo de apertura
+        Intent intent = new Intent(this,ResolveActivity.class);
+        intent.putExtra(DUDA_SELECCIONADA_2, (CharSequence) duda);
+        //Transacion de barrido
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
 
     /**

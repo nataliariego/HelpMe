@@ -48,6 +48,8 @@ public class Duda implements Parcelable {
         this.fecha = fecha;
     }
 
+
+
     protected Duda(Parcel in) {
         titulo = in.readString();
         descripcion = in.readString();
