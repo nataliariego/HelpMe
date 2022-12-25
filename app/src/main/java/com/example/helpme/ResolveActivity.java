@@ -21,6 +21,9 @@ public class ResolveActivity extends AppCompatActivity {
 
         Intent intentDuda= getIntent();
         duda= intentDuda.getParcelableExtra(ListarDudasActivity.DUDA_SELECCIONADA);
+        if (duda == null){
+            duda= intentDuda.getParcelableExtra(HomeActivity.DUDA_SELECCIONADA);
+        }
 
         titulo = findViewById(R.id.tituloDuda);
         descripcion = findViewById(R.id.textDescripcion);

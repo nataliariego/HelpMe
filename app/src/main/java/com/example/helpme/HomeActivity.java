@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.helpme.model.Duda;
 import com.example.helpme.navigation.impl.ActivityNavigationImpl;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -35,7 +36,7 @@ import viewmodel.DudaViewModel;
 public class HomeActivity extends AppCompatActivity implements NetworkStatusHandler {
 
     public static final String TAG = "HOME_ACTIVITY";
-    public static final String DUDA_SELECCIONADA_2 = "duda_seleccionada";
+    public static final String DUDA_SELECCIONADA = "duda_seleccionada";
 
     private TextView txDayOfTheWeek;
     private TextView txDateFormatted;
@@ -184,6 +185,7 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
                     Log.i(TAG, d.getTitulo() + " " + d.getAlumnoId());
                     DudaDto newDuda = new DudaDto();
                     newDuda.titulo = d.getTitulo();
+                    newDuda.descripcion=d.getDescripcion();
                     newDuda.alumno = d.getAlumnoId();
                     newDuda.asignatura = d.getAsignaturaId();
                     newDuda.materia = d.getMateriaId();
@@ -208,12 +210,17 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
     }
 
     public void clikonIntem(DudaDto duda) {
-
+        Duda dudaCreada = crearDuda(duda);
         //Paso el modo de apertura
-        Intent intent = new Intent(this,ResolveActivity.class);
-        intent.putExtra(DUDA_SELECCIONADA_2, (CharSequence) duda);
+        Intent intent = new Intent(HomeActivity.this,ResolveActivity.class);
+        intent.putExtra(DUDA_SELECCIONADA, dudaCreada);
         //Transacion de barrido
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+    }
+
+    private Duda crearDuda(DudaDto duda) {
+        Duda d = new Duda(duda.titulo,duda.descripcion,duda.alumno,duda.asignatura,duda.materia,duda.isResuelta,duda.fecha);
+        return d;
     }
 
     /**
