@@ -26,6 +26,7 @@ public class Duda implements Parcelable {
     private String id;
     private String titulo;
     private String descripcion;
+    private String emailAl;
     private Map<String, Object> alumnoId;
     private String asignaturaId;
     private Map<String, Object> materiaId;
@@ -33,6 +34,7 @@ public class Duda implements Parcelable {
     private boolean isResuelta;
 
     private String fecha;
+
 
     public Duda() {
     }
@@ -46,14 +48,31 @@ public class Duda implements Parcelable {
         this.materiaId = materiaId;
         this.isResuelta = isResuelta;
         this.fecha = fecha;
+        this.emailAl=(String)this.getAlumnoId().get("email");
+    }
+
+    public Duda(String titulo, String descripcion, Map<String, Object> alumnoId, String asignaturaId,
+                Map<String, Object> materiaId, boolean isResuelta, String fecha,String id) {
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.alumnoId = alumnoId;
+        this.asignaturaId = asignaturaId;
+        this.materiaId = materiaId;
+        this.isResuelta = isResuelta;
+        this.fecha = fecha;
+        this.id = id;
+        this.emailAl=(String)this.getAlumnoId().get("email");
     }
 
 
 
     protected Duda(Parcel in) {
+        id = in.readString();
         titulo = in.readString();
         descripcion = in.readString();
+        emailAl = in.readString();
         isResuelta = in.readByte() != 0;
+
     }
 
     public static final Creator<Duda> CREATOR = new Creator<Duda>() {
@@ -73,6 +92,9 @@ public class Duda implements Parcelable {
         return id;
     }
 
+    public String getEmailAl(){
+        return emailAl;
+    }
     public String getTitulo() {
         return titulo;
     }
@@ -136,12 +158,15 @@ public class Duda implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeString(id);
         parcel.writeString(titulo);
         parcel.writeString(descripcion);
+        parcel.writeString(emailAl);
         parcel.writeString(asignaturaId);
         parcel.writeMap(materiaId);
         parcel.writeMap(alumnoId);
         parcel.writeByte((byte) (isResuelta ? 1 : 0));
+
     }
 
     public void setId(String id) {

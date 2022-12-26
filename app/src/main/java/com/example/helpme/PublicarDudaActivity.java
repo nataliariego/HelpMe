@@ -182,6 +182,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
                         //Esto tdo no está bien porque en la base de datos
                         //Se guardan raro los datos, faltan cosas...etc
                         alumnoMap.put("nombre", alumno.getUo());
+                        alumnoMap.put("email", alumno.getEmail());
                         alumnoMap.put("id", alumno.getId());
                         alumnoMap.put("uo", alumno.getNombre());
                         alumnoMap.put("url_foto", alumno.getUrl_foto());
