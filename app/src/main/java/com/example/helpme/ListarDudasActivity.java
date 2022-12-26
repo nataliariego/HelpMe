@@ -111,6 +111,7 @@ public class ListarDudasActivity extends AppCompatActivity {
 
     public void clikonIntem(DudaDto duda) {
         Duda dudaCreada = crearDuda(duda);
+        System.out.println("ADIOSSSS");
         //Paso el modo de apertura
         Intent intent = new Intent(ListarDudasActivity.this,ResolveActivity.class);
         intent.putExtra(DUDA_SELECCIONADA, dudaCreada);
@@ -119,7 +120,7 @@ public class ListarDudasActivity extends AppCompatActivity {
     }
 
     private Duda crearDuda(DudaDto duda) {
-        Duda d = new Duda(duda.titulo,duda.descripcion,duda.alumno,duda.asignatura,duda.materia,duda.isResuelta,duda.fecha);
+        Duda d = new Duda(duda.titulo,duda.descripcion,duda.alumno,duda.asignatura,duda.materia,duda.isResuelta,duda.fecha,duda.id);
         return d;
     }
 

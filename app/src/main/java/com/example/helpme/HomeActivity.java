@@ -184,6 +184,7 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
                 dudasResult.forEach(d -> {
                     Log.i(TAG, d.getTitulo() + " " + d.getAlumnoId());
                     DudaDto newDuda = new DudaDto();
+                    newDuda.id=d.getId();
                     newDuda.titulo = d.getTitulo();
                     newDuda.descripcion=d.getDescripcion();
                     newDuda.alumno = d.getAlumnoId();
@@ -219,7 +220,7 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
     }
 
     private Duda crearDuda(DudaDto duda) {
-        Duda d = new Duda(duda.titulo,duda.descripcion,duda.alumno,duda.asignatura,duda.materia,duda.isResuelta,duda.fecha);
+        Duda d = new Duda(duda.titulo,duda.descripcion,duda.alumno,duda.asignatura,duda.materia,duda.isResuelta,duda.fecha,duda.id);
         return d;
     }
 

@@ -125,5 +125,6 @@
     <string name="contentDescripcion_mime_type">Tipo de contenido del documento</string>
     <string name="hit_password">Contraseña</string>
     <string name="chat_alumno_receiver_status">online</string>
+    <string name="respuestaEnviada">Respuesta enviada</string>
 
 </resources>
