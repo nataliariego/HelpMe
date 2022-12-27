@@ -93,15 +93,7 @@ public class ResolveActivity extends AppCompatActivity {
         listadoRespuestas = (RecyclerView) findViewById(R.id.recyclerRespuestas);
 
 
-        listadoRespuestas.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        listadoRespuestas.setLayoutManager(layoutManager);
 
-        cargarRespuestas(duda.getId());
-
-        respuestasAdapter = new RespuestaAdapter(respuestas);
-        listadoRespuestas.setAdapter(respuestasAdapter);
-        respuestasAdapter.notifyDataSetChanged();
 
         botonResolver = (Button) findViewById(R.id.btnResolver);
         if (emailDuda.equals(userInSession.getEmail())){
@@ -130,6 +122,22 @@ public class ResolveActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void onResume() {
+        super.onResume();
+        listadoRespuestas.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        listadoRespuestas.setLayoutManager(layoutManager);
+
+        cargarRespuestas(duda.getId());
+
+        respuestasAdapter = new RespuestaAdapter(respuestas);
+        listadoRespuestas.setAdapter(respuestasAdapter);
+        respuestasAdapter.notifyDataSetChanged();
+
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void cargarRespuestas(String idDuda) {
@@ -155,9 +163,14 @@ public class ResolveActivity extends AppCompatActivity {
                                         respuestas.add(newRes);
                                     }
                                     numrespuestas.setText("Todas las respuestas ("+respuestas.size()+")");
+                                    respuestasAdapter = new RespuestaAdapter(respuestas);
+                                    listadoRespuestas.setAdapter(respuestasAdapter);
+                                    respuestasAdapter.notifyDataSetChanged();
                     }});
+
                 });
             }
+
 
 
         });
