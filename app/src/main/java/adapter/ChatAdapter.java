@@ -29,7 +29,7 @@ import util.DateUtils;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder> {
 
-    public static final String TAG = "CAHT_ADAPTER";
+    public static final String TAG = "CHAT_ADAPTER";
 
     private List<ChatSummaryDto> chats = new ArrayList<>();
 

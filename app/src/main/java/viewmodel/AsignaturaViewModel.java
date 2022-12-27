@@ -24,4 +24,8 @@ public class AsignaturaViewModel extends ViewModel {
 
         return dudas;
     }
+
+    public MutableLiveData<List<Asignatura>> getAllAsignaturas() {
+        return AsignaturaController.getInstance().findAll();
+    }
 }

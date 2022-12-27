@@ -18,6 +18,7 @@ import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Chat;
 import com.example.helpme.model.Mensaje;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 
 import adapter.ChatAdapter;
-import auth.Authentication;
 import chat.ChatService;
 import dto.ChatSummaryDto;
 
@@ -65,6 +65,7 @@ public class ListarChatsActivity extends AppCompatActivity {
 
         Log.i(TAG, "USUARIO EN SESIÓN: " + userInSession.getEmail());
 
+        Log.d(TAG, "version android: " + Build.VERSION.SDK_INT);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             chatAdapter = new ChatAdapter(chats, new ChatAdapter.OnItemClickListener() {
@@ -120,13 +121,14 @@ public class ListarChatsActivity extends AppCompatActivity {
                                     String uidAlumnoA = ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_A).toString();
                                     String uidAlumnoB = ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_B).toString();
 
-
+                                    Log.d(TAG, "UserInSession: " + userInSession.getUid() + "Alumno A: " + uidAlumnoA + " Uid Alumno B: " + uidAlumnoB);
 
                                     /* Mensajes del chat */
                                     if (((HashMap<String, Object>) ds.getValue()).get(Mensaje.REFERENCE) != null) {
                                         summary.messages = (Map<String, Object>) ((HashMap<String, Object>) ds.getValue()).get(Mensaje.REFERENCE);
                                     }
 
+                                    Log.d(TAG, "userInSession: " + userInSession.getUid() + " " + uidAlumnoA + " " + uidAlumnoB);
                                     if (userInSession.getUid().equals(uidAlumnoA)
                                             || userInSession.getUid().equals(uidAlumnoB)) {
                                         String otherUserUid = uidAlumnoB.equals(userInSession.getUid()) ? uidAlumnoA : uidAlumnoB;
@@ -152,12 +154,24 @@ public class ListarChatsActivity extends AppCompatActivity {
                                                             summary.receiverName = nombre;
                                                             summary.receiverUid = otherUserUid;
 
+
+                                                            Log.d(TAG, "summary: " + summary.receiverName);
+
                                                             chats.add(summary);
 
                                                             chatAdapter.notifyDataSetChanged();
 
+
                                                             Log.d(TAG, nombre + " -- " + urlFoto);
                                                         }
+
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.d(TAG, "Error al cargar los chats.\n" + e.getMessage());
+                                                        e.printStackTrace();
                                                     }
                                                 });
                                     }

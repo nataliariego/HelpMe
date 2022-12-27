@@ -22,9 +22,10 @@ public class FormValidator {
      * @return true si la contraseña es válida y false en caso contrario.
      */
     public static boolean isPasswordValid(final String password) {
-        Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
-        Matcher matcher = pattern.matcher(password);
-        return matcher.matches();
+        //Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
+        //Matcher matcher = pattern.matcher(password);
+        //return matcher.matches();
+        return password.length() >= 6;
     }
 
     /**

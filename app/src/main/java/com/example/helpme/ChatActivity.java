@@ -3,7 +3,6 @@ package com.example.helpme;
 import static com.example.helpme.extras.IntentExtras.CHAT_SELECCIONADO;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -26,6 +25,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -62,7 +65,6 @@ import chat.MensajeStatus;
 import dto.AlumnoDto;
 import dto.ChatSummaryDto;
 import dto.MensajeDto;
-import util.ContentTypeUtils;
 import util.DateUtils;
 
 public class ChatActivity extends AppCompatActivity {
@@ -169,35 +171,31 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-//        btEnviarMensaje.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                switch (motionEvent.getAction()) {
-//                    case MotionEvent.ACTION_UP: {
-//                        grabandoAudio = false;
-//                        //stop recording voice if a long hold was detected and a recording started
-//                        detenerGrabacionAudio();
-//                        Log.d(TAG, "Grabacion parada");
-//                        Toast.makeText(view.getContext(), "Grabacion detenida", Toast.LENGTH_LONG).show();
-//                        cambiarBotonEnviarMensaje(false);
-//
-//                        return true; //indicate we're done listening to this touch listener
-//                    }
-//
-//                    case MotionEvent.ACTION_DOWN: {
-//                        grabandoAudio = true;
-//                        cambiarBotonEnviarMensaje(true);
-//                        iniciarGrabacionAudio();
-//                        Toast.makeText(view.getContext(), "Grabando...", Toast.LENGTH_LONG).show();
-//                        ;
-//                        Log.d(TAG, "Grabando audio...");
-//
-//                        return true;
-//                    }
-//                }
-//                return false;
-//            }
-//        });
+        /* Abre el explorador de archivos del dispositivo */
+        ActivityResultLauncher<Intent> fileLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                            /* Documento o imagen seleccionado del dispositivo */
+                            Log.d(TAG, "Documento recibido...");
+                            Log.d(TAG, result.getData().toString());
+                            Uri selectedMediaUri = result.getData().getData();
+                            Cursor cursor = getContentResolver().query(selectedMediaUri, null, null, null, null);
+                            int filenameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+
+                            cursor.moveToFirst();
+
+                            String filename = cursor.getString(filenameIndex);
+
+                            /* Subir el archivo seleccionado a Firebase */
+                            uploadFile(selectedMediaUri, filename);
+                        } else {
+                            Log.d(TAG, "SUBIDA CANCELADA.");
+                        }
+                    }
+                }
+        );
 
         /* Accion seleccionar archivo para enviar */
         btSubirArchivoChat.setOnClickListener(new View.OnClickListener() {
@@ -207,8 +205,8 @@ public class ChatActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("*/*");
-                startActivityForResult(intent, ADJUNTO_CHAT_REQUEST_CODE);
 
+                fileLauncher.launch(intent);
             }
         });
 
@@ -238,6 +236,29 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        /* Abre la galería de imágenes del dispositivo */
+        ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == RESULT_OK) {
+                            Bundle bundle = result.getData().getExtras();
+                            selectedImageToSend = (Bitmap) bundle.get("data");
+                            Log.d(TAG, "Imagen recibida");
+
+                            ImageView selected = new ImageView(getApplicationContext());
+                            selected.setImageBitmap(selectedImageToSend);
+                            uploadImage(selected);
+
+                        } else if (result.getResultCode() == RESULT_CANCELED) {
+                            Toast.makeText(getApplicationContext(), "Acción cancelada", Toast.LENGTH_SHORT);
+                        }
+
+
+                    }
+                }
+        );
+
         /* Accion sacar foto para enviar por chat */
         btCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -245,7 +266,7 @@ public class ChatActivity extends AppCompatActivity {
                 Log.d(TAG, "CAMERA: ");
 
                 Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, CAMERA_IMAGE_CHAT);
+                galleryLauncher.launch(intent);
             }
         });
 
@@ -400,42 +421,6 @@ public class ChatActivity extends AppCompatActivity {
 
         if (grabandoAudio) {
             stopRecording();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (!ContentTypeUtils.validSize(data.getData())) {
-            Toast.makeText(getApplicationContext(), "El archivo tiene que ser menor de 1MB", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        /* Imagen tomada de la cámara */
-        if (requestCode == CAMERA_IMAGE_CHAT && resultCode == Activity.RESULT_OK) {
-            selectedImageToSend = (Bitmap) data.getExtras().get("data");
-            Log.d(TAG, "Imagen recibida");
-
-            ImageView selected = new ImageView(getApplicationContext());
-            selected.setImageBitmap(selectedImageToSend);
-            uploadImage(selected);
-
-        } else if (requestCode == ADJUNTO_CHAT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            /* Documento o imagen seleccionado del dispositivo */
-            Log.d(TAG, "Documento recibido...");
-            Log.d(TAG, data.getData().toString());
-            Uri selectedMediaUri = data.getData();
-            Cursor cursor = getContentResolver().query(selectedMediaUri, null, null, null, null);
-            int filenameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-
-            cursor.moveToFirst();
-
-            String filename = cursor.getString(filenameIndex);
-//            String Fpath = selectedMediaUri.getPath();
-
-            /* Subir el archivo seleccionado a Firebase */
-            uploadFile(selectedMediaUri, filename);
         }
     }
 

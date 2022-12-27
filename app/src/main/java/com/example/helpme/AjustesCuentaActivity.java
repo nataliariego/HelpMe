@@ -21,7 +21,6 @@ import chat.ChatService;
 public class AjustesCuentaActivity extends AppCompatActivity {
 
     private Button btLogout;
-    private Button btDeleteAccount;
     private Button btResetPasswordLink;
     private Button btVerifyAccount;
 
@@ -40,7 +39,6 @@ public class AjustesCuentaActivity extends AppCompatActivity {
 
     private void initFields() {
         btLogout = (Button) findViewById(R.id.button_logout);
-        btDeleteAccount = (Button) findViewById(R.id.button_eliminar_cuenta);
         btResetPasswordLink = (Button) findViewById(R.id.button_reset_password);
         btVerifyAccount = (Button) findViewById(R.id.button_verificar_email);
         layoutVerificacionEmailLabel = (LinearLayout) findViewById(R.id.layout_correo_verificado_ajustes);
@@ -58,30 +56,6 @@ public class AjustesCuentaActivity extends AppCompatActivity {
                         finish();
                     }
                 });
-            }
-        });
-
-        /* Eliminar cuenta */
-        btDeleteAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(AjustesCuentaActivity.this)
-                        .setTitle("Eliminar la cuenta")
-                        .setMessage("AL eliminar la cuenta se perderán todos los datos almacenados ¿Deseas eliminar la cuenta?")
-                        .setIcon(android.R.drawable.ic_dialog_alert);
-
-                dialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        Authentication.getInstance().deleteAccount();
-
-                        Toast.makeText(AjustesCuentaActivity.this, "Cuenta eliminada", Toast.LENGTH_SHORT).show();
-                        redirectToLogin();
-                        finish();
-                    }
-                });
-
-                dialog.show();
             }
         });
 
