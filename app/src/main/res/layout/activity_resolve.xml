@@ -9,7 +9,6 @@
 
 
 
-
         <TextView
             android:id="@+id/tituloDuda"
             android:layout_width="382dp"
@@ -85,20 +84,6 @@
             app:layout_constraintTop_toBottomOf="@+id/btnResolver"
             app:layout_constraintVertical_bias="0.034" />
 
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-    android:id="@+id/bottomNavigationView"
-    android:layout_width="0dp"
-    android:layout_height="90dp"
-    app:menu="@menu/navigation_menu"
-    app:itemActiveIndicatorStyle="@style/Theme.Material3.DynamicColors.DayNight"
-    android:background="@drawable/rounded_corners_navigation"
-    app:itemIconSize="70dp"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.5"
-    app:layout_constraintStart_toStartOf="parent"
-        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
