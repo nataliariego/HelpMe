@@ -13,19 +13,17 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.R;
-
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Materia;
-
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import assembler.AlumnoAssembler;
-import de.hdodenhof.circleimageview.CircleImageView;
 import dto.DudaDto;
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+import util.DateUtils;
 import util.StringUtils;
 
 public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder> {
@@ -41,12 +39,11 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
     private final OnItemClickListener listener;
 //    private final AdapterView.OnItemClickListener listener;
 
-    public DudaAdapter(List<DudaDto> dudas,OnItemClickListener listener
+    public DudaAdapter(List<DudaDto> dudas, OnItemClickListener listener
     ) {
         this.dudas = dudas;
-        this.listener=listener;
+        this.listener = listener;
     }
-
 
 
     @NonNull
@@ -67,7 +64,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
         holder.fechaPublicacion.setText(duda.fecha);
         holder.nombreAlumno.setText(AlumnoAssembler.toDto(duda.alumno).nombre);
 
-        holder.bindDuda(duda,listener);
+        holder.bindDuda(duda, listener);
     }
 
     @Override
@@ -81,7 +78,7 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
         private TextView nombreAlumno;
         private TextView fechaPublicacion;
         private TextView abrevMateria;
-        private TextView siglasAlumno;
+        //private TextView siglasAlumno;
 
         private ImageView imgPerfilAlumno;
 
@@ -93,40 +90,39 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
             nombreAlumno = itemView.findViewById(R.id.txNombreAlumnoDudaResumen);
             fechaPublicacion = itemView.findViewById(R.id.txResumenFechaPublicacionDuda);
             abrevMateria = itemView.findViewById(R.id.txResumenDudaAbrevMateria);
-            siglasAlumno = itemView.findViewById(R.id.tx_siglas_alumno_avatar);
+            //siglasAlumno = itemView.findViewById(R.id.tx_siglas_alumno_avatar);
 
             imgPerfilAlumno = itemView.findViewById(R.id.img_perfil_alumno_duda);
 
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
-        public void bindDuda(final DudaDto duda,final OnItemClickListener listener) {
+        public void bindDuda(final DudaDto duda, final OnItemClickListener listener) {
             titulo.setText(duda.titulo);
-            //fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha));
-            fechaPublicacion.setText(duda.fecha);
+            fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha, 1));
 
-            siglasAlumno.setText(StringUtils.getAcronymName(duda.alumno.get(Alumno.NOMBRE).toString()));
-
-            System.out.println("--->"+duda.materia);
-            if(duda.materia != null){
+            System.out.println("--->" + duda.materia);
+            if (duda.materia != null) {
                 String abrev = duda.materia.get(Materia.ABREVIATURA).toString();
                 abrevMateria.setText(abrev);
-                System.out.println("--->"+abrev);
+                System.out.println("--->" + abrev);
             }
 
+            // https://github.com/wasabeef/picasso-transformations
+            // Profile image
+            String tempProfileImg = duda.alumno.get(Alumno.URL_FOTO) == null
+                    ? "https://ui-avatars.com/api/?name=" + duda.alumno.get(Alumno.NOMBRE)
+                    : duda.alumno.get(Alumno.URL_FOTO).toString();
 
-            if(duda.alumno.get(Alumno.URL_FOTO) != null && !duda.alumno.get(Alumno.URL_FOTO).toString().isEmpty()){
-                siglasAlumno.setVisibility(View.INVISIBLE);
+            Picasso.get().load(tempProfileImg)
+                    .fit()
+                    .centerCrop()
+                    .transform(new CropCircleTransformation())
+                    .into(imgPerfilAlumno);
 
-                // https://github.com/wasabeef/picasso-transformations
-                Picasso.get().load(duda.alumno.get(Alumno.URL_FOTO).toString())
-                        .fit()
-                        .centerCrop()
-                        .transform(new CropCircleTransformation())
-                        .into(imgPerfilAlumno);
-            }
             itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     Log.i("ListaPeliculasAdapter", "Click");
                     listener.onItemClick(duda);
                 }

@@ -111,7 +111,6 @@ public class ListarDudasActivity extends AppCompatActivity {
 
     public void clikonIntem(DudaDto duda) {
         Duda dudaCreada = crearDuda(duda);
-        System.out.println("ADIOSSSS");
         //Paso el modo de apertura
         Intent intent = new Intent(ListarDudasActivity.this,ResolveActivity.class);
         intent.putExtra(DUDA_SELECCIONADA, dudaCreada);
@@ -150,18 +149,6 @@ public class ListarDudasActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void cargarDudas() {
-        /*Duda d1 = new Duda("Algoritmo A*", "Estoy intentando hacer experimentos para el algoritmo A* y me da este error:", "Natalia Fernández Riego", "Sistemas Inteligentes", "IA", true, "30/10/2022 12:35:24");
-        Duda d2 = new Duda("Funciones Lambda", "Tecnologias y Paradigmas de la Programación", "Juan Iglesias Pérez", "Tecnologias y Paradigmas de la Programación", "TPP", false, "30/10/2022 12:35:24");
-        Duda d3 = new Duda("Conexión entre Activities", "Estoy intentando hacer esta conexion", "Marta Ramos Álvarez", "Software de Dispositivos Móviles", "SDM", false, "30/10/2022 14:35:24");
-        Duda d4 = new Duda("Paso a casos de equivalencia", "Estoy intentando hacer este paso", "Manuel Carillo Gómez", "Calidad y Validación del Software", "CVS", false, "31/10/2022 12:35:24");
-        Duda d5 = new Duda("Hacer un Grid Layout", "Estoy intentando hacer este layout", "Estela García Antuña", "Comunicacion Persona-Maquina", "CPM", false, "12/09/2022 10:35:24");
-
-        listaDuda.add(d1);
-        listaDuda.add(d2);
-        listaDuda.add(d3);
-        listaDuda.add(d4);
-        listaDuda.add(d5);
-         */
 
         dudas = new ArrayList<>();
 

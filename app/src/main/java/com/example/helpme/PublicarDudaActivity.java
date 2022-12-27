@@ -53,6 +53,7 @@ import dto.AlumnoDto;
 import dto.AsignaturaDto;
 import dto.CursoDto;
 import dto.MateriaDto;
+import util.DateUtils;
 import viewmodel.AsignaturaViewModel;
 import viewmodel.CursoViewModel;
 import viewmodel.MateriaViewModel;
@@ -138,7 +139,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
                 Duda newDuda = new Duda();
                 newDuda.setTitulo(titulo.getText().toString());
                 newDuda.setDescripcion(descripcion.getText().toString());
-                newDuda.setFecha(LocalDateTime.now().toString());
+                newDuda.setFecha(DateUtils.getNowWithPredefinedFormat());
                 newDuda.setResuelta(false);
 
                 btnPublicar.setOnClickListener(new View.OnClickListener() {

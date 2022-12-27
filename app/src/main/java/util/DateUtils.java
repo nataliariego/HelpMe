@@ -1,7 +1,6 @@
 package util;
 
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -26,7 +25,8 @@ public class DateUtils {
 
     public static final String TAG = "DATE_UTILS";
 
-    public static final String DEFAULT_DATETIME_PATTERN = "yyy-MM-dd HH:mm:ss.SSS";
+    public static final String DEFAULT_DATETIME_PATTERN = "yyyy-MM-dd HH:mm:ss.SSS";
+    public static final String ALT_FORMAT_DATETIME_PATTERN = "dd/MM/yyyy HH:mm:ss";
     public static final ZoneId DEFAULT_ZONE_ID = ZoneId.of("Europe/Madrid");
     public static final Locale DEFAULT_LOCALE = new Locale("ES", "es");
     private static PrettyTime prettyTime = new PrettyTime();
@@ -73,16 +73,19 @@ public class DateUtils {
      * Convierte una fecha en formato String a formato LocalDateTime.
      *
      * @param date
+     * @param format 0 para formatear en {@link #DEFAULT_DATETIME_PATTERN} y 1
+     *               en {@link #ALT_FORMAT_DATETIME_PATTERN}
      * @return
      */
-    public static LocalDateTime convertStringToLocalDateTime(String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DEFAULT_DATETIME_PATTERN);
+    public static LocalDateTime convertStringToLocalDateTime(String date, int format) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format == 0
+                ? DEFAULT_DATETIME_PATTERN : ALT_FORMAT_DATETIME_PATTERN);
         return LocalDateTime.parse(date, formatter);
     }
 
-    public static String prettyDate(final String dateTimeInStampFormat) {
+    public static String prettyDate(final String dateTimeInStampFormat, int format) {
         prettyTime.setLocale(new Locale("es"));
-        String resPrettyDate = prettyTime.format(convertStringToLocalDateTime(dateTimeInStampFormat), DEFAULT_ZONE_ID);
+        String resPrettyDate = prettyTime.format(convertStringToLocalDateTime(dateTimeInStampFormat, format), DEFAULT_ZONE_ID);
         return resPrettyDate.substring(0, 1).toUpperCase()
                 .concat(resPrettyDate.substring(1));
     }
@@ -105,7 +108,7 @@ public class DateUtils {
             return "no-date";
         }
 
-        LocalDateTime dateTime = convertStringToLocalDateTime(date);
+        LocalDateTime dateTime = convertStringToLocalDateTime(date, 0);
 
         return String.valueOf(dateTime.getHour())
                 .concat(":")
@@ -117,7 +120,7 @@ public class DateUtils {
      */
     public static String getNowWithPredefinedFormat() {
         Instant now = Instant.now();
-        LocalDateTime nowDateTime =  LocalDateTime.ofInstant(now, DEFAULT_ZONE_ID);
+        LocalDateTime nowDateTime = LocalDateTime.ofInstant(now, DEFAULT_ZONE_ID);
 
         return String.valueOf(nowDateTime
                 .format(DateTimeFormatter.ofPattern(DEFAULT_DATETIME_PATTERN, DEFAULT_LOCALE)));

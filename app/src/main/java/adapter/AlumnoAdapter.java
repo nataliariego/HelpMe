@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import assembler.MateriaAssembler;
 import dto.AlumnoDto;
 import dto.AsignaturaDto;
 
@@ -92,9 +91,8 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
             } else {
                 asiganturas.setText(cadena);
             }
-            Picasso.get().load(alumno.urlFoto).into(imagen_alumno);
 
-            //fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha));
+            Picasso.get().load(alumno.urlFoto).into(imagen_alumno);
 
         }
     }

@@ -143,12 +143,13 @@ public class ListarChatsActivity extends AppCompatActivity {
 
                                                             DocumentSnapshot res = task.getResult();
 
+                                                            Log.d(TAG, res.toString());
+
                                                             String nombre = res.get(Alumno.NOMBRE).toString();
 
                                                             String urlFoto = res.get(Alumno.URL_FOTO) != null
                                                                     ? res.get(Alumno.URL_FOTO).toString()
-                                                                    : res.get("urlFoto") != null
-                                                                    ? res.get("urlFoto").toString() : "https://ui-avatars.com/api/?name=" + String.join(nombre);
+                                                                    : "https://ui-avatars.com/api/?name=" + String.join(nombre);
 
                                                             summary.receiverProfileImage = urlFoto;
                                                             summary.receiverName = nombre;
