@@ -7,6 +7,13 @@ import android.os.Parcelable;
 public class RespuestaDuda implements Parcelable {
 
     public static final String COLLECTION = "RESPONDE";
+
+    public static final String ALUMNO_DUDA = "alumnoDuda";
+    public static final String ALUMNO_RESPONDE = "alumnoResponde";
+    public static final String FECHA = "fecha";
+    public static final String ID_DUDA = "idDuda";
+    public static final String RESPUESTA = "respuesta";
+
     private String id;
     private String alumnoDuda;
     private String alumnoResponde;
