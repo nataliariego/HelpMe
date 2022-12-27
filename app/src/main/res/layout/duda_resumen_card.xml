@@ -33,16 +33,6 @@
                 android:foregroundGravity="center"
                 app:srcCompat="@drawable/profile_placeholcer_primary_48" />
 
-            <TextView
-                android:id="@+id/tx_siglas_alumno_avatar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="@font/roboto_medium"
-                android:gravity="center"
-                android:text="@string/avatar_placeholder_text"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="25sp" />
         </RelativeLayout>
 
         <LinearLayout

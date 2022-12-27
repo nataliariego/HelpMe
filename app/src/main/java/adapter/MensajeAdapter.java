@@ -262,7 +262,7 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
         @RequiresApi(api = Build.VERSION_CODES.O)
         public void bindMensaje(final MensajeDto msg) {
 
-            LocalDateTime timestamp = DateUtils.convertStringToLocalDateTime(msg.createdAt);
+            LocalDateTime timestamp = DateUtils.convertStringToLocalDateTime(msg.createdAt, 0);
             String hour = String.format("%02d", timestamp.getHour());
             String minutes = String.format("%02d", timestamp.getMinute());
             String msgDateFormatted = hour.concat(":").concat(minutes);

@@ -100,7 +100,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                 msgData.contenido = rawMessageData.get(Mensaje.CONTENT).toString();
                 msgData.userUid = rawMessageData.get(Mensaje.RECEIVER).toString();
 
-                LocalDateTime msgDataCreatedAt = DateUtils.convertStringToLocalDateTime(msgData.createdAt);
+                LocalDateTime msgDataCreatedAt = DateUtils.convertStringToLocalDateTime(msgData.createdAt, 0);
                 LocalDateTime now = LocalDateTime.now();
                 if (ChronoUnit.SECONDS.between(msgDataCreatedAt, now) < mostRecentDate) {
                     last = msgData;

@@ -255,7 +255,7 @@ public class ChatService {
             return null;
         }
 
-        Comparator<MensajeDto> msgComparator = Comparator.comparing(msg -> DateUtils.convertStringToLocalDateTime(msg.createdAt));
+        Comparator<MensajeDto> msgComparator = Comparator.comparing(msg -> DateUtils.convertStringToLocalDateTime(msg.createdAt, 0));
         messages.sort(msgComparator);
 
 
