@@ -21,7 +21,11 @@ import com.example.helpme.model.Alumno;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 
+import org.checkerframework.checker.units.qual.A;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -30,7 +34,9 @@ import controller.AlumnoController;
 import controller.AsignaturaController;
 import controller.callback.GenericCallback;
 import dto.AlumnoDto;
+import dto.AsignaturaDto;
 import util.FormValidator;
+import viewmodel.AsignaturaViewModel;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
@@ -52,10 +58,11 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private static AlumnoController alumnoController = new AlumnoController();
 
+    private AsignaturaViewModel asignaturaViewModel = new AsignaturaViewModel();
+
+    private List<AsignaturaDto> asignaturasDisponibles = new ArrayList<>();
+
     private HashMap<String, Object> asignaturasDominadasSeleccionadas = new HashMap<>();
-
-    private AsignaturasDominadasBottomSheetDialogFragment bottomSheetAsignaturasDominadasFragment = new AsignaturasDominadasBottomSheetDialogFragment();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +104,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         // Autocompletado para el textView de asignaturas
         ArrayAdapter asignaturasAutoCompleteAdapter = ArrayAdapter.createFromResource(this, R.array.asignaturas_array, android.R.layout.simple_spinner_dropdown_item);
+        // TODO: Asignaturas sólamente disponibles
         txSelectorAsignaturasDominadas.setAdapter(asignaturasAutoCompleteAdapter);
 
         /* Evento click en boton añadir asignatura */
@@ -134,6 +142,23 @@ public class CreateAccountActivity extends AppCompatActivity {
                 AsignaturasDominadasBottomSheetDialogFragment fragment = AsignaturasDominadasBottomSheetDialogFragment.newInstance(asignaturasDominadasSeleccionadas);
                 fragment.show(getSupportFragmentManager(), fragment.getTag());
 
+            }
+        });
+    }
+
+    private void asignaturasDisponibles(){
+        asignaturasDisponibles.clear();
+        asignaturaViewModel.getAllAsignaturas().observe(this, asignaturas -> {
+            if(asignaturas != null){
+                asignaturas.forEach(a -> {
+                    if(a != null){
+
+                        AsignaturaDto asig = new AsignaturaDto();
+
+
+                        //asignaturasDisponibles.add();
+                    }
+                });
             }
         });
     }
@@ -181,7 +206,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         String passwordRepeated = txRepeatPassword.getText().toString();
         String uo = txUo.getText().toString();
 
-        if (!FormValidator.isNotEmpty(email)) {
+        if (!FormValidator.isNotEmpty(uo)) {
             txUo.setError(getText(R.string.uo_empty));
             return false;
         }
@@ -206,8 +231,18 @@ public class CreateAccountActivity extends AppCompatActivity {
             return false;
         }
 
+        if (!FormValidator.isEmailValid(email)) {
+            txEmail.setError(getText(R.string.email_invalid));
+            return false;
+        }
+
         if (!FormValidator.isNotEmpty(password)) {
             txPassword.setError(getText(R.string.password_empty));
+            return false;
+        }
+
+        if (!FormValidator.isPasswordValid(password)) {
+            txPassword.setError(getText(R.string.password_invalid));
             return false;
         }
 
@@ -215,12 +250,6 @@ public class CreateAccountActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), getText(R.string.password_not_matching), Toast.LENGTH_SHORT);
             return false;
         }
-
-
-//        if (!FormValidator.isPasswordValid(txPassword.getText().toString())) {
-//            txPassword.setError(getText(R.string.password_invalid));
-//            isValid = false;
-//        }
 
         return true;
     }

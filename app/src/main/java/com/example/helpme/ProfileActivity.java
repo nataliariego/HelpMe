@@ -114,6 +114,7 @@ public class ProfileActivity extends AppCompatActivity {
             alumnoController.findByUOWithPhoto(userInSession.getEmail(), new AlumnoController.AlumnoCallback() {
                 @Override
                 public void callback(Alumno alumno) {
+                    Log.d(TAG, alumno.getEmail() + " " + alumno.getUrl_foto());
                     if (alumno != null) {
                         //Esto tdo no está bien porque en la base de datos
                         //Se guardan raro los datos, faltan cosas...etc

@@ -1,6 +1,7 @@
 package dto;
 
 import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.PropertyName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,7 +14,10 @@ public class AlumnoDto implements Serializable {
     public String id;
     public String nombre;
     public String uo;
+
+    @PropertyName("url_foto")
     public String urlFoto;
+
     public Map<String, Object> asignaturasDominadas;
     public String email;
     @Exclude
