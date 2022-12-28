@@ -371,6 +371,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
 
                         titulo.setText("");
                         descripcion.setText("");
+                        adjuntar.setText("Adjuntar imagen");
                     }
                 }
             });
