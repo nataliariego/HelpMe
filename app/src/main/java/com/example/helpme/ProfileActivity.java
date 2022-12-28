@@ -42,6 +42,7 @@ import dto.DudaDto;
 import viewmodel.AsignaturaViewModel;
 import viewmodel.CursoViewModel;
 
+import com.example.helpme.extras.IntentExtras;
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Asignatura;
 import com.example.helpme.model.Duda;
@@ -98,12 +99,6 @@ public class ProfileActivity extends AppCompatActivity {
         btnGuardar = findViewById(R.id.bt_guardar_perfil);
         btnAmigos = findViewById(R.id.buttonVerAmigos);
 
-        //Pongo los datos del usuario que está autenticado
-        //String uo = userInSession.getEmail().split("@")[0].toUpperCase();
-
-        //Log.i(TAG, "UO: " + uo + " ; email: " + userInSession.getEmail());
-
-       // Log.i("patatita: " , uo);
         //Tengo que buscar el alumno que tenga ese email para poner después los datos
         //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             alumnoController.findByUOWithPhoto(userInSession.getEmail(), new AlumnoController.AlumnoCallback() {
@@ -127,30 +122,10 @@ public class ProfileActivity extends AppCompatActivity {
             });
         //}
 
-
         cargarAsignaturas();
-        //cargarCursos();
-
-
         //navegacion
         navegacion = findViewById(R.id.bottomNavigationView);
-        navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.nav_chat:
-
-                        return true;
-                    case R.id.nav_home:
-                        redirectPantallaHome();
-                        return true;
-                    case R.id.nav_dudas:
-                        redirectPantallaDudas();
-                        return true;
-                }
-                return false;
-            }
-        });
+        IntentExtras.getInstance().handleNavigationView(navegacion, getBaseContext());
 
         //Boton guardar
         btnGuardar.setOnClickListener(new View.OnClickListener() {
@@ -160,7 +135,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        //Boton guardar
+        //Boton ver amigos
         btnAmigos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -178,9 +153,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void actualizarPerfil() {
-
-        String uo = userInSession.getEmail().split("@")[0].toUpperCase();
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             alumnoController.findByUOWithPhoto(userInSession.getEmail(), new AlumnoController.AlumnoCallback() {

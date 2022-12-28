@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.helpme.extras.IntentExtras;
 import com.example.helpme.model.Duda;
 import com.example.helpme.navigation.impl.ActivityNavigationImpl;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -82,23 +83,7 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
 
         //Navegación
         navegacion = findViewById(R.id.bottomNavigationView);
-        navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.nav_chat:
-                        redirectChatActivity();
-                        return true;
-                    case R.id.nav_cuenta:
-                        redirectPantallaCuenta();
-                        return true;
-                    case R.id.nav_dudas:
-                        redirectPantallaDudas();
-                        return true;
-                }
-                return false;
-            }
-        });
+        IntentExtras.getInstance().handleNavigationView(navegacion, getBaseContext());
 
         /* Redirecciones a otras pantallas */
 

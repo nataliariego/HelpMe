@@ -153,6 +153,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     /**
      * Obtiene todas las asignaturas disponibles en la aplicación.
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void obtenerAsignaturasDisponibles() {
         asignaturasDisponibles.clear();
         asignaturaViewModel.getAllAsignaturas().observe(this, availableSubjects -> {
