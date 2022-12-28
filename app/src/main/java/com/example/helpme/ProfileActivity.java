@@ -356,6 +356,13 @@ public class ProfileActivity extends AppCompatActivity {
 
         List<AsignaturaDto> asignaturas = new ArrayList<>();
         Object[] asigs = asignaturasDominadas.values().toArray();
+
+        Log.d(TAG, "ASIGS::: " + asignaturasDominadas.values().toString());
+
+//        for(Map.Entry asignatura : asignaturasDominadas.entrySet()){
+//            Map<String, Object> asignaturaDom =
+//        }
+
         for (Object nombre: asigs) {
             AsignaturaDto a = new AsignaturaDto();
             String linea = nombre.toString();

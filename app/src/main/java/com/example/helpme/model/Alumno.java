@@ -45,7 +45,8 @@ public class Alumno implements Parcelable {
         this.asignaturasDominadas = asignaturasDominadas;
     }
 
-    public Alumno(String nombre, String uo, String url_foto, String email, String userId, Map<String, Object> asignaturasDominadas) {
+    public Alumno(String nombre, String uo, String url_foto, String email, String userId,
+                  Map<String, Object> asignaturasDominadas) {
         this.nombre = nombre;
         this.uo = uo;
         this.url_foto = url_foto;
