@@ -4,25 +4,39 @@ import static android.content.ContentValues.TAG;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Asignatura;
+import com.example.helpme.model.Chat;
 import com.example.helpme.model.Curso;
 import com.example.helpme.model.Duda;
 import com.example.helpme.model.Materia;
+import com.example.helpme.model.Mensaje;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,11 +45,17 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,9 +64,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import assembler.CursoAssembler;
 import assembler.MateriaAssembler;
+import chat.ChatService;
 import controller.AlumnoController;
 import controller.CursoController;
 import dto.AlumnoDto;
@@ -60,9 +82,15 @@ import viewmodel.MateriaViewModel;
 
 public class PublicarDudaActivity extends AppCompatActivity {
 
+    public static final String CLOUD_STORAGE_URL = "gs://helpme-app-435b7.appspot.com/";
+    public static final String BASE_PATH_CLOUD_STORAGE = "imgDudas";
+    public static final String DB_URL = "https://helpme-app-435b7-default-rtdb.europe-west1.firebasedatabase.app";
+
     private Spinner spinner;
     private EditText titulo;
     private EditText descripcion;
+    private ImageButton imagenAdjuntar;
+    private TextView adjuntar;
     private FirebaseFirestore myFirebase;
     private Button btnPublicar;
     private AsignaturaViewModel asignaturaViewModel = new AsignaturaViewModel();
@@ -76,15 +104,26 @@ public class PublicarDudaActivity extends AppCompatActivity {
     private List<MateriaDto> materias =  new ArrayList<>();
     private AlumnoController alumnoController = new AlumnoController();
     private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
+    private Bitmap selectedImageToSend;
+
+    private FirebaseStorage cloudStorage = FirebaseStorage.getInstance(CLOUD_STORAGE_URL);
+    private StorageReference storageRef = cloudStorage.getReference();
+    private StorageReference imgStorage = storageRef.child(BASE_PATH_CLOUD_STORAGE);
+
+    FirebaseDatabase db = FirebaseDatabase.getInstance(DB_URL);
+
+    private String url_imagen="";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publicar_duda);
+        imagenAdjuntar = findViewById(R.id.imageButtonAdjuntar);
         spinner = (Spinner) findViewById(R.id.spinnerAsignaturas);
         titulo = (EditText) findViewById(R.id.editTextTituloDudaNueva);
         descripcion = (EditText) findViewById(R.id.editTextDuda);
+        adjuntar = findViewById(R.id.textViewAdjuntar);
         myFirebase = FirebaseFirestore.getInstance();
         BottomNavigationView navegacion = findViewById(R.id.bottomNavigationView);
         cargarAsignaturas();
@@ -102,6 +141,49 @@ public class PublicarDudaActivity extends AppCompatActivity {
 
             }
         });
+
+
+
+        /* Abre la galería de imágenes del dispositivo */
+        ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == RESULT_OK) {
+                            Uri uri = result.getData().getData();
+                            System.out.println(uri);
+                            try {
+                                selectedImageToSend = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), uri);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            Log.d(TAG, "Imagen recibida");
+
+                            ImageView selected = new ImageView(getApplicationContext());
+                            selected.setImageBitmap(selectedImageToSend);
+                            uploadImage(selected);
+
+                        } else if (result.getResultCode() == RESULT_CANCELED) {
+                            Toast.makeText(getApplicationContext(), "Acción cancelada", Toast.LENGTH_SHORT);
+                        }
+
+
+                    }
+                }
+        );
+        imagenAdjuntar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "BT-ADJUNTAR ARCHIVO: ");
+
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/");
+
+                galleryLauncher.launch(intent);
+            }
+        });
+
+
 
         //Navegacion:
         navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -126,6 +208,63 @@ public class PublicarDudaActivity extends AppCompatActivity {
         });
 
     }
+
+    private void uploadImage(ImageView imageView) {
+
+        imageView.setDrawingCacheEnabled(true);
+        imageView.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        String imgUid = UUID.randomUUID().toString();
+        String imageName = imgUid + ".jpg";
+        url_imagen = imageName;
+        adjuntar.setText("Adjuntar imagen "+ "(1)");
+        imagenAdjuntar.setEnabled(false);
+        UploadTask uploadTask = imgStorage.child(imageName).putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.e(TAG, "Error al subir la imagen a Cloud Storage");
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+
+                if (taskSnapshot.getTask().isSuccessful()) {
+                    Log.d(TAG, "Imagen subida: " + taskSnapshot.getMetadata());
+                    Map<String, Object> payload = new HashMap<>();
+
+                    payload.put(Mensaje.SENDER, userInSession.getUid());
+                    payload.put(Mensaje.CONTENT, imgStorage.child(imageName).getPath());
+                    payload.put(Mensaje.MESSAGE_TYPE, "image/jpeg");
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        payload.put(Mensaje.CREATED_AT, DateUtils.getNowWithPredefinedFormat());
+                    }
+
+                    db.getReference().child(Chat.REFERENCE).child(Mensaje.REFERENCE).child(imgUid).updateChildren(payload).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Log.e(TAG, "Imagen subida. ");
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e(TAG, "ERROR al subir la imagen al servidor. " + e.getMessage());
+                        }
+                    });
+                }
+
+            }
+        });
+    }
+
 
     @Override
     protected void onPause() {
@@ -211,6 +350,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
                         docData.put("materia", materiaMap);
                         docData.put("resuelta", false);
                         docData.put("fecha", fecha);
+                        docData.put("url_adjunto",url_imagen);
 
 
                         System.out.println("Holaaaaaaaaaa");
