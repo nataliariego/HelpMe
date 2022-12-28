@@ -1,16 +1,15 @@
 package com.example.helpme;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.animation.Animator;
-import android.content.Context;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ScaleGestureDetector;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -20,22 +19,22 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.helpme.model.Alumno;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import controller.AlumnoController;
 import de.hdodenhof.circleimageview.CircleImageView;
-import dto.AlumnoDto;
 import dto.AsignaturaDto;
 import viewmodel.AsignaturaViewModel;
 
 public class FriendProfileActivity extends AppCompatActivity {
 
 
+    private BottomNavigationView navegacion;
 
     private String alumno;
     private String email;
@@ -82,32 +81,57 @@ public class FriendProfileActivity extends AppCompatActivity {
 
         paramsBefore=img_persona.getLayoutParams();
 
-
+        //Cuando hago click fuera de la imagen
         findViewById(R.id.containerView).setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-
                 img_persona.setLayoutParams(paramsBefore);
-                img_persona.setMinimumHeight(124);
-                img_persona.setMaxHeight(124);
                 findViewById(R.id.containerView).setBackgroundColor(Color.WHITE);
                 findViewById(R.id.constraintLayout).setVisibility(View.VISIBLE);
-
+                navegacion.setVisibility(View.INVISIBLE);
+               // navegacion.setEnabled(false);
             }
         });
+
+        //Cuando hago click dentro de la imagen
         img_persona.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                     img_persona.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
                     findViewById(R.id.containerView).setBackgroundColor(Color.GRAY);
                     findViewById(R.id.constraintLayout).setVisibility(View.INVISIBLE);
-                }
 
+                }
+        });
+
+
+        //Navegacion:
+        navegacion = findViewById(R.id.bottomNavigationView);
+        navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()){
+                    case R.id.nav_home:
+
+                        redirectPantallaHome();
+                        return true;
+                    case R.id.nav_chat:
+
+                        return true;
+                    case R.id.nav_cuenta:
+                        redirectPantallaCuenta();
+                        return true;
+                    case R.id.nav_dudas:
+                        redirectPantallaDudas();
+                        return true;
+                }
+                return false;
+            }
         });
 
     }
+
 
 
     private void cargarAsignaturas() {
@@ -228,5 +252,30 @@ public class FriendProfileActivity extends AppCompatActivity {
 
         return asignaturas;
 
+    }
+
+
+    private void redirectPantallaHome() {
+        Intent listadoDudasIntent = new Intent(FriendProfileActivity.this, HomeActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
+    }
+
+    private void redirectPantallaDudas() {
+        Intent listadoDudasIntent = new Intent(FriendProfileActivity.this, ListarDudasActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
+    }
+
+    private void redirectPantallaCuenta() {
+        Intent listadoDudasIntent = new Intent(FriendProfileActivity.this, ProfileActivity.class);
+        // Para transiciones
+        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        //startActivity(listadoDudasIntent);
     }
 }
