@@ -64,13 +64,8 @@ public class ProfileActivity extends AppCompatActivity {
     private static final String TAG = "profile_activity";
     private List<AsignaturaDto> asignaturaList = new ArrayList<AsignaturaDto>();
     private AsignaturaViewModel asignaturaViewModel = new AsignaturaViewModel();
-    private Spinner spinnerAsignaturas;
-    private List<String> nombreAsignaturas = new ArrayList<>();
+   
 
-    private List<CursoDto> cursos = new ArrayList<CursoDto>();
-    private CursoViewModel cursoViewModel = new CursoViewModel();
-    private Spinner spinnerCursos;
-    private List<String> numeroCursos = new ArrayList<>();
 
     private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
     private AlumnoController alumnoController = new AlumnoController();
