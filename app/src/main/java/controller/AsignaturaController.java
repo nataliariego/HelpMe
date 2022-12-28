@@ -120,6 +120,7 @@ public class AsignaturaController {
                     if (docs.size() > 0) {
                         DocumentSnapshot doc = docs.get(0);
                         Map<String, Object> res = doc.getData();
+                        res.put(Asignatura.ID, doc.getId());
                         callback.callback(res);
                     }
                 }
