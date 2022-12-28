@@ -1,9 +1,14 @@
 package adapter;
 
+import android.app.ActivityOptions;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,18 +16,26 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.helpme.FriendProfileActivity;
+import com.example.helpme.FriendsActivity;
+import com.example.helpme.ListarDudasActivity;
 import com.example.helpme.R;
+import com.example.helpme.ResolveActivity;
+import com.example.helpme.model.Alumno;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import assembler.MateriaAssembler;
 import dto.AlumnoDto;
 import dto.AsignaturaDto;
 
-public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoViewHolder> {
+public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoViewHolder>
+{
+
+
+
 
     private List<AlumnoDto> alumnos = new ArrayList<>();
 
@@ -46,6 +59,38 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
         holder.nombreAlumno.setText(alumno.nombre);
 
         holder.bindAlumno(alumno);
+
+
+
+        holder.botonPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("...", alumno.toString());
+
+                /*Alumno a = new Alumno(alumno.nombre,
+                        alumno.uo,
+                        alumno.urlFoto,
+                        alumno.uo+"@uniovi.es",
+                        null, alumno.asignaturasDominadas);
+
+                Log.i("patata", a.toString());*/
+
+                Intent intent = new Intent(holder.context, FriendProfileActivity.class);
+
+                String info = alumno.nombre + "---" + alumno.uo + "---"
+                        + alumno.urlFoto + "---" + alumno.uo+"@uniovi.es" + "---" +
+                        alumno.asignaturasDominadas;
+
+
+               //intent.putExtra("alumno_seleccionado", a);
+                intent.putExtra("alumno_seleccionado", info);
+
+                //Transacion de barrido
+                holder.context.startActivity(intent);
+
+            }
+        });
+
     }
 
     @Override
@@ -53,17 +98,24 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
         return alumnos.size();
     }
 
+
+
+
     protected class AlumnoViewHolder extends RecyclerView.ViewHolder {
 
         private TextView nombreAlumno;
         private TextView asiganturas;
         private ImageView imagen_alumno;
+        private Button botonPerfil;
+        private Context context;
 
         public AlumnoViewHolder(@NonNull View itemView) {
             super(itemView);
+            context=itemView.getContext();
             nombreAlumno = itemView.findViewById(R.id.nombreAlumno);
             asiganturas = itemView.findViewById(R.id.textViewAsignaturasDominadas);
             imagen_alumno = itemView.findViewById(R.id.imageViewPerfil);
+            botonPerfil = itemView.findViewById(R.id.buttonPerfil);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
@@ -92,9 +144,8 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
             } else {
                 asiganturas.setText(cadena);
             }
-            Picasso.get().load(alumno.urlFoto).into(imagen_alumno);
 
-            //fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha));
+            Picasso.get().load(alumno.urlFoto).into(imagen_alumno);
 
         }
     }

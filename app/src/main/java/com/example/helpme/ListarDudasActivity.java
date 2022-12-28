@@ -1,14 +1,12 @@
 package com.example.helpme;
 
 import android.app.ActivityOptions;
-import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -16,19 +14,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.helpme.extras.IntentExtras;
 import com.example.helpme.model.Duda;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import adapter.DudaAdapter;
-import controller.AlumnoController;
-import controller.AsignaturaController;
-import controller.DudaController;
 import dto.DudaDto;
 import viewmodel.DudaViewModel;
 
@@ -42,7 +36,6 @@ public class ListarDudasActivity extends AppCompatActivity {
     private List<Duda> listaDuda = new ArrayList<Duda>();
 
 
-
     private RecyclerView listaDudaView;
 
     private DudaAdapter dudaAdapter;
@@ -53,8 +46,6 @@ public class ListarDudasActivity extends AppCompatActivity {
 
 
     private BottomNavigationView navegacion;
-
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -86,41 +77,22 @@ public class ListarDudasActivity extends AppCompatActivity {
 
         //Navegacion:
         navegacion = findViewById(R.id.bottomNavigationView);
-        navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.nav_home:
-                        redirectPantallaHome();
-                        return true;
-                    case R.id.nav_chat:
-
-                        return true;
-                    case R.id.nav_cuenta:
-                        redirectPantallaCuenta();
-                        return true;
-                    case R.id.nav_dudas:
-
-                }
-                return false;
-            }
-        });
+        IntentExtras.getInstance().handleNavigationView(navegacion, getBaseContext());
 
 
     }
 
     public void clikonIntem(DudaDto duda) {
         Duda dudaCreada = crearDuda(duda);
-        System.out.println("ADIOSSSS");
         //Paso el modo de apertura
-        Intent intent = new Intent(ListarDudasActivity.this,ResolveActivity.class);
+        Intent intent = new Intent(ListarDudasActivity.this, ResolveActivity.class);
         intent.putExtra(DUDA_SELECCIONADA, dudaCreada);
         //Transacion de barrido
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
 
     private Duda crearDuda(DudaDto duda) {
-        Duda d = new Duda(duda.titulo,duda.descripcion,duda.alumno,duda.asignatura,duda.materia,duda.isResuelta,duda.fecha,duda.id);
+        Duda d = new Duda(duda.titulo, duda.descripcion, duda.alumno, duda.asignatura, duda.materia, duda.isResuelta, duda.fecha, duda.id);
         return d;
     }
 
@@ -139,7 +111,8 @@ public class ListarDudasActivity extends AppCompatActivity {
                     public void onItemClick(DudaDto duda) {
                         clikonIntem(duda);
                     }
-                });;
+                });
+        ;
         listaDudaView.setAdapter(dudaAdapter);
 
         dudaAdapter.notifyDataSetChanged();
@@ -147,21 +120,8 @@ public class ListarDudasActivity extends AppCompatActivity {
     }
 
 
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void cargarDudas() {
-        /*Duda d1 = new Duda("Algoritmo A*", "Estoy intentando hacer experimentos para el algoritmo A* y me da este error:", "Natalia Fernández Riego", "Sistemas Inteligentes", "IA", true, "30/10/2022 12:35:24");
-        Duda d2 = new Duda("Funciones Lambda", "Tecnologias y Paradigmas de la Programación", "Juan Iglesias Pérez", "Tecnologias y Paradigmas de la Programación", "TPP", false, "30/10/2022 12:35:24");
-        Duda d3 = new Duda("Conexión entre Activities", "Estoy intentando hacer esta conexion", "Marta Ramos Álvarez", "Software de Dispositivos Móviles", "SDM", false, "30/10/2022 14:35:24");
-        Duda d4 = new Duda("Paso a casos de equivalencia", "Estoy intentando hacer este paso", "Manuel Carillo Gómez", "Calidad y Validación del Software", "CVS", false, "31/10/2022 12:35:24");
-        Duda d5 = new Duda("Hacer un Grid Layout", "Estoy intentando hacer este layout", "Estela García Antuña", "Comunicacion Persona-Maquina", "CPM", false, "12/09/2022 10:35:24");
-
-        listaDuda.add(d1);
-        listaDuda.add(d2);
-        listaDuda.add(d3);
-        listaDuda.add(d4);
-        listaDuda.add(d5);
-         */
 
         dudas = new ArrayList<>();
 
@@ -175,9 +135,9 @@ public class ListarDudasActivity extends AppCompatActivity {
                     newDuda.alumno = d.getAlumnoId();
                     newDuda.asignatura = d.getAsignaturaId();
                     newDuda.fecha = d.getFecha();
-                    newDuda.id=d.getId();
+                    newDuda.id = d.getId();
                     newDuda.materia = d.getMateriaId();
-                    newDuda.isResuelta=d.isResuelta();
+                    newDuda.isResuelta = d.isResuelta();
 
                     dudas.add(newDuda);
 
@@ -190,7 +150,8 @@ public class ListarDudasActivity extends AppCompatActivity {
                         public void onItemClick(DudaDto duda) {
                             clikonIntem(duda);
                         }
-                    });;
+                    });
+            ;
             listaDudaView.setAdapter(dudaAdapter);
             dudaAdapter.notifyDataSetChanged();
         });

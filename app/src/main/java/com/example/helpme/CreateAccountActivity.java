@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -14,20 +13,16 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.model.Alumno;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import auth.Authentication;
 import controller.AlumnoController;
@@ -62,7 +57,10 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private List<AsignaturaDto> asignaturasDisponibles = new ArrayList<>();
 
+    private ArrayAdapter asignaturasAutoCompleteAdapter;
+
     private HashMap<String, Object> asignaturasDominadasSeleccionadas = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +87,12 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        obtenerAsignaturasDisponibles();
+    }
+
     private void initFields() {
         txUo = (EditText) findViewById(R.id.text_uo_create_account);
         txEmail = (EditText) findViewById(R.id.text_email_create_account);
@@ -103,7 +107,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         btAddAsignatura = (Button) findViewById(R.id.button_add_asignatura_create_account);
 
         // Autocompletado para el textView de asignaturas
-        ArrayAdapter asignaturasAutoCompleteAdapter = ArrayAdapter.createFromResource(this, R.array.asignaturas_array, android.R.layout.simple_spinner_dropdown_item);
+        asignaturasAutoCompleteAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, asignaturasDisponibles.stream().map(a -> a.nombre).collect(Collectors.toList()));
         // TODO: Asignaturas sólamente disponibles
         txSelectorAsignaturasDominadas.setAdapter(asignaturasAutoCompleteAdapter);
 
@@ -146,19 +150,25 @@ public class CreateAccountActivity extends AppCompatActivity {
         });
     }
 
-    private void asignaturasDisponibles(){
+    /**
+     * Obtiene todas las asignaturas disponibles en la aplicación.
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void obtenerAsignaturasDisponibles() {
         asignaturasDisponibles.clear();
-        asignaturaViewModel.getAllAsignaturas().observe(this, asignaturas -> {
-            if(asignaturas != null){
-                asignaturas.forEach(a -> {
-                    if(a != null){
+        asignaturaViewModel.getAllAsignaturas().observe(this, availableSubjects -> {
+            if (availableSubjects != null) {
+                availableSubjects.forEach(a -> {
+                    if (a != null) {
 
                         AsignaturaDto asig = new AsignaturaDto();
+                        asig.id = a.getId();
+                        asig.nombre = a.getNombre();
 
-
-                        //asignaturasDisponibles.add();
+                        asignaturasDisponibles.add(asig);
                     }
                 });
+                asignaturasAutoCompleteAdapter.notifyDataSetChanged();
             }
         });
     }
