@@ -1,14 +1,12 @@
 package com.example.helpme;
 
 import android.app.ActivityOptions;
-import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -16,19 +14,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.helpme.extras.IntentExtras;
 import com.example.helpme.model.Duda;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import adapter.DudaAdapter;
-import controller.AlumnoController;
-import controller.AsignaturaController;
-import controller.DudaController;
 import dto.DudaDto;
 import viewmodel.DudaViewModel;
 
@@ -42,7 +36,6 @@ public class ListarDudasActivity extends AppCompatActivity {
     private List<Duda> listaDuda = new ArrayList<Duda>();
 
 
-
     private RecyclerView listaDudaView;
 
     private DudaAdapter dudaAdapter;
@@ -53,8 +46,6 @@ public class ListarDudasActivity extends AppCompatActivity {
 
 
     private BottomNavigationView navegacion;
-
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -86,25 +77,7 @@ public class ListarDudasActivity extends AppCompatActivity {
 
         //Navegacion:
         navegacion = findViewById(R.id.bottomNavigationView);
-        navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.nav_home:
-                        redirectPantallaHome();
-                        return true;
-                    case R.id.nav_chat:
-
-                        return true;
-                    case R.id.nav_cuenta:
-                        redirectPantallaCuenta();
-                        return true;
-                    case R.id.nav_dudas:
-
-                }
-                return false;
-            }
-        });
+        IntentExtras.getInstance().handleNavigationView(navegacion, getBaseContext());
 
 
     }
@@ -112,14 +85,14 @@ public class ListarDudasActivity extends AppCompatActivity {
     public void clikonIntem(DudaDto duda) {
         Duda dudaCreada = crearDuda(duda);
         //Paso el modo de apertura
-        Intent intent = new Intent(ListarDudasActivity.this,ResolveActivity.class);
+        Intent intent = new Intent(ListarDudasActivity.this, ResolveActivity.class);
         intent.putExtra(DUDA_SELECCIONADA, dudaCreada);
         //Transacion de barrido
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
 
     private Duda crearDuda(DudaDto duda) {
-        Duda d = new Duda(duda.titulo,duda.descripcion,duda.alumno,duda.asignatura,duda.materia,duda.isResuelta,duda.fecha,duda.id);
+        Duda d = new Duda(duda.titulo, duda.descripcion, duda.alumno, duda.asignatura, duda.materia, duda.isResuelta, duda.fecha, duda.id);
         return d;
     }
 
@@ -138,13 +111,13 @@ public class ListarDudasActivity extends AppCompatActivity {
                     public void onItemClick(DudaDto duda) {
                         clikonIntem(duda);
                     }
-                });;
+                });
+        ;
         listaDudaView.setAdapter(dudaAdapter);
 
         dudaAdapter.notifyDataSetChanged();
 
     }
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -162,9 +135,9 @@ public class ListarDudasActivity extends AppCompatActivity {
                     newDuda.alumno = d.getAlumnoId();
                     newDuda.asignatura = d.getAsignaturaId();
                     newDuda.fecha = d.getFecha();
-                    newDuda.id=d.getId();
+                    newDuda.id = d.getId();
                     newDuda.materia = d.getMateriaId();
-                    newDuda.isResuelta=d.isResuelta();
+                    newDuda.isResuelta = d.isResuelta();
 
                     dudas.add(newDuda);
 
@@ -177,7 +150,8 @@ public class ListarDudasActivity extends AppCompatActivity {
                         public void onItemClick(DudaDto duda) {
                             clikonIntem(duda);
                         }
-                    });;
+                    });
+            ;
             listaDudaView.setAdapter(dudaAdapter);
             dudaAdapter.notifyDataSetChanged();
         });
