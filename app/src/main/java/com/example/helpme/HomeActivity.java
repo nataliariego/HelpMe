@@ -176,6 +176,7 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
                     newDuda.asignatura = d.getAsignaturaId();
                     newDuda.materia = d.getMateriaId();
                     newDuda.fecha = d.getFecha();
+                    newDuda.url_adnjuto=d.getUrl_adjunto();
 
                     dudas.add(newDuda);
                 });
@@ -205,7 +206,7 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
     }
 
     private Duda crearDuda(DudaDto duda) {
-        Duda d = new Duda(duda.titulo,duda.descripcion,duda.alumno,duda.asignatura,duda.materia,duda.isResuelta,duda.fecha,duda.id);
+        Duda d = new Duda(duda.titulo,duda.descripcion,duda.alumno,duda.asignatura,duda.materia,duda.isResuelta,duda.fecha,duda.id,duda.url_adnjuto);
         return d;
     }
 

@@ -92,7 +92,7 @@ public class ListarDudasActivity extends AppCompatActivity {
     }
 
     private Duda crearDuda(DudaDto duda) {
-        Duda d = new Duda(duda.titulo, duda.descripcion, duda.alumno, duda.asignatura, duda.materia, duda.isResuelta, duda.fecha, duda.id);
+        Duda d = new Duda(duda.titulo, duda.descripcion, duda.alumno, duda.asignatura, duda.materia, duda.isResuelta, duda.fecha, duda.id,duda.url_adnjuto);
         return d;
     }
 
@@ -138,6 +138,7 @@ public class ListarDudasActivity extends AppCompatActivity {
                     newDuda.id = d.getId();
                     newDuda.materia = d.getMateriaId();
                     newDuda.isResuelta = d.isResuelta();
+                    newDuda.url_adnjuto = d.getUrl_adjunto();
 
                     dudas.add(newDuda);
 
