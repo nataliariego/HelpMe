@@ -46,8 +46,6 @@ public class FriendProfileActivity extends AppCompatActivity {
 
     private ViewGroup.LayoutParams paramsBefore;
 
-    boolean isImageFitToScreen;
-
     private List<CheckBox> cB = new ArrayList<>();
 
     private List<String> asignaturaList = new ArrayList<String>();
@@ -70,8 +68,6 @@ public class FriendProfileActivity extends AppCompatActivity {
         nombreCompleto = findViewById(R.id.tv_user_name);
 
 
-        Log.i("patata", alumno);
-
         String[] info = alumno.split("---");
 
         email = info[3];
@@ -92,15 +88,11 @@ public class FriendProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Log.i("-->", "a ver");
                 img_persona.setLayoutParams(paramsBefore);
-                //img_persona.layout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
                 img_persona.setMinimumHeight(124);
                 img_persona.setMaxHeight(124);
                 findViewById(R.id.containerView).setBackgroundColor(Color.WHITE);
                 findViewById(R.id.constraintLayout).setVisibility(View.VISIBLE);
-
-
 
             }
         });
@@ -108,11 +100,9 @@ public class FriendProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
                     img_persona.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
                     findViewById(R.id.containerView).setBackgroundColor(Color.GRAY);
                     findViewById(R.id.constraintLayout).setVisibility(View.INVISIBLE);
-                    //img_persona.setScaleType(CircleImageView.ScaleType.FIT_XY);
                 }
 
         });
@@ -178,7 +168,9 @@ public class FriendProfileActivity extends AppCompatActivity {
                                 System.out.println("Todas**"+asignaturaList);
 
                                 for (String as: asignaturasAlumno) {
+
                                     if (a.equals(as)) {
+
                                         opcion.setChecked(true);
                                         opcion.setTextColor(Color.BLACK);
 
