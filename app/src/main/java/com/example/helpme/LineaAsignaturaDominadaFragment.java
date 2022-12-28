@@ -25,7 +25,6 @@ public class LineaAsignaturaDominadaFragment extends Fragment {
     private AsignaturaDto asignatura;
 
     private TextView txNombreAsignaturaDominada;
-    private ImageButton btRemoveAsignaturaDominada;
 
     public LineaAsignaturaDominadaFragment() {
         // Required empty public constructor
@@ -67,14 +66,5 @@ public class LineaAsignaturaDominadaFragment extends Fragment {
 
     private void initFields(View view) {
         txNombreAsignaturaDominada = (TextView) view.findViewById(R.id.text_asignatura_dominada);
-        btRemoveAsignaturaDominada = (ImageButton) view.findViewById(R.id.button_delete_asignaturaDominada);
-
-        btRemoveAsignaturaDominada.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i(TAG, "ELIMINADO: " + getArguments().get(DATA_ASIGNATURA));
-                getArguments().clear();
-            }
-        });
     }
 }
