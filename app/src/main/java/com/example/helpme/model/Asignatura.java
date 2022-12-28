@@ -12,6 +12,7 @@ public class Asignatura implements Parcelable {
     public static final String NOMBRE = "nombre";
     public static final String MATERIA = "materia";
     public static final String CURSO = "curso";
+    public static final String ID = "id";
 
     private String id;
     private String nombre;

@@ -45,7 +45,9 @@ import viewmodel.CursoViewModel;
 import com.example.helpme.extras.IntentExtras;
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Asignatura;
+import com.example.helpme.model.Curso;
 import com.example.helpme.model.Duda;
+import com.example.helpme.model.Materia;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -359,29 +361,41 @@ public class ProfileActivity extends AppCompatActivity {
 
         Log.d(TAG, "ASIGS::: " + asignaturasDominadas.values().toString());
 
-//        for(Map.Entry asignatura : asignaturasDominadas.entrySet()){
-//            Map<String, Object> asignaturaDom =
-//        }
+        for(Map.Entry asignatura : asignaturasDominadas.entrySet()){
+            Map<String, Object> asignaturaDom = (Map<String, Object>) asignatura.getValue();
+            String nombre = (String) asignaturaDom.get(Asignatura.NOMBRE);
+            String id = (String) asignaturaDom.get(Asignatura.ID);
+            Map<String, Object> curso = (Map<String, Object>) asignaturaDom.get(Asignatura.CURSO);
+            Map<String, Object> materia = (Map<String, Object>) asignaturaDom.get(Asignatura.MATERIA);
 
-        for (Object nombre: asigs) {
-            AsignaturaDto a = new AsignaturaDto();
-            String linea = nombre.toString();
-            System.out.println("pa" + nombre);
-           // a.curso=linea.split("curso=")[1].split(Pattern.quote("}")+",")[0]+"}";
-            //a.materia=linea.split("materia=")[1].split(Pattern.quote("}")+",")[0]+"}";
-            //a.nombre=linea.split("nombre=")[1].split(",")[0].split(Pattern.quote("}"))[0];
-            //esta nal el id
+            AsignaturaDto newAsig = new AsignaturaDto();
+            newAsig.id = id;
+            newAsig.nombre = nombre;
+            newAsig.curso = (String) curso.get(Curso.NUMERO);
+            newAsig.materia = (String) materia.get(Materia.ABREVIATURA);
 
-            Map<Object, String> prueba = (Map<Object, String>) nombre;
-
-            prueba.get("id");
-            //System.out.println("prueba " + prueba.get("curso"));
-            a.curso=prueba.get("curso");
-            a.materia=prueba.get("materia");
-            a.nombre=prueba.get("nombre");
-            a.id=prueba.get("id");
-            asignaturas.add(a);
+            asignaturas.add(newAsig);
         }
+
+//        for (Object nombre: asigs) {
+//            AsignaturaDto a = new AsignaturaDto();
+//            String linea = nombre.toString();
+//            System.out.println("pa" + nombre);
+//           // a.curso=linea.split("curso=")[1].split(Pattern.quote("}")+",")[0]+"}";
+//            //a.materia=linea.split("materia=")[1].split(Pattern.quote("}")+",")[0]+"}";
+//            //a.nombre=linea.split("nombre=")[1].split(",")[0].split(Pattern.quote("}"))[0];
+//            //esta nal el id
+//
+//            Map<Object, String> prueba = (Map<Object, String>) nombre;
+//
+//            prueba.get("id");
+//            //System.out.println("prueba " + prueba.get("curso"));
+//            a.curso=prueba.get("curso");
+//            a.materia=prueba.get("materia");
+//            a.nombre=prueba.get("nombre");
+//            a.id=prueba.get("id");
+//            asignaturas.add(a);
+//        }
 
 
         return asignaturas;
