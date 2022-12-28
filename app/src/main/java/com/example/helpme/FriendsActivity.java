@@ -13,12 +13,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Duda;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +70,7 @@ public class FriendsActivity extends AppCompatActivity {
 
         cargarAmigos();
 
+       // AlumnoAdapter adapter = new AlumnoAdapter(amigos);
 
         //Navegación
         navegacion = findViewById(R.id.bottomNavigationView);
@@ -140,10 +145,22 @@ public class FriendsActivity extends AppCompatActivity {
                 });
             }
             alumnoAdapter = new AlumnoAdapter(amigos);
+
+
             listadoAmigos.setAdapter(alumnoAdapter);
             alumnoAdapter.notifyDataSetChanged();
         });
     }
+
+
+    /**public static AlumnoDto deselectUser(List<AlumnoDto> amigos, int posicion){
+        for(int i = 0; i < lstUsuarios.size(); i++){
+            lstUsuarios.get(i).setSelected(false);
+        }
+        lstUsuarios.get(posicion).setSelected(true);
+        return lstUsuarios;
+    }*/
+
 
     private void redirectPantallaHome() {
         Intent listadoDudasIntent = new Intent(FriendsActivity.this, HomeActivity.class);
