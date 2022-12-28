@@ -1,6 +1,5 @@
 package adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +7,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.helpme.CreateAccountActivity;
 import com.example.helpme.R;
 
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class AsignaturaDominadaSheetAdapter extends RecyclerView.Adapter<Asignat
         holder.bindAsignaturaDominada(asignatura);
     }
 
-    public List<String> getAsignaturasDominadas(){
+    public List<String> getAsignaturasDominadas() {
         return asignaturasDominadas;
     }
 
@@ -50,29 +49,18 @@ public class AsignaturaDominadaSheetAdapter extends RecyclerView.Adapter<Asignat
         return asignaturasDominadas.size();
     }
 
-    protected class AsignaturaDominadaViewHolder extends RecyclerView.ViewHolder{
+    protected class AsignaturaDominadaViewHolder extends RecyclerView.ViewHolder {
 
         private TextView txNombreAsignatura;
-        private ImageButton btEliminarAsignatura;
 
         public AsignaturaDominadaViewHolder(@NonNull View itemView) {
             super(itemView);
 
             txNombreAsignatura = (TextView) itemView.findViewById(R.id.text_asignatura_dominada);
-            btEliminarAsignatura = (ImageButton) itemView.findViewById(R.id.button_delete_asignaturaDominada);
         }
 
-        public void bindAsignaturaDominada(final String nombre){
+        public void bindAsignaturaDominada(final String nombre) {
             txNombreAsignatura.setText(nombre);
-
-            btEliminarAsignatura.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    asignaturasDominadas.remove(nombre);
-                    notifyDataSetChanged();
-                }
-            });
         }
 
     }

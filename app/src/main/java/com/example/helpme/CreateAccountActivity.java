@@ -1,6 +1,7 @@
 package com.example.helpme;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import auth.Authentication;
 import controller.AlumnoController;
@@ -45,20 +45,15 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private AutoCompleteTextView txSelectorAsignaturasDominadas;
     private Button btAddAsignatura;
-
     private Button btVerAsignaturasDominadasSeleccionadas;
-
+    private Button btEliminarAsignaturasDominadas;
     private Button btCreateAccount;
     private Button btRedirectToLogin;
 
     private static AlumnoController alumnoController = new AlumnoController();
-
     private AsignaturaViewModel asignaturaViewModel = new AsignaturaViewModel();
-
-    private List<AsignaturaDto> asignaturasDisponibles = new ArrayList<>();
-
+    private List<String> asignaturasDisponibles = new ArrayList<>();
     private ArrayAdapter asignaturasAutoCompleteAdapter;
-
     private HashMap<String, Object> asignaturasDominadasSeleccionadas = new HashMap<>();
 
     @Override
@@ -68,7 +63,9 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         setTitle("Crear una cuenta");
 
-        initFields();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            initFields();
+        }
 
         btCreateAccount.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -90,9 +87,41 @@ public class CreateAccountActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        obtenerAsignaturasDisponibles();
+
+        changeButtonColors(false);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                && asignaturasDisponibles.size() == 0) {
+            obtenerAsignaturasDisponibles();
+        }
     }
 
+    private void changeButtonColors(boolean habilitar) {
+        boolean anyAsignaturasSeleccionadas = asignaturasDominadasSeleccionadas.size() > 0;
+
+
+        btEliminarAsignaturasDominadas.setEnabled(anyAsignaturasSeleccionadas);
+
+        if (anyAsignaturasSeleccionadas || habilitar) {
+            btVerAsignaturasDominadasSeleccionadas.setEnabled(true);
+            btEliminarAsignaturasDominadas.setEnabled(true);
+
+            btVerAsignaturasDominadasSeleccionadas.setBackgroundColor(Color.rgb(255, 239, 211));
+
+            btEliminarAsignaturasDominadas.setBackgroundColor(Color.rgb(219, 15, 0));
+            btEliminarAsignaturasDominadas.setTextColor(Color.rgb(255, 255, 255));
+        } else {
+            btVerAsignaturasDominadasSeleccionadas.setEnabled(false);
+            btEliminarAsignaturasDominadas.setEnabled(false);
+
+            btVerAsignaturasDominadasSeleccionadas.setBackgroundColor(Color.rgb(209, 209, 209));
+
+            btEliminarAsignaturasDominadas.setBackgroundColor(Color.rgb(209, 209, 209));
+            btEliminarAsignaturasDominadas.setTextColor(Color.rgb(12, 12, 50));
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initFields() {
         txUo = (EditText) findViewById(R.id.text_uo_create_account);
         txEmail = (EditText) findViewById(R.id.text_email_create_account);
@@ -102,13 +131,10 @@ public class CreateAccountActivity extends AppCompatActivity {
         btCreateAccount = (Button) findViewById(R.id.button_signup_create_account);
         btRedirectToLogin = (Button) findViewById(R.id.button_login_create_account);
         btVerAsignaturasDominadasSeleccionadas = (Button) findViewById(R.id.buttonVerAsignaturasSeleccionadasCreateAccount);
-
         txSelectorAsignaturasDominadas = (AutoCompleteTextView) findViewById(R.id.text_asignaturas_dominadas_create_account);
         btAddAsignatura = (Button) findViewById(R.id.button_add_asignatura_create_account);
-
-        // Autocompletado para el textView de asignaturas
-        asignaturasAutoCompleteAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, asignaturasDisponibles.stream().map(a -> a.nombre).collect(Collectors.toList()));
-        // TODO: Asignaturas sólamente disponibles
+        btEliminarAsignaturasDominadas = (Button) findViewById(R.id.buttonEliminarAsignaturasDominadas);
+        asignaturasAutoCompleteAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, asignaturasDisponibles);
         txSelectorAsignaturasDominadas.setAdapter(asignaturasAutoCompleteAdapter);
 
         /* Evento click en boton añadir asignatura */
@@ -122,7 +148,6 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                     String asigName = txSelectorAsignaturasDominadas.getText().toString();
 
-
                     AsignaturaController.getInstance().findByName(asigName, new AsignaturaController.AsignaturaCallback() {
                         @Override
                         public void callback(Map<String, Object> payload) {
@@ -130,12 +155,22 @@ public class CreateAccountActivity extends AppCompatActivity {
                             asignaturasDominadasSeleccionadas.put(String.valueOf(pos), payload);
 
                             Log.i(TAG, payload.toString());
+
+                            txSelectorAsignaturasDominadas.setText("");
+                            changeButtonColors(true);
                         }
                     });
-
-                    txSelectorAsignaturasDominadas.setText("");
-
                 }
+            }
+        });
+
+        /* Evento click para restablecer las asignaturas dominadas seleccionadas */
+        btEliminarAsignaturasDominadas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                asignaturasDominadasSeleccionadas.clear();
+                changeButtonColors(false);
+                Toast.makeText(CreateAccountActivity.this, "Asignaturas dominadas borradas", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -165,10 +200,12 @@ public class CreateAccountActivity extends AppCompatActivity {
                         asig.id = a.getId();
                         asig.nombre = a.getNombre();
 
-                        asignaturasDisponibles.add(asig);
+                        asignaturasDisponibles.add(asig.nombre);
                     }
                 });
+
                 asignaturasAutoCompleteAdapter.notifyDataSetChanged();
+                Log.d(TAG, "Asignaturas: " + asignaturasDisponibles);
             }
         });
     }
@@ -267,5 +304,17 @@ public class CreateAccountActivity extends AppCompatActivity {
     public void redirectToHomeView() {
         Intent intent = new Intent(CreateAccountActivity.this, HomeActivity.class);
         startActivity(intent);
+    }
+
+    /**
+     * Elimina la asignatura dominada seleccionada.
+     *
+     * @param nombreAsignatura Nombre de la asignatura.
+     */
+    public void eliminarAsignaturaSeleccionada(String nombreAsignatura) {
+        if (asignaturasDominadasSeleccionadas.containsKey(nombreAsignatura)) {
+            Log.d(TAG, nombreAsignatura);
+            asignaturasDominadasSeleccionadas.remove(nombreAsignatura);
+        }
     }
 }

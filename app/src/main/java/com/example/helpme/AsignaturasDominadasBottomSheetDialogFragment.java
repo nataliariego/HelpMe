@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.databinding.FragmentAsignaturasDominadasBottomSheetDialogListDialogBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -68,7 +67,7 @@ public class AsignaturasDominadasBottomSheetDialogFragment extends BottomSheetDi
 
         List<Map<String, Object>> res = new ArrayList<>();
 
-        if(asignaturaDominadaSheetAdapter.getAsignaturasDominadas().size() == 0){
+        if (asignaturaDominadaSheetAdapter.getAsignaturasDominadas().size() == 0) {
             return new ArrayList<>();
         }
 
