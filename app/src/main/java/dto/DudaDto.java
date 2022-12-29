@@ -18,6 +18,7 @@ public class DudaDto {
     public boolean isResuelta;
     public String fecha;
     public String id;
+    public String url_adnjuto;
 
     @Override
     public boolean equals(Object o) {

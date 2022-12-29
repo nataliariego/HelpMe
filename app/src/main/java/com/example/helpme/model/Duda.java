@@ -27,6 +27,7 @@ public class Duda implements Parcelable {
     private String titulo;
     private String descripcion;
     private String emailAl;
+    private String url_adjunto;
     private Map<String, Object> alumnoId;
     private String asignaturaId;
     private Map<String, Object> materiaId;
@@ -52,7 +53,7 @@ public class Duda implements Parcelable {
     }
 
     public Duda(String titulo, String descripcion, Map<String, Object> alumnoId, String asignaturaId,
-                Map<String, Object> materiaId, boolean isResuelta, String fecha,String id) {
+                Map<String, Object> materiaId, boolean isResuelta, String fecha,String id,String url_adjunto) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.alumnoId = alumnoId;
@@ -62,6 +63,7 @@ public class Duda implements Parcelable {
         this.fecha = fecha;
         this.id = id;
         this.emailAl=(String)this.getAlumnoId().get("email");
+        this.url_adjunto=url_adjunto;
     }
 
 
@@ -71,6 +73,7 @@ public class Duda implements Parcelable {
         titulo = in.readString();
         descripcion = in.readString();
         emailAl = in.readString();
+        url_adjunto = in.readString();
         isResuelta = in.readByte() != 0;
 
     }
@@ -150,6 +153,9 @@ public class Duda implements Parcelable {
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
+    public String getUrl_adjunto(){
+        return this.url_adjunto;
+    }
 
     @Override
     public int describeContents() {
@@ -162,6 +168,7 @@ public class Duda implements Parcelable {
         parcel.writeString(titulo);
         parcel.writeString(descripcion);
         parcel.writeString(emailAl);
+        parcel.writeString(url_adjunto);
         parcel.writeString(asignaturaId);
         parcel.writeMap(materiaId);
         parcel.writeMap(alumnoId);
