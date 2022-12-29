@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModel;
 import com.example.helpme.model.Asignatura;
 
 import java.util.List;
+import java.util.Map;
 
 import controller.AsignaturaController;
+import dto.AsignaturaDto;
 
 public class AsignaturaViewModel extends ViewModel {
 
@@ -27,5 +29,9 @@ public class AsignaturaViewModel extends ViewModel {
 
     public MutableLiveData<List<Asignatura>> getAllAsignaturas() {
         return AsignaturaController.getInstance().findAll();
+    }
+
+    public MutableLiveData<List<Map<String, Object>>> getAllAsignaturasAsMap() {
+        return AsignaturaController.getInstance().findAllAsMap();
     }
 }

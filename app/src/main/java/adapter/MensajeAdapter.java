@@ -151,7 +151,7 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
         private TextView txMetadatosDocumento;
         private ImageButton btDescargarDocumento;
         private TextView txHoraEnvioDocumento;
-        private ImageView iconEstadoMensaje;
+        //private ImageView iconEstadoMensaje;
 
         public MensajeViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -167,7 +167,7 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
             btDescargarDocumento = (ImageButton) itemView.findViewById(R.id.img_download_document_message);
             txHoraEnvioDocumento = (TextView) itemView.findViewById(R.id.text_hora_envio_documento_conversacion);
             /* Ticks estado mensaje  */
-            iconEstadoMensaje = (ImageView) itemView.findViewById(R.id.img_estado_envio_mensaje);
+            //iconEstadoMensaje = (ImageView) itemView.findViewById(R.id.img_estado_envio_mensaje);
 
         }
 
@@ -237,27 +237,27 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
          * Establece el icono del estado del mensaje en función del valor
          * de éste.
          *
-         * @param status Estado del mensaje
+         * @param --status Estado del mensaje
          * @see {@link MensajeStatus}
          */
-        private void setStatusIcon(final MensajeStatus status) {
-            Log.d(TAG, "ADAPT. STATUS = " + status.toString());
-            if (status.equals(MensajeStatus.ENVIADO)) {
-                iconEstadoMensaje.setImageResource(R.drawable.ic_round_done_24);
-                iconEstadoMensaje.setVisibility(View.VISIBLE);
-
-            } else if (status.equals(MensajeStatus.RECIBIDO)) {
-                iconEstadoMensaje.setImageResource(R.drawable.ic_icon_recibido_24);
-                iconEstadoMensaje.setVisibility(View.VISIBLE);
-
-            } else if (status.equals(MensajeStatus.LEIDO)) {
-                iconEstadoMensaje.setImageResource(R.drawable.ic_round_done_all_24);
-                iconEstadoMensaje.setVisibility(View.VISIBLE);
-
-            } else {
-                iconEstadoMensaje.setVisibility(View.GONE);
-            }
-        }
+//        private void setStatusIcon(final MensajeStatus status) {
+//            Log.d(TAG, "ADAPT. STATUS = " + status.toString());
+//            if (status.equals(MensajeStatus.ENVIADO)) {
+//                iconEstadoMensaje.setImageResource(R.drawable.ic_round_done_24);
+//                iconEstadoMensaje.setVisibility(View.VISIBLE);
+//
+//            } else if (status.equals(MensajeStatus.RECIBIDO)) {
+//                iconEstadoMensaje.setImageResource(R.drawable.ic_icon_recibido_24);
+//                iconEstadoMensaje.setVisibility(View.VISIBLE);
+//
+//            } else if (status.equals(MensajeStatus.LEIDO)) {
+//                iconEstadoMensaje.setImageResource(R.drawable.ic_round_done_all_24);
+//                iconEstadoMensaje.setVisibility(View.VISIBLE);
+//
+//            } else {
+//                iconEstadoMensaje.setVisibility(View.GONE);
+//            }
+//        }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
         public void bindMensaje(final MensajeDto msg) {
@@ -267,9 +267,9 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
             String minutes = String.format("%02d", timestamp.getMinute());
             String msgDateFormatted = hour.concat(":").concat(minutes);
 
-            if (msg.status != null && iconEstadoMensaje != null) {
-                setStatusIcon(msg.status);
-            }
+//            if (msg.status != null && iconEstadoMensaje != null) {
+//                setStatusIcon(msg.status);
+//            }
 
             /* Si el contenido del mensaje a mostrar es una imagen */
             if (msg.mimeType.equals(DEFAULT_MIME_IMG)) {
