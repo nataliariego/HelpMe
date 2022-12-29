@@ -110,6 +110,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
     private StorageReference storageRef = cloudStorage.getReference();
     private StorageReference imgStorage = storageRef.child(BASE_PATH_CLOUD_STORAGE);
 
+
     FirebaseDatabase db = FirebaseDatabase.getInstance(DB_URL);
 
     private String url_imagen="";
@@ -217,7 +218,6 @@ public class PublicarDudaActivity extends AppCompatActivity {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
-
         String imgUid = UUID.randomUUID().toString();
         String imageName = imgUid + ".jpg";
         url_imagen = imageName;
@@ -235,11 +235,14 @@ public class PublicarDudaActivity extends AppCompatActivity {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                 // ...
-
                 if (taskSnapshot.getTask().isSuccessful()) {
                     Log.d(TAG, "Imagen subida: " + taskSnapshot.getMetadata());
-                    Map<String, Object> payload = new HashMap<>();
+                    Log.d(TAG, "Imagen subida2: " + taskSnapshot.getStorage());
+                    Log.d(TAG, "Imagen subida3: " + taskSnapshot.getTask().getResult());
+                    Log.d(TAG, "Imagen subida4: " + taskSnapshot.getMetadata().getReference());
+                    Log.d(TAG, "Imagen subida5: " + taskSnapshot.getMetadata().getPath());
 
+                    Map<String, Object> payload = new HashMap<>();
                     payload.put(Mensaje.SENDER, userInSession.getUid());
                     payload.put(Mensaje.CONTENT, imgStorage.child(imageName).getPath());
                     payload.put(Mensaje.MESSAGE_TYPE, "image/jpeg");
@@ -247,6 +250,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         payload.put(Mensaje.CREATED_AT, DateUtils.getNowWithPredefinedFormat());
                     }
+
 
                     db.getReference().child(Chat.REFERENCE).child(Mensaje.REFERENCE).child(imgUid).updateChildren(payload).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
