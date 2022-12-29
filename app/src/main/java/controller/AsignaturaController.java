@@ -16,9 +16,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import dto.AsignaturaDto;
 
 public class AsignaturaController {
 
@@ -70,6 +73,45 @@ public class AsignaturaController {
                         }
                     }
                     liveAsign.postValue(asignasturas);
+
+                });
+
+
+        return liveAsign;
+    }
+
+    /**
+     * Parche. El curso y la materia de una asignatura se cargan como Mapa.
+     *
+     * @return
+     * @since 28/12/2022
+     */
+    public MutableLiveData<List<Map<String, Object>>> findAllAsMap() {
+        MutableLiveData<List<Map<String, Object>>> liveAsign = new MutableLiveData<List<Map<String, Object>>>();
+        db.collection(Asignatura.COLLECTION)
+                .addSnapshotListener((snapshot, e) -> {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+
+                    List<Map<String, Object>> asignaturas = new ArrayList<>();
+
+                    if (snapshot != null && !snapshot.isEmpty()) {
+                        for (DocumentSnapshot documentSnapshot : snapshot.getDocuments()) {
+
+                            Map<String, Object> asig = new HashMap<>();
+                            //asig.id = documentSnapshot.getId();
+
+                            //Log.d(TAG, "ASIGNSSS: " + documentSnapshot.get(Asignatura.NOMBRE));
+                            asig.put(Asignatura.NOMBRE, documentSnapshot.get(Asignatura.NOMBRE));
+                            asig.put(Asignatura.CURSO, (Map<String, Object>) (Map<String, Object>) documentSnapshot.get(Asignatura.CURSO));
+                            asig.put(Asignatura.MATERIA, (Map<String, Object>) documentSnapshot.get(Asignatura.MATERIA));
+
+                            asignaturas.add(asig);
+                        }
+                    }
+                    liveAsign.postValue(asignaturas);
 
                 });
 
