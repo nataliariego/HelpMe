@@ -20,19 +20,17 @@
         <RelativeLayout
             android:id="@+id/layout_resumen_avatar"
             android:layout_width="100dp"
-            android:layout_height="match_parent"
+            android:layout_height="112dp"
             android:gravity="center">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_perfil_alumno_duda"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:layout_centerInParent="true"
                 android:baselineAlignBottom="false"
                 android:contentDescription="@string/resumen_img_perfil_alumno_descripcion"
                 android:foregroundGravity="center"
                 app:srcCompat="@drawable/profile_placeholcer_primary_48" />
-
         </RelativeLayout>
 
         <LinearLayout

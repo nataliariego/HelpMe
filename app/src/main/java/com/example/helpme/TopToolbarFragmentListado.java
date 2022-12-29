@@ -15,15 +15,14 @@ import androidx.fragment.app.Fragment;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link TopToolbarFragment#newInstance} factory method to
+ * Use the {@link TopToolbarFragmentListado#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TopToolbarFragment extends Fragment {
+public class TopToolbarFragmentListado extends Fragment {
 
     public static final String TAG = "TOP_TOOLBAR_FRAGMENT";
 
     private ImageButton btFaq;
-    private ImageButton btBack;
 
     // TODO: Temporal - Borrar
     private ImageButton btSettings;
@@ -35,7 +34,7 @@ public class TopToolbarFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public TopToolbarFragment() {
+    public TopToolbarFragmentListado() {
         // Required empty public constructor
     }
 
@@ -46,8 +45,8 @@ public class TopToolbarFragment extends Fragment {
      * @return A new instance of fragment TopToolbarFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TopToolbarFragment newInstance() {
-        TopToolbarFragment fragment = new TopToolbarFragment();
+    public static TopToolbarFragmentListado newInstance() {
+        TopToolbarFragmentListado fragment = new TopToolbarFragmentListado();
         Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -62,7 +61,7 @@ public class TopToolbarFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_top_toolbar, container, false);
+        View view = inflater.inflate(R.layout.fragment_top_toolbar_listado, container, false);
         initElements(view);
         return view;
     }
@@ -73,7 +72,6 @@ public class TopToolbarFragment extends Fragment {
     }
 
     private void initElements(View view) {
-        btBack = (ImageButton) view.findViewById(R.id.button_toolbar_back);
         btFaq = (ImageButton) view.findViewById(R.id.button_toolbar_faq);
         toolbarLogo = (ImageView) view.findViewById(R.id.toolbar_logo);
 
@@ -82,15 +80,10 @@ public class TopToolbarFragment extends Fragment {
 
         String activityName = getActivity().getClass().getSimpleName();
 
-        Log.i("actividad" , activityName);
-
         // En la vista de Home mostrar el logo en vez del botón de volver
-        //if (activityName.equalsIgnoreCase("HomeActivity")) {
-            btBack.setVisibility(View.INVISIBLE);
+        if (activityName.equalsIgnoreCase("HomeActivity")) {
             toolbarLogo.setVisibility(View.VISIBLE);
-       // }
-
-
+        }
 
         btSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,12 +101,6 @@ public class TopToolbarFragment extends Fragment {
             }
         });
 
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.exit(0);
-            }
-        });
 
         Log.i(TAG, view.getClass().getName());
 
@@ -122,7 +109,5 @@ public class TopToolbarFragment extends Fragment {
 
     }
 
-    public ImageButton getBackButton() {
-        return btBack;
-    }
+
 }

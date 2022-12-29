@@ -24,7 +24,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+//import com.bumptech.glide.Glide;
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Duda;
 import com.example.helpme.model.RespuestaDuda;

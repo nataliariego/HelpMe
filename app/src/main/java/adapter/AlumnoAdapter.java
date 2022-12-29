@@ -60,29 +60,17 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
 
         holder.bindAlumno(alumno);
 
-
-
         holder.botonPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("...", alumno.toString());
 
-                /*Alumno a = new Alumno(alumno.nombre,
-                        alumno.uo,
-                        alumno.urlFoto,
-                        alumno.uo+"@uniovi.es",
-                        null, alumno.asignaturasDominadas);
-
-                Log.i("patata", a.toString());*/
-
                 Intent intent = new Intent(holder.context, FriendProfileActivity.class);
 
                 String info = alumno.nombre + "---" + alumno.uo + "---"
-                        + alumno.urlFoto + "---" + alumno.uo+"@uniovi.es" + "---" +
+                        + alumno.urlFoto + "---" + alumno.email + "---" +
                         alumno.asignaturasDominadas;
 
-
-               //intent.putExtra("alumno_seleccionado", a);
                 intent.putExtra("alumno_seleccionado", info);
 
                 //Transacion de barrido

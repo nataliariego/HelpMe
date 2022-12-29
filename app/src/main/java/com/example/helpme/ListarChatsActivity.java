@@ -14,12 +14,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.helpme.extras.IntentExtras;
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Chat;
 import com.example.helpme.model.Mensaje;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -53,6 +55,8 @@ public class ListarChatsActivity extends AppCompatActivity {
     private List<ChatSummaryDto> chats = new ArrayList<>();
 
     private FloatingActionButton fabNuevoChat;
+    private BottomNavigationView navegacion;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +84,9 @@ public class ListarChatsActivity extends AppCompatActivity {
 
         recyclerListadoChats.setAdapter(chatAdapter);
 
+        //Navegación
+        navegacion = findViewById(R.id.bottomNavigationView);
+        IntentExtras.getInstance().handleNavigationView(navegacion, getBaseContext());
 
     }
 

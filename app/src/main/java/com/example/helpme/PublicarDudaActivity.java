@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.helpme.extras.IntentExtras;
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Asignatura;
 import com.example.helpme.model.Chat;
@@ -187,26 +188,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
 
 
         //Navegacion:
-        navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.nav_home:
-                        redirectPantallaHome();
-                        return true;
-                    case R.id.nav_chat:
-
-                        return true;
-                    case R.id.nav_cuenta:
-                        redirectPantallaCuenta();
-                        return true;
-                    case R.id.nav_dudas:
-                        redirectPantallaDudas();
-                        return true;
-                }
-                return false;
-            }
-        });
+        IntentExtras.getInstance().handleNavigationView(navegacion, getBaseContext());
 
     }
 
@@ -484,27 +466,4 @@ public class PublicarDudaActivity extends AppCompatActivity {
         });
     }
 
-    private void redirectPantallaHome() {
-        Intent listadoDudasIntent = new Intent(PublicarDudaActivity.this, HomeActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
-
-    private void redirectPantallaDudas() {
-        Intent listadoDudasIntent = new Intent(PublicarDudaActivity.this, ListarDudasActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
-
-    private void redirectPantallaCuenta() {
-        Intent listadoDudasIntent = new Intent(PublicarDudaActivity.this, ProfileActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
 }

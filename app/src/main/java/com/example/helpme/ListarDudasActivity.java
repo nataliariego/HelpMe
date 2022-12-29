@@ -159,29 +159,7 @@ public class ListarDudasActivity extends AppCompatActivity {
     }
 
 
-    private void redirectPantallaHome() {
-        Intent listadoDudasIntent = new Intent(ListarDudasActivity.this, HomeActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
-        //startActivity(listadoDudasIntent);
-    }
-
-    private void redirectPantallaDudas() {
-        Intent listadoDudasIntent = new Intent(ListarDudasActivity.this, ListarDudasActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
-
-    private void redirectPantallaCuenta() {
-        Intent listadoDudasIntent = new Intent(ListarDudasActivity.this, ProfileActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
 
 
 }

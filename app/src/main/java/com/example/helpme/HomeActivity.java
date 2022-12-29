@@ -137,8 +137,6 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
         Intent listadoDudasIntent = new Intent(HomeActivity.this, ListarDudasActivity.class);
         // Para transiciones
         startActivity(listadoDudasIntent);
-
-        //startActivity(listadoDudasIntent);
     }
 
     /**
@@ -149,16 +147,9 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
 
         // Para transiciones
         startActivity(publicarDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(publicarDudasIntent);
     }
 
-    /**
-     * Redirecciona al Activity del chat.
-     */
-    private void redirectChatActivity() {
-        startActivity(new Intent(HomeActivity.this, ListarChatsActivity.class));
-    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void cargarDudas() {
@@ -225,26 +216,6 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
         }
     }
 
-    private void cargarDudasInit() {
-//        Duda d1 = new Duda("Duda 1", "asdfasfd", "asdfasdf", "000", "999", false, "20/10/2022 12:00:01");
-//        dudas.add(d1);
-    }
-
-    private void redirectPantallaCuenta() {
-        Intent listadoDudasIntent = new Intent(HomeActivity.this, ProfileActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
-
-    private void redirectPantallaDudas() {
-        Intent listadoDudasIntent = new Intent(HomeActivity.this, ListarDudasActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
 
     @Override
     public void checkConnection() {

@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.helpme.extras.IntentExtras;
 import com.example.helpme.model.Alumno;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
@@ -107,28 +108,7 @@ public class FriendProfileActivity extends AppCompatActivity {
 
         //Navegacion:
         navegacion = findViewById(R.id.bottomNavigationView);
-        navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                switch (item.getItemId()){
-                    case R.id.nav_home:
-
-                        redirectPantallaHome();
-                        return true;
-                    case R.id.nav_chat:
-
-                        return true;
-                    case R.id.nav_cuenta:
-                        redirectPantallaCuenta();
-                        return true;
-                    case R.id.nav_dudas:
-                        redirectPantallaDudas();
-                        return true;
-                }
-                return false;
-            }
-        });
+        IntentExtras.getInstance().handleNavigationView(navegacion, getBaseContext());
 
     }
 
@@ -171,17 +151,11 @@ public class FriendProfileActivity extends AppCompatActivity {
 
                 //Seleccionar si ya la tengo
 
-
-
-                System.out.println(".."+Build.VERSION.SDK_INT);
-                System.out.println(".."+Build.VERSION_CODES.N);
-
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     alumnoController.findByUOWithPhoto(email, new AlumnoController.AlumnoCallback() {
                         @Override
                         public void callback(Alumno alumno) {
-                            System.out.println("aa"+alumno);
+                            Log.i("--> ", alumno.toString());
                             if (alumno != null) {
 
 
@@ -252,30 +226,5 @@ public class FriendProfileActivity extends AppCompatActivity {
 
         return asignaturas;
 
-    }
-
-
-    private void redirectPantallaHome() {
-        Intent listadoDudasIntent = new Intent(FriendProfileActivity.this, HomeActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
-
-    private void redirectPantallaDudas() {
-        Intent listadoDudasIntent = new Intent(FriendProfileActivity.this, ListarDudasActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
-
-    private void redirectPantallaCuenta() {
-        Intent listadoDudasIntent = new Intent(FriendProfileActivity.this, ProfileActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
     }
 }

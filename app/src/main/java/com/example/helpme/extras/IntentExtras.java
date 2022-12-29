@@ -23,7 +23,9 @@ public class IntentExtras {
      * @param destinationActivityClass Clase del Activity destino.
      */
     private void redirectTo(Context currentContext, Class destinationActivityClass) {
-        currentContext.startActivity(new Intent(currentContext, destinationActivityClass));
+        Intent e = new Intent(currentContext, destinationActivityClass);
+        e.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        currentContext.startActivity(e);
     }
 
     /**

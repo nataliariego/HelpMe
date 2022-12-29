@@ -2,6 +2,7 @@ package com.example.helpme;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -91,28 +93,19 @@ public class ProfileActivity extends AppCompatActivity {
         alumnoController.findByUOWithPhoto(userInSession.getEmail(), new AlumnoController.AlumnoCallback() {
             @Override
             public void callback(Alumno alumno) {
-                Log.d(TAG, alumno.getEmail() + " " + alumno.getUrl_foto());
+                Log.d("patata", alumno.getEmail() + " " + alumno.getUrl_foto());
                 if (alumno != null) {
-                    //Esto tdo no está bien porque en la base de datos
-                    //Se guardan raro los datos, faltan cosas...etc
-
-//                        textViewUO.setText(uo);
-//                        textViewEmail.setText(userInSession.getEmail());
-
                     textViewUO.setText(alumno.getNombre());
-                    textViewEmail.setText(alumno.getNombre() + "@uniovi.es");
+                    textViewEmail.setText(alumno.getEmail());
                     nombreCompleto.setText(alumno.getUo());
                     if (alumno.getUrl_foto() != null && alumno.getUrl_foto() != "")
                         Picasso.get().load(alumno.getUrl_foto()).into(img_persona);
                 }
             }
         });
-        //}
-
-        // cargarAsignaturas();
 
         cargarAsignaturasDominadas();
-        //navegacion
+        // Navegacion
         navegacion = findViewById(R.id.bottomNavigationView);
         IntentExtras.getInstance().handleNavigationView(navegacion, getBaseContext());
 
@@ -138,7 +131,6 @@ public class ProfileActivity extends AppCompatActivity {
         // Para transiciones
         startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
-        //startActivity(listadoDudasIntent);
     }
 
     private void actualizarPerfil() {
@@ -154,14 +146,6 @@ public class ProfileActivity extends AppCompatActivity {
                         docData.put(Alumno.UO, alumno.getNombre());
                         docData.put(Alumno.URL_FOTO, alumno.getUrl_foto());
 
-                        /*AlumnoDto a = new AlumnoDto();
-                        a.email=alumno.getEmail();
-                        a.uo=alumno.getNombre();
-                        a.urlFoto=alumno.getUrl_foto();
-                        a.nombre=nombreCompleto.getText().toString();
-                        a.id=alumno.getId();
-                        a.asignaturasDominadas=alumno.getAsignaturasDominadas();*/
-                        //a.asignaturasDominadas=alumno.getAsignaturasDominadas();
                         asignaturasDominadas.clear();
                         for (CheckBox c : cB
                         ) {
@@ -178,7 +162,6 @@ public class ProfileActivity extends AppCompatActivity {
 
                         int i = 0;
                         for (Map<String, Object> as : asignaturasDominadas) {
-//                        for (AsignaturaDto as : asignaturaDuda) {
                             mapAsi.put(String.valueOf(i++), as);
                         }
 
@@ -186,24 +169,6 @@ public class ProfileActivity extends AppCompatActivity {
 
                         System.out.println(docData.toString());
 
-                        /*myFirebase.collection(Alumno.COLLECTION).document()
-                                .set(docData)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d(TAG, "DocumentSnapshot successfully actualizao!");
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w(TAG, "Error actualizando document", e);
-                                    }
-                                });
-                        /*Log.i("*",a.toString());
-                        asignaturaDuda.clear();
-                        System.out.println(a.asignaturasDominadas);
-                        alumnoController.update(a, a.id);*/
 
                         // TODO: Descomentar para actualizar perfil
                         db.collection(Alumno.COLLECTION).document(alumno.getId()).update(docData)
@@ -211,6 +176,12 @@ public class ProfileActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
+                                            Context context = getApplicationContext();
+                                            CharSequence text = "Perfil actualizado correctamente";
+                                            int duration = Toast.LENGTH_SHORT;
+
+                                            Toast toast = Toast.makeText(context, text, duration);
+                                            toast.show();
                                             Log.d(TAG, "Alumno actualizado");
                                         }
                                     }
@@ -438,25 +409,6 @@ public class ProfileActivity extends AppCompatActivity {
             asignaturas.add(newAsig);
         }
 
-//        for (Object nombre: asigs) {
-//            AsignaturaDto a = new AsignaturaDto();
-//            String linea = nombre.toString();
-//            System.out.println("pa" + nombre);
-//           // a.curso=linea.split("curso=")[1].split(Pattern.quote("}")+",")[0]+"}";
-//            //a.materia=linea.split("materia=")[1].split(Pattern.quote("}")+",")[0]+"}";
-//            //a.nombre=linea.split("nombre=")[1].split(",")[0].split(Pattern.quote("}"))[0];
-//            //esta nal el id
-//
-//            Map<Object, String> prueba = (Map<Object, String>) nombre;
-//
-//            prueba.get("id");
-//            //System.out.println("prueba " + prueba.get("curso"));
-//            a.curso=prueba.get("curso");
-//            a.materia=prueba.get("materia");
-//            a.nombre=prueba.get("nombre");
-//            a.id=prueba.get("id");
-//            asignaturas.add(a);
-//        }
 
         return asignaturas;
 
