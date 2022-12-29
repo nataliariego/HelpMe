@@ -152,8 +152,15 @@ public class ChatActivity extends AppCompatActivity {
 //                    startRecording();
 //                }
 
+                String contenidoMensaje = txMensajeAEnviar.getText().toString();
+
+                if (contenidoMensaje.trim().isEmpty()) {
+                    Toast.makeText(ChatActivity.this, "Escribe un mensaje", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 MensajeDto newMsgDto = new MensajeDto();
-                newMsgDto.contenido = txMensajeAEnviar.getText().toString();
+                newMsgDto.contenido = contenidoMensaje;
                 newMsgDto.createdAt = DateUtils.getNowWithPredefinedFormat();
                 newMsgDto.status = MensajeStatus.ENVIADO;
 
