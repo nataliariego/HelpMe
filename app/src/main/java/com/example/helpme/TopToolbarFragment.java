@@ -25,15 +25,9 @@ public class TopToolbarFragment extends Fragment {
     private ImageButton btFaq;
     private ImageButton btBack;
 
-    // TODO: Temporal - Borrar
     private ImageButton btSettings;
 
     private ImageView toolbarLogo;
-
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public TopToolbarFragment() {
         // Required empty public constructor
@@ -45,7 +39,6 @@ public class TopToolbarFragment extends Fragment {
      *
      * @return A new instance of fragment TopToolbarFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static TopToolbarFragment newInstance() {
         TopToolbarFragment fragment = new TopToolbarFragment();
         Bundle args = new Bundle();
@@ -77,20 +70,14 @@ public class TopToolbarFragment extends Fragment {
         btFaq = (ImageButton) view.findViewById(R.id.button_toolbar_faq);
         toolbarLogo = (ImageView) view.findViewById(R.id.toolbar_logo);
 
-        //TODO: Temporal - borrar
         btSettings = (ImageButton) view.findViewById(R.id.button_toolbar_settings);
 
         String activityName = getActivity().getClass().getSimpleName();
 
-        Log.i("actividad" , activityName);
+        Log.i(TAG, "Activity: " + activityName);
 
-        // En la vista de Home mostrar el logo en vez del botón de volver
-        //if (activityName.equalsIgnoreCase("HomeActivity")) {
-            btBack.setVisibility(View.INVISIBLE);
-            toolbarLogo.setVisibility(View.VISIBLE);
-       // }
-
-
+        btBack.setVisibility(View.INVISIBLE);
+        toolbarLogo.setVisibility(View.VISIBLE);
 
         btSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,10 +103,6 @@ public class TopToolbarFragment extends Fragment {
         });
 
         Log.i(TAG, view.getClass().getName());
-
-        //btBack.setOnClickListener();
-
-
     }
 
     public ImageButton getBackButton() {

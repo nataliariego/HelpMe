@@ -23,19 +23,10 @@ public class TopToolbarFragmentListado extends Fragment {
     public static final String TAG = "TOP_TOOLBAR_FRAGMENT";
 
     private ImageButton btFaq;
-
-    // TODO: Temporal - Borrar
     private ImageButton btSettings;
-
     private ImageView toolbarLogo;
 
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public TopToolbarFragmentListado() {
-        // Required empty public constructor
     }
 
     /**
@@ -44,7 +35,6 @@ public class TopToolbarFragmentListado extends Fragment {
      *
      * @return A new instance of fragment TopToolbarFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static TopToolbarFragmentListado newInstance() {
         TopToolbarFragmentListado fragment = new TopToolbarFragmentListado();
         Bundle args = new Bundle();
@@ -75,7 +65,6 @@ public class TopToolbarFragmentListado extends Fragment {
         btFaq = (ImageButton) view.findViewById(R.id.button_toolbar_faq);
         toolbarLogo = (ImageView) view.findViewById(R.id.toolbar_logo);
 
-        //TODO: Temporal - borrar
         btSettings = (ImageButton) view.findViewById(R.id.button_toolbar_settings);
 
         String activityName = getActivity().getClass().getSimpleName();
@@ -101,12 +90,7 @@ public class TopToolbarFragmentListado extends Fragment {
             }
         });
 
-
         Log.i(TAG, view.getClass().getName());
-
-        //btBack.setOnClickListener();
-
-
     }
 
 
