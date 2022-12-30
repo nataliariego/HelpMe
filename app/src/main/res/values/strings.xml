@@ -137,4 +137,11 @@
     <string name="olvida_contraseña">Recibirás un correo para restablecer la contraseña. Revisa la bandeja de spam.</string>
     <string name="revisa_contraseña">Recibirás un correo para verificar el correo de tu cuenta. Revisa la bandeja de Spam.</string>
     <string name="inicia_sesion">Inicia sesión</string>
+
+    <!-- FAQ Activity -->
+    <string name="desarrolladores">Desarrollado por:</string>
+    <string name="uo257239">UO257239</string>
+    <string name="uo277516">UO277516</string>
+    <string name="uo276922">UO276922</string>
+    <string name="app_version">v1.0.0</string>
 </resources>
