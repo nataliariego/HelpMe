@@ -99,34 +99,11 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
                 redirectPantallaPublicarNuevaDuda();
             }
         });
-
-        // TODO: No borrar este evento
-//        btLogoutDemo.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // TODO: Mover a cuenta de usuario funcionalidad logout
-////                Authentication.getInstance().signOut();
-////                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-////                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-////                        | Intent.FLAG_ACTIVITY_CLEAR_TOP
-////                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-////                startActivity(intent);
-////                finish();
-//
-//                Authentication.getInstance().sendEmailVerification();
-//
-//                // TODO: Plantilla correo
-//                // https://support.google.com/firebase/answer/7000714
-//
-//            }
-//        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        //checkConnection();
     }
 
     /**

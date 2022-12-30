@@ -37,7 +37,6 @@ public class LineaAsignaturaDominadaFragment extends Fragment {
      * @param param1 Parameter 1.
      * @return A new instance of fragment LineaAsignaturaDominadaFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static LineaAsignaturaDominadaFragment newInstance(String param1) {
         LineaAsignaturaDominadaFragment fragment = new LineaAsignaturaDominadaFragment();
         Bundle args = new Bundle();

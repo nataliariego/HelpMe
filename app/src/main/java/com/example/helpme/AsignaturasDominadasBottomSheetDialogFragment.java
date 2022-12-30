@@ -40,11 +40,9 @@ public class AsignaturasDominadasBottomSheetDialogFragment extends BottomSheetDi
 
     Map<String, Object> asigs = new HashMap<>();
 
-    // TODO: Customize parameter argument names
     private static final String ASIGNATURAS = "asignaturas_dominadas";
     private FragmentAsignaturasDominadasBottomSheetDialogListDialogBinding binding;
 
-    // TODO: Customize parameters
     public static AsignaturasDominadasBottomSheetDialogFragment newInstance(Map<String, Object> asignaturas) {
         final AsignaturasDominadasBottomSheetDialogFragment fragment = new AsignaturasDominadasBottomSheetDialogFragment();
         final Bundle args = new Bundle();
@@ -81,10 +79,6 @@ public class AsignaturasDominadasBottomSheetDialogFragment extends BottomSheetDi
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        final ConstraintLayout layout = (ConstraintLayout) view;
-//        layout.setLayoutManager(new LinearLayoutManager(getContext()));
-        //recyclerView.setAdapter(new ItemAdapter(getArguments().get(ASIGNATURAS)));
-
         Bundle args = getArguments();
 
         List<String> nombresAsignaturas = new ArrayList<>();

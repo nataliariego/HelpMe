@@ -277,7 +277,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-
         if (originChatDataDto != null) {
             /* Mostrar img perfil y nombre del alumnoB */
             paintReceiverData();
@@ -334,31 +333,6 @@ public class ChatActivity extends AppCompatActivity {
                 });
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (grabandoAudio) {
-            stopRecording();
-        }
-    }
-
-    /**
-     * Cambia la apariencia del botón de enviar mensaje.
-     *
-     * @param grabandoAudio true si el icono del botón es el micrófono (Iniciar grabación) y false si el icono es
-     *                      el correspondiente a enviar mensaje (Detener grabacion).
-     */
-    private void cambiarBotonEnviarMensaje(final boolean grabandoAudio) {
-        if (grabandoAudio) {
-            btEnviarMensaje.setBackgroundResource(R.drawable.button_rounded_corners_red);
-            btEnviarMensaje.setImageResource(R.drawable.ic_round_mic_24);
-
-        } else {
-            btEnviarMensaje.setBackgroundResource(R.drawable.button_rounded_corners_primary);
-            btEnviarMensaje.setImageResource(R.drawable.ic_baseline_send_24);
-        }
-    }
-
     /**
      * Comprueba si el micrófono está activado.
      *
@@ -397,10 +371,6 @@ public class ChatActivity extends AppCompatActivity {
      * @return
      */
     private String getAudioOutputFileName() {
-//        ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
-//        File musicDirectory = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
-//        File file = new File(musicDirectory, "audiorecordtest" + ".mp3");
-
         return Environment.DIRECTORY_MUSIC + "/audio_test.3gp";
     }
 
@@ -410,24 +380,6 @@ public class ChatActivity extends AppCompatActivity {
 
         if (microfonoActivo()) {
             obtenerPermisoMicrofono();
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (recorder != null) {
-            recorder.release();
-            recorder = null;
-        }
-
-        if (player != null) {
-            player.release();
-            player = null;
-        }
-
-        if (grabandoAudio) {
-            stopRecording();
         }
     }
 
@@ -642,66 +594,5 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    // TODO: Completar
-    private void iniciarGrabacionAudio() {
-        if (!grabandoAudio) {
-            startRecording();
-        }
-    }
-
-    private void detenerGrabacionAudio() {
-        if (grabandoAudio) {
-            stopRecording();
-        }
-    }
-
-    private void onPlay(boolean start) {
-        if (start) {
-            startPlaying();
-        } else {
-            stopPlaying();
-        }
-    }
-
-    private void startPlaying() {
-        player = new MediaPlayer();
-        try {
-            player.setDataSource(audioOutputFileName);
-            player.prepare();
-            player.start();
-        } catch (IOException e) {
-            Log.e(TAG, "prepare() failed");
-        }
-    }
-
-    private void stopPlaying() {
-        player.release();
-        player = null;
-    }
-
-    private void startRecording() {
-        recorder = new MediaRecorder();
-        //recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_2_TS);
-        recorder.setOutputFile(getAudioOutputFileName());
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-
-
-        try {
-            recorder.prepare();
-        } catch (IOException e) {
-            Log.e(TAG, "prepare() failed");
-        }
-
-        recorder.start();
-    }
-
-    private void stopRecording() {
-        recorder.stop();
-        recorder.release();
-        recorder = null;
     }
 }
