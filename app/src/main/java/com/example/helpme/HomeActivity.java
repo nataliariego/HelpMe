@@ -50,7 +50,6 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
 
     private List<DudaDto> dudas = new ArrayList<>();
 
-    private ActivityNavigationImpl navigation = new ActivityNavigationImpl();
     private BottomNavigationView navegacion;
 
     @RequiresApi(api = Build.VERSION_CODES.N)

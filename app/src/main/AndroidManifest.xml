@@ -31,7 +31,7 @@
         </activity>
         <activity
             android:name=".ResolveActivity"
-            android:exported="true" >
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -59,7 +59,7 @@
         </activity>
         <activity
             android:name=".ChatActivity"
-            android:exported="true"
+            android:exported="false"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.app.lib_name"
@@ -67,7 +67,7 @@
         </activity>
         <activity
             android:name=".ProfileActivity"
-            android:exported="true"
+            android:exported="false"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.app.lib_name"
@@ -75,7 +75,7 @@
         </activity>
         <activity
             android:name=".FriendsActivity"
-            android:exported="true" >
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -124,14 +124,14 @@
         </activity>
         <activity
             android:name=".PublicarDudaActivity"
-            android:exported="true" >
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".ListarDudasActivity"
-            android:exported="true" >
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

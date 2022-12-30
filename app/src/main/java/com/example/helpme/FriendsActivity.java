@@ -52,8 +52,6 @@ public class FriendsActivity extends AppCompatActivity {
 
     private BottomNavigationView navegacion;
 
-    //Hardcodeado
-    private List<Alumno> listaAlumnos = new ArrayList<Alumno>();
 
     private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -72,7 +70,6 @@ public class FriendsActivity extends AppCompatActivity {
 
         cargarAmigos();
 
-       // AlumnoAdapter adapter = new AlumnoAdapter(amigos);
 
         //Navegación
         navegacion = findViewById(R.id.bottomNavigationView);

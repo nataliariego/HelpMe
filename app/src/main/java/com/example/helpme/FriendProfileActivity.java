@@ -90,7 +90,6 @@ public class FriendProfileActivity extends AppCompatActivity {
                 findViewById(R.id.containerView).setBackgroundColor(Color.WHITE);
                 findViewById(R.id.constraintLayout).setVisibility(View.VISIBLE);
                 navegacion.setVisibility(View.INVISIBLE);
-               // navegacion.setEnabled(false);
             }
         });
 
@@ -101,7 +100,6 @@ public class FriendProfileActivity extends AppCompatActivity {
                     img_persona.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
                     findViewById(R.id.containerView).setBackgroundColor(Color.GRAY);
                     findViewById(R.id.constraintLayout).setVisibility(View.INVISIBLE);
-
                 }
         });
 
@@ -119,7 +117,6 @@ public class FriendProfileActivity extends AppCompatActivity {
             if (dudasResult != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     dudasResult.forEach(d -> {
-                        Log.i("FriendProfileActivity", d.getNombre());
                         AsignaturaDto a = new AsignaturaDto();
                         a.nombre = d.getNombre();
                         a.curso=d.getCurso();
@@ -129,16 +126,10 @@ public class FriendProfileActivity extends AppCompatActivity {
                         asignaturaList.add(a.nombre);
                     });
                 }
-                System.out.println("-->"+asignaturaList);
             }
 
 
-
             LinearLayout ll = findViewById(R.id.ll_dentroscroll);
-            System.out.println("-->"+asignaturaList);
-
-
-
 
             for (String a : asignaturaList) {
                 CheckBox opcion = new CheckBox(this);
@@ -155,15 +146,8 @@ public class FriendProfileActivity extends AppCompatActivity {
                     alumnoController.findByUOWithPhoto(email, new AlumnoController.AlumnoCallback() {
                         @Override
                         public void callback(Alumno alumno) {
-                            Log.i("--> ", alumno.toString());
                             if (alumno != null) {
-
-
                                 List<String> asignaturasAlumno = crearAsignaturas(alumno.getAsignaturasDominadas());
-
-
-                                System.out.println("Las de el**"+ asignaturasAlumno);
-                                System.out.println("Todas**"+asignaturaList);
 
                                 for (String as: asignaturasAlumno) {
 
@@ -175,16 +159,10 @@ public class FriendProfileActivity extends AppCompatActivity {
                                     }
                                 }
 
-
-
-
                             }
                         }
                     });
                 }
-
-
-
 
                 ll.addView(opcion);
                 cB.add(opcion);
@@ -192,18 +170,13 @@ public class FriendProfileActivity extends AppCompatActivity {
         });
     }
 
+
     private List<String> crearAsignaturas(Map<String, Object> asignaturasDominadas) {
 
         List<String> asignaturas = new ArrayList<>();
         Object[] asigs = asignaturasDominadas.values().toArray();
         for (Object nombre: asigs) {
             AsignaturaDto a = new AsignaturaDto();
-            String linea = nombre.toString();
-            System.out.println("pa" + nombre);
-            // a.curso=linea.split("curso=")[1].split(Pattern.quote("}")+",")[0]+"}";
-            //a.materia=linea.split("materia=")[1].split(Pattern.quote("}")+",")[0]+"}";
-            //a.nombre=linea.split("nombre=")[1].split(",")[0].split(Pattern.quote("}"))[0];
-            //esta nal el id
 
             Map<Object, String> prueba = (Map<Object, String>) nombre;
 
@@ -211,8 +184,6 @@ public class FriendProfileActivity extends AppCompatActivity {
             Object materia = prueba.get("materia");
             Object nombres = prueba.get("nombre");
             Object id = prueba.get("id");
-
-
 
             a.curso= curso.toString();
             a.materia= materia.toString();
@@ -222,7 +193,6 @@ public class FriendProfileActivity extends AppCompatActivity {
 
             asignaturas.add(a.nombre);
         }
-
 
         return asignaturas;
 

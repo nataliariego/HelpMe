@@ -42,7 +42,6 @@ public class IntentExtras {
 
                 case R.id.nav_home:
                     IntentExtras.getInstance().redirectTo(currentContext, HomeActivity.class);
-                    //redirectPantallaHome();
                     return true;
 
                 case R.id.nav_chat:
@@ -51,7 +50,6 @@ public class IntentExtras {
 
                 case R.id.nav_cuenta:
                     IntentExtras.getInstance().redirectTo(currentContext, ProfileActivity.class);
-                    //redirectPantallaCuenta();
                     return true;
 
                 case R.id.nav_dudas:

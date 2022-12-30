@@ -85,7 +85,6 @@ public class ResolveActivity extends AppCompatActivity {
     private String emailDuda;
     private RecyclerView listadoRespuestas;
     private List<RespuestaDto> respuestas = new ArrayList<>();
-    FirebaseDatabase db = FirebaseDatabase.getInstance(DB_URL);
     private FirebaseStorage cloudStorage = FirebaseStorage.getInstance(CLOUD_STORAGE_URL);
     private StorageReference storageRef = cloudStorage.getReference();
     private StorageReference imgStorage = storageRef.child(BASE_PATH_CLOUD_STORAGE);
@@ -112,10 +111,7 @@ public class ResolveActivity extends AppCompatActivity {
         titulo.setText(duda.getTitulo());
         descripcion.setText(duda.getDescripcion());
         emailDuda= duda.getEmailAl();
-        System.out.println(duda.getUrl_adjunto());
         listadoRespuestas = (RecyclerView) findViewById(R.id.recyclerRespuestas);
-
-
 
 
         botonResolver = (Button) findViewById(R.id.btnResolver);
@@ -268,7 +264,6 @@ public class ResolveActivity extends AppCompatActivity {
         docData.put("respuesta", respuesta.getText().toString());
         docData.put("fecha", fecha);
 
-        System.out.println(docData);
         myFirebase.collection(RespuestaDuda.COLLECTION).document()
                 .set(docData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

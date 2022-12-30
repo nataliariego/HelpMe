@@ -14,7 +14,7 @@ public class NoWifiConnectionActivity extends AppCompatActivity implements Netwo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_no_wifi_connection);
 
-        setTitle("No hay conexión a Internet");
+        setTitle(R.string.no_internet);
     }
 
     @Override

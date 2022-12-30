@@ -63,7 +63,6 @@ public class ProfileActivity extends AppCompatActivity {
     private List<Map<String, Object>> asignaturasDominadas = new ArrayList<>();
     private List<Map<String, Object>> allAsignaturas = new ArrayList<>();
 
-
     private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
     private AlumnoController alumnoController = new AlumnoController();
 
@@ -99,8 +98,7 @@ public class ProfileActivity extends AppCompatActivity {
         btnAmigos = findViewById(R.id.buttonVerAmigos);
         tvEditarImagen = findViewById(R.id.tveditarimagen);
 
-        //Tengo que buscar el alumno que tenga ese email para poner después los datos
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
         alumnoController.findByUOWithPhoto(userInSession.getEmail(), new AlumnoController.AlumnoCallback() {
             @Override
             public void callback(Alumno alumno) {
@@ -264,7 +262,6 @@ public class ProfileActivity extends AppCompatActivity {
                         System.out.println(docData.toString());
 
 
-                        // TODO: Descomentar para actualizar perfil
                         db.collection(Alumno.COLLECTION).document(alumno.getId()).update(docData)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override

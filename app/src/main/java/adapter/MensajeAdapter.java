@@ -55,11 +55,11 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
     private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
 
     public MensajeAdapter(List<MensajeDto> mensajes) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            Log.d(TAG, "MENSAJES ORDENADOS: " + ChatService.getInstance().getSortedMessages(mensajes));
-//            this.mensajes = ChatService.getInstance().getSortedMessages(mensajes);
-//        }else{
-//        }
+    /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Log.d(TAG, "MENSAJES ORDENADOS: " + ChatService.getInstance().getSortedMessages(mensajes));
+            this.mensajes = ChatService.getInstance().getSortedMessages(mensajes);
+        }else{
+        }*/
         this.mensajes = mensajes;
     }
 

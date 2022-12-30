@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        setTitle("Iniciar sesión");
+        setTitle(R.string.iniciar_sesion);
 
         initFields();
 
@@ -84,7 +84,7 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
 
             @Override
             public void onFailure() {
-                Toast.makeText(getApplicationContext(), "Las credenciales no son correctas", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.credenciales_incorrectas, Toast.LENGTH_SHORT).show();
                 txEmail.setText("");
                 txPassword.setText("");
                 txEmail.requestFocus();
