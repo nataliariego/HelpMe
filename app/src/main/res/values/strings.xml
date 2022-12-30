@@ -130,5 +130,6 @@
     <string name="speakeable_add_asignatura">Añadir asignatura dominada</string>
     <string name="ninguna_asignatura_dominada">No hay asignaturas dominadas seleccionadas</string>
     <string name="nohayimagen">No hay imagen para mostrar</string>
+    <string name="title_activity_main">MainActivity</string>
 
 </resources>

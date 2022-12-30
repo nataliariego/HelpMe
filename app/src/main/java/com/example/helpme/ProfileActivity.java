@@ -2,17 +2,24 @@ package com.example.helpme;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,6 +82,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     private List<AsignaturaDto> asignaturaDuda = new ArrayList<>();
 
+    private TextView tvEditarImagen;
+    private String urlFoto;
+
     @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,13 +97,13 @@ public class ProfileActivity extends AppCompatActivity {
         nombreCompleto = findViewById(R.id.tv_user_name);
         btnGuardar = findViewById(R.id.bt_guardar_perfil);
         btnAmigos = findViewById(R.id.buttonVerAmigos);
+        tvEditarImagen = findViewById(R.id.tveditarimagen);
 
         //Tengo que buscar el alumno que tenga ese email para poner después los datos
         //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         alumnoController.findByUOWithPhoto(userInSession.getEmail(), new AlumnoController.AlumnoCallback() {
             @Override
             public void callback(Alumno alumno) {
-                Log.d("patata", alumno.getEmail() + " " + alumno.getUrl_foto());
                 if (alumno != null) {
                     textViewUO.setText(alumno.getNombre());
                     textViewEmail.setText(alumno.getEmail());
@@ -124,6 +134,82 @@ public class ProfileActivity extends AppCompatActivity {
                 ventanaAmigos();
             }
         });
+
+        //Boton editar imagen perfil
+        tvEditarImagen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editarImagenPerfil(view);
+            }
+        });
+
+        //Si hago click fuera del pop up
+        findViewById(R.id.containerView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                findViewById(R.id.containerView).setBackgroundColor(Color.WHITE);
+                findViewById(R.id.constraintLayout).setVisibility(View.VISIBLE);
+                img_persona.setBackgroundColor(Color.WHITE);
+                tvEditarImagen.setBackgroundColor(Color.WHITE);
+                findViewById(R.id.buttonVerAmigos).setEnabled(true);
+                navegacion.setVisibility(View.VISIBLE);
+            }
+        });
+
+    }
+
+    private void editarImagenPerfil(View v) {
+        findViewById(R.id.containerView).setBackgroundColor(Color.GRAY);
+        findViewById(R.id.constraintLayout).setVisibility(View.INVISIBLE);
+        findViewById(R.id.img_persona_duda).setBackgroundColor(Color.GRAY);
+        findViewById(R.id.tveditarimagen).setBackgroundColor(Color.GRAY);
+        findViewById(R.id.buttonVerAmigos).setEnabled(false);
+        navegacion.setVisibility(View.INVISIBLE);
+
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Introduzca la URL de su nueva imagen de perfil");
+
+        // Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        input.setHint("   https://exampleofanurl.com");
+        alert.setView(input);
+
+        alert.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //Encender tdo otra vez
+                findViewById(R.id.containerView).setBackgroundColor(Color.WHITE);
+                findViewById(R.id.constraintLayout).setVisibility(View.VISIBLE);
+                img_persona.setBackgroundColor(Color.WHITE);
+                tvEditarImagen.setBackgroundColor(Color.WHITE);
+                findViewById(R.id.buttonVerAmigos).setEnabled(true);
+                navegacion.setVisibility(View.VISIBLE);
+                // Do something with value!
+                if (input.getText().toString()!=null
+                    && input.getText().toString()!="") {
+                    urlFoto = input.getText().toString();
+                    Picasso.get().load(input.getText().toString()).into(img_persona);
+                }
+            }
+        });
+
+        alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //Encender tdo otra vez
+                findViewById(R.id.containerView).setBackgroundColor(Color.WHITE);
+                findViewById(R.id.constraintLayout).setVisibility(View.VISIBLE);
+                img_persona.setBackgroundColor(Color.WHITE);
+                tvEditarImagen.setBackgroundColor(Color.WHITE);
+                findViewById(R.id.buttonVerAmigos).setEnabled(true);
+                navegacion.setVisibility(View.VISIBLE);
+                // Canceled.
+            }
+        });
+
+        alert.show();
+
+
     }
 
     private void ventanaAmigos() {
@@ -132,6 +218,8 @@ public class ProfileActivity extends AppCompatActivity {
         startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
     }
+
+
 
     private void actualizarPerfil() {
 
@@ -144,7 +232,13 @@ public class ProfileActivity extends AppCompatActivity {
                         docData.put(Alumno.EMAIL, alumno.getEmail());
                         docData.put(Alumno.NOMBRE, nombreCompleto.getText().toString());
                         docData.put(Alumno.UO, alumno.getNombre());
-                        docData.put(Alumno.URL_FOTO, alumno.getUrl_foto());
+
+                        if (urlFoto!=null && urlFoto!="") {
+                            docData.put(Alumno.URL_FOTO, urlFoto);
+                        }
+                        else {
+                            docData.put(Alumno.URL_FOTO, alumno.getUrl_foto());
+                        }
 
                         asignaturasDominadas.clear();
                         for (CheckBox c : cB
@@ -209,56 +303,7 @@ public class ProfileActivity extends AppCompatActivity {
         return null;
     }
 
-    private void crearAsignaturaDuda(String nombreA) {
-        asignaturaViewModel.getAllAsignaturasAsMap().observe(this, dudasResult -> {
-            if (dudasResult != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    dudasResult.forEach(d -> {
 
-//                        if (d.nombre.equals(nombreA)) {
-                        String nombre = d.get(Asignatura.NOMBRE).toString();
-
-                        if (nombre.equalsIgnoreCase(nombreA)) {
-                            Log.d(TAG, "SELECCIONADA: " + d.toString());
-                            asignaturasDominadas.add(d);
-                        }
-
-//                            a.nombre = d.getNombre();
-//                            a.id=d.getId();
-//                            a.curso=d.getCurso();
-//                            a.materia=d.getMateria();
-//                            asignaturaDuda.add(a);
-//                        }
-                    });
-                }
-            }
-        });
-    }
-
-    /*
-    private void cargarCursos() {
-        cursoViewModel.getAllCursos().observe(this, dudasResult -> {
-            if (dudasResult != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    dudasResult.forEach(d -> {
-                        Log.i(TAG, d.getNumero());
-                        CursoDto a = new CursoDto();
-                        a.numero = d.getNumero();
-
-                        cursos.add(a);
-                    });
-                }
-            }
-            for (CursoDto dto: cursos
-            ) {
-                numeroCursos.add(dto.numero);
-            }
-
-
-            spinnerCursos.setAdapter(new ArrayAdapter<>(ProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, numeroCursos));
-
-        });
-    }*/
 
     /**
      * Enhance.
@@ -316,101 +361,4 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void cargarAsignaturas() {
-        asignaturaViewModel.getAllDudas().observe(this, dudasResult -> {
-            if (dudasResult != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    dudasResult.forEach(d -> {
-                        Log.i(TAG, d.toString());
-                        AsignaturaDto a = new AsignaturaDto();
-                        a.nombre = d.getNombre();
-                        a.curso = d.getCurso();
-                        a.materia = d.getMateria();
-                        a.id = d.getId();
-
-                        asignaturaList.add(a);
-                    });
-                }
-                System.out.println("-->" + asignaturaList);
-            }
-
-
-            LinearLayout ll = findViewById(R.id.ll_dentroscroll);
-            System.out.println("-->" + asignaturaList);
-
-
-            for (AsignaturaDto a : asignaturaList) {
-                CheckBox opcion = new CheckBox(this);
-                opcion.setText(a.nombre);
-                opcion.setLayoutParams(
-                        new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
-                                , ViewGroup.LayoutParams.WRAP_CONTENT));
-
-                //Seleccionar si ya la tengo
-
-                String email = userInSession.getEmail();
-
-                System.out.println(".." + Build.VERSION.SDK_INT);
-                System.out.println(".." + Build.VERSION_CODES.N);
-
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    alumnoController.findByUOWithPhoto(userInSession.getEmail(), new AlumnoController.AlumnoCallback() {
-                        @Override
-                        public void callback(Alumno alumno) {
-                            System.out.println("aa" + alumno);
-                            if (alumno != null) {
-
-
-                                List<AsignaturaDto> asignaturasAlumno = crearAsignaturas(alumno.getAsignaturasDominadas());
-
-
-                                System.out.println("Las de el**" + asignaturasAlumno);
-                                System.out.println("Todas**" + asignaturaList);
-
-                                for (AsignaturaDto as : asignaturasAlumno) {
-                                    if (a.equals(as)) opcion.setChecked(true);
-                                }
-
-
-                            }
-                        }
-                    });
-                }
-
-
-                ll.addView(opcion);
-                cB.add(opcion);
-            }
-        });
-    }
-
-    private List<AsignaturaDto> crearAsignaturas(Map<String, Object> asignaturasDominadas) {
-
-        List<AsignaturaDto> asignaturas = new ArrayList<>();
-        Object[] asigs = asignaturasDominadas.values().toArray();
-
-        Log.d(TAG, "ASIGS::: " + asignaturasDominadas.values().toString());
-
-        for (Map.Entry asignatura : asignaturasDominadas.entrySet()) {
-            Map<String, Object> asignaturaDom = (Map<String, Object>) asignatura.getValue();
-            String nombre = (String) asignaturaDom.get(Asignatura.NOMBRE);
-            String id = (String) asignaturaDom.get(Asignatura.ID);
-
-            Map<String, Object> curso = (Map<String, Object>) asignaturaDom.get(Asignatura.CURSO);
-            Map<String, Object> materia = (Map<String, Object>) asignaturaDom.get(Asignatura.MATERIA);
-
-            AsignaturaDto newAsig = new AsignaturaDto();
-            newAsig.id = id;
-            newAsig.nombre = nombre;
-            newAsig.curso = (String) curso.get(Curso.NUMERO);
-            newAsig.materia = (String) materia.get(Materia.ABREVIATURA);
-
-            asignaturas.add(newAsig);
-        }
-
-
-        return asignaturas;
-
-    }
 }
