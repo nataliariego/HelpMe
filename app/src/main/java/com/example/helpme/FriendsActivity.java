@@ -52,8 +52,6 @@ public class FriendsActivity extends AppCompatActivity {
 
     private BottomNavigationView navegacion;
 
-    //Hardcodeado
-    private List<Alumno> listaAlumnos = new ArrayList<Alumno>();
 
     private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -72,35 +70,12 @@ public class FriendsActivity extends AppCompatActivity {
 
         cargarAmigos();
 
-       // AlumnoAdapter adapter = new AlumnoAdapter(amigos);
 
         //Navegación
         navegacion = findViewById(R.id.bottomNavigationView);
         IntentExtras.getInstance().handleNavigationView(navegacion, getBaseContext());
     }
 
-    //click del item del adapter
-    private void clikonIntem(Alumno alumno) {
-        Log.i("Click adapter", "Item Clicked " + alumno.getNombre());
-
-
-        //Le paso la duda al MainActivity para que la muestre al picnchar en la duda
-        Intent intent = new Intent(FriendsActivity.this, ActivityShowDuda.class);
-        intent.putExtra(ALUMNO_SELECCIONADO, alumno);
-
-        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-    }
-
-    /*
-    private void cargarAmigos() {
-       Alumno a1 = new Alumno("1","Jose Rodriguez","uo276922","https://res.cloudinary.com/dyoejqhka/image/upload/v1666868641/natalia_im9atl.png",new ArrayList<>());
-        Alumno a2 = new Alumno("2","Natalia Fernandez","uo277516","https://res.cloudinary.com/dyoejqhka/image/upload/v1666868641/natalia_im9atl.png",new ArrayList<>());
-
-        listaAlumnos.add(a1);
-        listaAlumnos.add(a2);
-    }
-
-     */
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -123,6 +98,7 @@ public class FriendsActivity extends AppCompatActivity {
                         newDuda.uo = d.getUo();
                         newDuda.urlFoto = d.getUrl_foto();
                         newDuda.asignaturasDominadas = d.getAsignaturasDominadas();
+                        newDuda.email=d.getEmail();
 
                         amigos.add(newDuda);
                     }
@@ -137,36 +113,4 @@ public class FriendsActivity extends AppCompatActivity {
     }
 
 
-    /**public static AlumnoDto deselectUser(List<AlumnoDto> amigos, int posicion){
-        for(int i = 0; i < lstUsuarios.size(); i++){
-            lstUsuarios.get(i).setSelected(false);
-        }
-        lstUsuarios.get(posicion).setSelected(true);
-        return lstUsuarios;
-    }*/
-
-
-    private void redirectPantallaHome() {
-        Intent listadoDudasIntent = new Intent(FriendsActivity.this, HomeActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
-
-    private void redirectPantallaCuenta() {
-        Intent listadoDudasIntent = new Intent(FriendsActivity.this, ProfileActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
-
-    private void redirectPantallaDudas() {
-        Intent listadoDudasIntent = new Intent(FriendsActivity.this, ListarDudasActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
 }

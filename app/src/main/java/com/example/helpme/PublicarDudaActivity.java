@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.helpme.extras.IntentExtras;
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Asignatura;
 import com.example.helpme.model.Chat;
@@ -187,26 +188,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
 
 
         //Navegacion:
-        navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.nav_home:
-                        redirectPantallaHome();
-                        return true;
-                    case R.id.nav_chat:
-
-                        return true;
-                    case R.id.nav_cuenta:
-                        redirectPantallaCuenta();
-                        return true;
-                    case R.id.nav_dudas:
-                        redirectPantallaDudas();
-                        return true;
-                }
-                return false;
-            }
-        });
+        IntentExtras.getInstance().handleNavigationView(navegacion, getBaseContext());
 
     }
 
@@ -315,7 +297,6 @@ public class PublicarDudaActivity extends AppCompatActivity {
         //Pongo los datos del usuario que está autenticado
         String email = userInSession.getEmail();
 
-        // Log.i("patatita: " , uo);
         //Tengo que buscar el alumno que tenga ese email para poner después los datos
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             alumnoController.findByUOWithPhoto(userInSession.getEmail(), new AlumnoController.AlumnoCallback() {
@@ -323,8 +304,6 @@ public class PublicarDudaActivity extends AppCompatActivity {
                 public void callback(Alumno alumno) {
                     if (alumno != null) {
                         Map<String, Object> alumnoMap = new HashMap<>();
-                        //Esto tdo no está bien porque en la base de datos
-                        //Se guardan raro los datos, faltan cosas...etc
                         alumnoMap.put("nombre", alumno.getUo());
                         alumnoMap.put("email", alumno.getEmail());
                         alumnoMap.put("id", alumno.getId());
@@ -357,7 +336,6 @@ public class PublicarDudaActivity extends AppCompatActivity {
                         docData.put("url_adjunto",url_imagen);
 
 
-                        System.out.println("Holaaaaaaaaaa");
                         myFirebase.collection(Duda.COLLECTION).document()
                                 .set(docData)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -429,7 +407,6 @@ public class PublicarDudaActivity extends AppCompatActivity {
             if (dudasResult != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     dudasResult.forEach(d -> {
-                        System.out.println("LLegdshfgshdgfskjhf");
                         Log.i(TAG, d.getAbreviatura());
                         if (abre.equals(d.getAbreviatura())){
                             MateriaDto a = new MateriaDto();
@@ -484,27 +461,4 @@ public class PublicarDudaActivity extends AppCompatActivity {
         });
     }
 
-    private void redirectPantallaHome() {
-        Intent listadoDudasIntent = new Intent(PublicarDudaActivity.this, HomeActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
-
-    private void redirectPantallaDudas() {
-        Intent listadoDudasIntent = new Intent(PublicarDudaActivity.this, ListarDudasActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
-
-    private void redirectPantallaCuenta() {
-        Intent listadoDudasIntent = new Intent(PublicarDudaActivity.this, ProfileActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
 }

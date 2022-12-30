@@ -1,10 +1,8 @@
 package adapter;
 
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +15,7 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.FriendProfileActivity;
-import com.example.helpme.FriendsActivity;
-import com.example.helpme.ListarDudasActivity;
 import com.example.helpme.R;
-import com.example.helpme.ResolveActivity;
-import com.example.helpme.model.Alumno;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -31,11 +25,7 @@ import java.util.Map;
 import dto.AlumnoDto;
 import dto.AsignaturaDto;
 
-public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoViewHolder>
-{
-
-
-
+public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoViewHolder> {
 
     private List<AlumnoDto> alumnos = new ArrayList<>();
 
@@ -60,32 +50,17 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
 
         holder.bindAlumno(alumno);
 
-
-
         holder.botonPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("...", alumno.toString());
-
-                /*Alumno a = new Alumno(alumno.nombre,
-                        alumno.uo,
-                        alumno.urlFoto,
-                        alumno.uo+"@uniovi.es",
-                        null, alumno.asignaturasDominadas);
-
-                Log.i("patata", a.toString());*/
-
                 Intent intent = new Intent(holder.context, FriendProfileActivity.class);
 
                 String info = alumno.nombre + "---" + alumno.uo + "---"
-                        + alumno.urlFoto + "---" + alumno.uo+"@uniovi.es" + "---" +
+                        + alumno.urlFoto + "---" + alumno.email + "---" +
                         alumno.asignaturasDominadas;
 
-
-               //intent.putExtra("alumno_seleccionado", a);
                 intent.putExtra("alumno_seleccionado", info);
 
-                //Transacion de barrido
                 holder.context.startActivity(intent);
 
             }
@@ -140,7 +115,7 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
                 cadena += abreviatura + " ";
             }
             if (cadena.length() == 0) {
-                asiganturas.setText("Sin asignaturas");
+                asiganturas.setText(R.string.sin_asignaturas);
             } else {
                 asiganturas.setText(cadena);
             }

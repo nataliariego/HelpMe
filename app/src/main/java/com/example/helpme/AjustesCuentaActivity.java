@@ -32,7 +32,7 @@ public class AjustesCuentaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ajustes_cuenta);
-        setTitle("Ajustes de la cuenta");
+        setTitle(R.string.account_settings);
 
         initFields();
     }
@@ -65,7 +65,7 @@ public class AjustesCuentaActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Authentication.getInstance().sendResetPasswordEmail(userInSession.getEmail());
 
-                Toast.makeText(AjustesCuentaActivity.this, "Recibirás un correo para restablecer la contraseña. Revisa la bandeja de spam.", Toast.LENGTH_LONG).show();
+                Toast.makeText(AjustesCuentaActivity.this, R.string.olvida_contraseña, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -80,7 +80,7 @@ public class AjustesCuentaActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Authentication.getInstance().sendEmailVerification();
 
-                Toast.makeText(AjustesCuentaActivity.this, "Recibirás un correo para verificar el correo de tu cuenta. Revisa la bandeja de Spam.", Toast.LENGTH_LONG).show();
+                Toast.makeText(AjustesCuentaActivity.this, R.string.revisa_contraseña, Toast.LENGTH_LONG).show();
             }
         });
     }

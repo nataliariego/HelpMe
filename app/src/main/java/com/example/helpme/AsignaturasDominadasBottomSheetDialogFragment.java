@@ -103,7 +103,6 @@ public class AsignaturasDominadasBottomSheetDialogFragment extends BottomSheetDi
         recyclerAsignaturasDominadas.setLayoutManager(layoutManager);
         recyclerAsignaturasDominadas.setHasFixedSize(true);
 
-        Log.i(TAG, "nombres: " + nombresAsignaturas.toString());
         asignaturaDominadaSheetAdapter = new AsignaturaDominadaSheetAdapter(nombresAsignaturas);
         recyclerAsignaturasDominadas.setAdapter(asignaturaDominadaSheetAdapter);
 

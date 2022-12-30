@@ -132,7 +132,7 @@ public class ChatActivity extends AppCompatActivity {
             processIntentExtras(info);
 
         } else {
-            Toast.makeText(this, "Inicia sesión", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.inicia_sesion, Toast.LENGTH_SHORT).show();
 
             //AlumnoDto alumno = (AlumnoDto) savedInstanceState.getSerializable(ListadoAlumnosChatActivity.ALUMNO_SELECCIONADO_CHAT);
             //Log.i(TAG, "ALUMNO-DTO-SAVED-INSTANCE-NN: " + alumno.toString());

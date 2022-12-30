@@ -130,5 +130,16 @@
     <string name="speakeable_add_asignatura">Añadir asignatura dominada</string>
     <string name="ninguna_asignatura_dominada">No hay asignaturas dominadas seleccionadas</string>
     <string name="nohayimagen">No hay imagen para mostrar</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="sin_asignaturas">Sin asignaturas</string>
+    <string name="iniciar_sesion">Iniciar sesión</string>
+    <string name="credenciales_incorrectas">Las credenciales no son correctas</string>
+    <string name="no_internet">No hay conexión a Internet</string>
+    <string name="account_settings">Ajustes de la cuenta</string>
+    <string name="olvida_contraseña">Recibirás un correo para restablecer la contraseña. Revisa la bandeja de spam.</string>
+    <string name="revisa_contraseña">Recibirás un correo para verificar el correo de tu cuenta. Revisa la bandeja de Spam.</string>
+    <string name="inicia_sesion">Inicia sesión</string>
+
+
 
 </resources>
