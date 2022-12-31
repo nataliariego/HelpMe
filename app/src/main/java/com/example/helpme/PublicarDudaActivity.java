@@ -2,7 +2,6 @@ package com.example.helpme;
 
 import static android.content.ContentValues.TAG;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -11,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -30,12 +28,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.helpme.extras.IntentExtras;
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Asignatura;
 import com.example.helpme.model.Chat;
-import com.example.helpme.model.Curso;
 import com.example.helpme.model.Duda;
-import com.example.helpme.model.Materia;
 import com.example.helpme.model.Mensaje;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -47,31 +44,24 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 import assembler.CursoAssembler;
 import assembler.MateriaAssembler;
-import chat.ChatService;
 import controller.AlumnoController;
 import controller.CursoController;
-import dto.AlumnoDto;
 import dto.AsignaturaDto;
 import dto.CursoDto;
 import dto.MateriaDto;
@@ -101,7 +91,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
     private CursoViewModel cursoViewModel = new CursoViewModel();
     private List<CursoDto> cursos = new ArrayList<CursoDto>();
     private MateriaViewModel materiaViewModel = new MateriaViewModel();
-    private List<MateriaDto> materias =  new ArrayList<>();
+    private List<MateriaDto> materias = new ArrayList<>();
     private AlumnoController alumnoController = new AlumnoController();
     private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
     private Bitmap selectedImageToSend;
@@ -113,7 +103,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
 
     FirebaseDatabase db = FirebaseDatabase.getInstance(DB_URL);
 
-    private String url_imagen="";
+    private String url_imagen = "";
 
 
     @Override
@@ -185,28 +175,8 @@ public class PublicarDudaActivity extends AppCompatActivity {
         });
 
 
-
         //Navegacion:
-        navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.nav_home:
-                        redirectPantallaHome();
-                        return true;
-                    case R.id.nav_chat:
-
-                        return true;
-                    case R.id.nav_cuenta:
-                        redirectPantallaCuenta();
-                        return true;
-                    case R.id.nav_dudas:
-                        redirectPantallaDudas();
-                        return true;
-                }
-                return false;
-            }
-        });
+        IntentExtras.getInstance().handleNavigationView(navegacion, getBaseContext());
 
     }
 
@@ -221,7 +191,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
         String imgUid = UUID.randomUUID().toString();
         String imageName = imgUid + ".jpg";
         url_imagen = imageName;
-        adjuntar.setText("Adjuntar imagen "+ "(1)");
+        adjuntar.setText("Adjuntar imagen " + "(1)");
         imagenAdjuntar.setEnabled(false);
         UploadTask uploadTask = imgStorage.child(imageName).putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -302,20 +272,14 @@ public class PublicarDudaActivity extends AppCompatActivity {
     }
 
 
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void crearDuda() {
         List<Asignatura> list = new ArrayList<>();
         String fecha = sacarFecha();
-        //CAmbiar porqeue cambio constructor duda
-        // TODO: Asignatura asig = (Asignatura) spinner.getSelectedItem();
-
-
 
         //Pongo los datos del usuario que está autenticado
         String email = userInSession.getEmail();
 
-        // Log.i("patatita: " , uo);
         //Tengo que buscar el alumno que tenga ese email para poner después los datos
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             alumnoController.findByUOWithPhoto(userInSession.getEmail(), new AlumnoController.AlumnoCallback() {
@@ -323,14 +287,12 @@ public class PublicarDudaActivity extends AppCompatActivity {
                 public void callback(Alumno alumno) {
                     if (alumno != null) {
                         Map<String, Object> alumnoMap = new HashMap<>();
-                        //Esto tdo no está bien porque en la base de datos
-                        //Se guardan raro los datos, faltan cosas...etc
-                        alumnoMap.put("nombre", alumno.getUo());
-                        alumnoMap.put("email", alumno.getEmail());
-                        alumnoMap.put("id", alumno.getId());
-                        alumnoMap.put("uo", alumno.getNombre());
-                        alumnoMap.put("url_foto", alumno.getUrl_foto());
-                        alumnoMap.put("asignaturasDominadas", alumno.getAsignaturasDominadas());
+                        alumnoMap.put(Alumno.NOMBRE, alumno.getUo());
+                        alumnoMap.put(Alumno.EMAIL, alumno.getEmail());
+                        alumnoMap.put(Alumno.ID, alumno.getId());
+                        alumnoMap.put(Alumno.UO, alumno.getNombre());
+                        alumnoMap.put(Alumno.URL_FOTO, alumno.getUrl_foto());
+                        alumnoMap.put(Alumno.ASIGNATURAS_DOMINADAS, alumno.getAsignaturasDominadas());
                         Map<String, Object> asignaturaMap = new HashMap<>();
                         String nAsignatura = spinner.getSelectedItem().toString();
                         crearAsignaturaDuda(nAsignatura);
@@ -339,25 +301,24 @@ public class PublicarDudaActivity extends AppCompatActivity {
 
 
                         Map<String, Object> materiaMap = MateriaAssembler.toHashMap(asignaturaDuda.get(0).materia);
-                        asignaturaMap.put("nombre", nAsignatura);
-                        asignaturaMap.put("curso", cursoMap);
-                        asignaturaMap.put("id", asignaturaDuda.get(0).id);
-                        asignaturaMap.put("materia", materiaMap);
+                        asignaturaMap.put(Asignatura.NOMBRE, nAsignatura);
+                        asignaturaMap.put(Asignatura.CURSO, cursoMap);
+                        asignaturaMap.put(Asignatura.ID, asignaturaDuda.get(0).id);
+                        asignaturaMap.put(Asignatura.MATERIA, materiaMap);
                         asignaturaDuda.clear();
 
 
                         Map<String, Object> docData = new HashMap<>();
-                        docData.put("titulo", titulo.getText().toString());
-                        docData.put("descripcion", descripcion.getText().toString());
-                        docData.put("alumno", alumnoMap);
-                        docData.put("asignatura", asignaturaMap);
-                        docData.put("materia", materiaMap);
-                        docData.put("resuelta", false);
-                        docData.put("fecha", fecha);
-                        docData.put("url_adjunto",url_imagen);
+                        docData.put(Duda.TITULO, titulo.getText().toString());
+                        docData.put(Duda.DESCRIPCION, descripcion.getText().toString());
+                        docData.put(Duda.REF_ALUMNO, alumnoMap);
+                        docData.put(Duda.ASIGNATURA_REF, asignaturaMap);
+                        docData.put(Duda.REF_MATERIA, materiaMap);
+                        docData.put(Duda.IS_RESUELTA, false);
+                        docData.put(Duda.FECHA, fecha);
+                        docData.put(Duda.URL_ADJUNTO, url_imagen);
 
 
-                        System.out.println("Holaaaaaaaaaa");
                         myFirebase.collection(Duda.COLLECTION).document()
                                 .set(docData)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -413,7 +374,7 @@ public class PublicarDudaActivity extends AppCompatActivity {
                 }
             }
 
-            for (AsignaturaDto dto: asignaturaList
+            for (AsignaturaDto dto : asignaturaList
             ) {
                 nombreAsignaturas.add(dto.nombre);
             }
@@ -429,13 +390,12 @@ public class PublicarDudaActivity extends AppCompatActivity {
             if (dudasResult != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     dudasResult.forEach(d -> {
-                        System.out.println("LLegdshfgshdgfskjhf");
                         Log.i(TAG, d.getAbreviatura());
-                        if (abre.equals(d.getAbreviatura())){
+                        if (abre.equals(d.getAbreviatura())) {
                             MateriaDto a = new MateriaDto();
                             a.id = d.getId();
-                            a.abreviatura=d.getAbreviatura();
-                            a.denominacion=d.getDenominacion();
+                            a.abreviatura = d.getAbreviatura();
+                            a.denominacion = d.getDenominacion();
 
                             materias.add(a);
                         }
@@ -453,11 +413,11 @@ public class PublicarDudaActivity extends AppCompatActivity {
                     dudasResult.forEach(d -> {
 
                         AsignaturaDto a = new AsignaturaDto();
-                        if (d.getNombre().equals(nombreA)){
+                        if (d.getNombre().equals(nombreA)) {
                             a.nombre = d.getNombre();
-                            a.id=d.getId();
-                            a.curso=d.getCurso();
-                            a.materia=d.getMateria();
+                            a.id = d.getId();
+                            a.curso = d.getCurso();
+                            a.materia = d.getMateria();
                             asignaturaDuda.add(a);
                         }
                     });
@@ -484,27 +444,4 @@ public class PublicarDudaActivity extends AppCompatActivity {
         });
     }
 
-    private void redirectPantallaHome() {
-        Intent listadoDudasIntent = new Intent(PublicarDudaActivity.this, HomeActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
-
-    private void redirectPantallaDudas() {
-        Intent listadoDudasIntent = new Intent(PublicarDudaActivity.this, ListarDudasActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
-
-    private void redirectPantallaCuenta() {
-        Intent listadoDudasIntent = new Intent(PublicarDudaActivity.this, ProfileActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
 }

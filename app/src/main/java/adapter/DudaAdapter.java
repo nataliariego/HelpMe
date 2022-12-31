@@ -1,7 +1,6 @@
 package adapter;
 
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +36,6 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
 
     private List<DudaDto> dudas = new ArrayList<>();
     private final OnItemClickListener listener;
-//    private final AdapterView.OnItemClickListener listener;
 
     public DudaAdapter(List<DudaDto> dudas, OnItemClickListener listener
     ) {
@@ -78,7 +76,6 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
         private TextView nombreAlumno;
         private TextView fechaPublicacion;
         private TextView abrevMateria;
-        //private TextView siglasAlumno;
 
         private ImageView imgPerfilAlumno;
 
@@ -90,8 +87,6 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
             nombreAlumno = itemView.findViewById(R.id.txNombreAlumnoDudaResumen);
             fechaPublicacion = itemView.findViewById(R.id.txResumenFechaPublicacionDuda);
             abrevMateria = itemView.findViewById(R.id.txResumenDudaAbrevMateria);
-            //siglasAlumno = itemView.findViewById(R.id.tx_siglas_alumno_avatar);
-
             imgPerfilAlumno = itemView.findViewById(R.id.img_perfil_alumno_duda);
 
         }
@@ -101,11 +96,9 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
             titulo.setText(duda.titulo);
             fechaPublicacion.setText(DateUtils.prettyDate(duda.fecha, 1));
 
-            System.out.println("--->" + duda.materia);
             if (duda.materia != null) {
                 String abrev = duda.materia.get(Materia.ABREVIATURA).toString();
                 abrevMateria.setText(abrev);
-                System.out.println("--->" + abrev);
             }
 
             // https://github.com/wasabeef/picasso-transformations
@@ -123,7 +116,6 @@ public class DudaAdapter extends RecyclerView.Adapter<DudaAdapter.DudaViewHolder
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i("ListaPeliculasAdapter", "Click");
                     listener.onItemClick(duda);
                 }
             });

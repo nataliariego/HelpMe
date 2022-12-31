@@ -32,10 +32,6 @@ public class ListarDudasActivity extends AppCompatActivity {
 
     public static final String DUDA_SELECCIONADA = "duda_seleccionada";
 
-    //Modelo de datos
-    private List<Duda> listaDuda = new ArrayList<Duda>();
-
-
     private RecyclerView listaDudaView;
 
     private DudaAdapter dudaAdapter;
@@ -43,7 +39,6 @@ public class ListarDudasActivity extends AppCompatActivity {
 
     private List<DudaDto> dudas = new ArrayList<>();
     private List<String> idDudas = new ArrayList<>();
-
 
     private BottomNavigationView navegacion;
 
@@ -59,21 +54,13 @@ public class ListarDudasActivity extends AppCompatActivity {
         listaDudaView = (RecyclerView) findViewById(R.id.recicler_listado_dudas);
         listaDudaView.setHasFixedSize(true);
 
-        /* Un RecyclerView necesita un Layout Manager para manejar el posicionamiento de los
-        elementos en cada línea. Se podría definir un LayoutManager propio extendendiendo la clase
-        RecyclerView.LayoutManager. Sin embargo, en la mayoría de los casos, simplemente se usa
-        una de las subclases LayoutManager predefinidas: LinearLayoutManager, GridLayoutManager,
-        StaggeredGridLayoutManager*/
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         listaDudaView.setLayoutManager(layoutManager);
 
 
         //Rellenar lista de dudas y en el adapter
         cargarDudas();
-        //Pasamos la lista de dudas al RecyclerView con el ListaDudaAdapter
-        // Instanciamos el adapter con los datos de la petición y lo asignamos a RecyclerView
-        // Generar el adaptador, le pasamos la lista de dudas
-        // y el manejador para el evento click sobre un elemento
 
         //Navegacion:
         navegacion = findViewById(R.id.bottomNavigationView);
@@ -159,29 +146,7 @@ public class ListarDudasActivity extends AppCompatActivity {
     }
 
 
-    private void redirectPantallaHome() {
-        Intent listadoDudasIntent = new Intent(ListarDudasActivity.this, HomeActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
-        //startActivity(listadoDudasIntent);
-    }
-
-    private void redirectPantallaDudas() {
-        Intent listadoDudasIntent = new Intent(ListarDudasActivity.this, ListarDudasActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
-
-    private void redirectPantallaCuenta() {
-        Intent listadoDudasIntent = new Intent(ListarDudasActivity.this, ProfileActivity.class);
-        // Para transiciones
-        startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-        //startActivity(listadoDudasIntent);
-    }
 
 
 }

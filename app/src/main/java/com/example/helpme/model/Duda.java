@@ -20,6 +20,7 @@ public class Duda implements Parcelable {
     public static final String FECHA = "fecha";
     public static final String ASIGNATURA_REF = "asignatura";
     public static final String REF_MATERIA = "materia";
+    public static final String URL_ADJUNTO = "url_adjunto";
 
     public static final String IS_RESUELTA = "resuelta";
 
