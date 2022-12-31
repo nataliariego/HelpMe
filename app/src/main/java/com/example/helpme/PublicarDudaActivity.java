@@ -48,6 +48,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.ocpsoft.prettytime.units.Hour;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -203,8 +205,6 @@ public class PublicarDudaActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
                 if (taskSnapshot.getTask().isSuccessful()) {
                     Log.d(TAG, "Imagen subida: " + taskSnapshot.getMetadata());
                     Log.d(TAG, "Imagen subida2: " + taskSnapshot.getStorage());
@@ -348,8 +348,23 @@ public class PublicarDudaActivity extends AppCompatActivity {
     private String sacarFecha() {
         String fecha;
         Calendar c = new GregorianCalendar();
+        String min = "";
+        String hour="";
+        if (c.get(Calendar.HOUR_OF_DAY) <10){
+            hour = "0"+(c.get(Calendar.HOUR_OF_DAY)+1);
+        }else{
+            hour=""+(c.get(Calendar.HOUR_OF_DAY)+1);
+        }
+        System.out.println("hjhjsgfsjjfsd");
+        System.out.println(c.get(Calendar.MINUTE));
+        if (c.get(Calendar.MINUTE) < 10){
+            min = "0"+c.get(Calendar.MINUTE);
+        }else{
+            min=""+c.get(Calendar.MINUTE);
+
+        }
         fecha = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR)
-                + " " + c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":00";
+                + " " + hour + ":" + min + ":00";
         return fecha;
     }
 
@@ -385,26 +400,6 @@ public class PublicarDudaActivity extends AppCompatActivity {
         });
     }
 
-    private void crearMateriaDuda(String abre) {
-        materiaViewModel.getAllDudas().observe(this, dudasResult -> {
-            if (dudasResult != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    dudasResult.forEach(d -> {
-                        Log.i(TAG, d.getAbreviatura());
-                        if (abre.equals(d.getAbreviatura())) {
-                            MateriaDto a = new MateriaDto();
-                            a.id = d.getId();
-                            a.abreviatura = d.getAbreviatura();
-                            a.denominacion = d.getDenominacion();
-
-                            materias.add(a);
-                        }
-
-                    });
-                }
-            }
-        });
-    }
 
     private void crearAsignaturaDuda(String nombreA) {
         asignaturaViewModel.getAllDudas().observe(this, dudasResult -> {
@@ -426,22 +421,5 @@ public class PublicarDudaActivity extends AppCompatActivity {
         });
     }
 
-    private void crearCursoDuda(String num) {
-        cursoViewModel.getAllCursos().observe(this, dudasResult -> {
-            if (dudasResult != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    dudasResult.forEach(d -> {
-                        Log.i(TAG, d.getNumero());
-                        if (num.equals(d.getNumero())) {
-                            CursoDto a = new CursoDto();
-                            a.numero = d.getNumero();
-                            cursos.add(a);
-                        }
-                    });
-                }
-            }
-
-        });
-    }
 
 }

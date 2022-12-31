@@ -65,7 +65,6 @@ public class ResolveActivity extends AppCompatActivity {
 
     public static final String CLOUD_STORAGE_URL = "gs://helpme-app-435b7.appspot.com/";
     public static final String BASE_PATH_CLOUD_STORAGE = "imgDudas";
-    public static final String DB_URL = "https://helpme-app-435b7-default-rtdb.europe-west1.firebasedatabase.app";
 
     private Duda duda;
     private TextView titulo;
@@ -139,7 +138,6 @@ public class ResolveActivity extends AppCompatActivity {
                             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                             imagen.setScaleType(ImageView.ScaleType.CENTER_CROP);
                             imagen.setImageBitmap(Bitmap.createScaledBitmap(bitmap, 600, 900, false));
-
                         }
 
                     }).addOnFailureListener(new OnFailureListener() {
@@ -155,12 +153,10 @@ public class ResolveActivity extends AppCompatActivity {
         findViewById(R.id.containerView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //imagen.setLayoutParams(paramsBefore);
                 findViewById(R.id.containerView).setBackgroundColor(Color.WHITE);
                 imagen.setVisibility(View.INVISIBLE);
                 findViewById(R.id.layout_listar_dudas_wrapper_resolve).setVisibility(View.VISIBLE);
                 respuesta.setVisibility(View.VISIBLE);
-                // navegacion.setEnabled(false);
             }
         });
 
@@ -169,11 +165,9 @@ public class ResolveActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!duda.getUrl_adjunto().equals("")) {
-                    //imagen.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
                     findViewById(R.id.containerView).setBackgroundColor(Color.GRAY);
                     imagen.setVisibility(View.VISIBLE);
                     respuesta.setVisibility(View.INVISIBLE);
-                    //findViewById(R.id.layout_listar_dudas_wrapper_resolve).setVisibility(View.INVISIBLE);
                 }else{
                     Snackbar.make(findViewById(R.id.layaoutResolverDuda), R.string.nohayimagen, Snackbar.LENGTH_LONG).show();
                 }
@@ -285,12 +279,23 @@ public class ResolveActivity extends AppCompatActivity {
     private String sacarFecha() {
         String fecha;
         Calendar c = new GregorianCalendar();
-        int min = 0;
+        String min = "";
+        String hour="";
+        if (c.get(Calendar.HOUR_OF_DAY) <10){
+            hour = "0"+(c.get(Calendar.HOUR_OF_DAY)+1);
+        }else{
+            hour=""+(c.get(Calendar.HOUR_OF_DAY)+1);
+        }
+        System.out.println("hjhjsgfsjjfsd");
+        System.out.println(c.get(Calendar.MINUTE));
         if (c.get(Calendar.MINUTE) < 10){
-            min = 0+c.get(Calendar.MINUTE);
+            min = "0"+c.get(Calendar.MINUTE);
+        }else{
+            min=""+c.get(Calendar.MINUTE);
+
         }
         fecha = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR)
-                + " " + c.get(Calendar.HOUR_OF_DAY) + ":" + min + ":00";
+                + " " + hour + ":" + min + ":00";
         return fecha;
     }
 
