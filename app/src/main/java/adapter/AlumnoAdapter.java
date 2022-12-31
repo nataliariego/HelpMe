@@ -107,7 +107,6 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
                 Map<Object, Object> prueba = (Map<Object, Object>) nombre;
                 Map<Object, String> materia = (Map<Object, String>) prueba.get("materia");
                 String abreviatura = materia.get("abreviatura");
-                System.out.println(abreviatura);
                 if (contador == 5) {
                     cadena += "...";
                     break;
