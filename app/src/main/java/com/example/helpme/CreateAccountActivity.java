@@ -61,7 +61,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
 
-        setTitle("Crear una cuenta");
+        setTitle(R.string.crear_cuenta);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             initFields();
@@ -170,7 +170,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             public void onClick(View view) {
                 asignaturasDominadasSeleccionadas.clear();
                 changeButtonColors(false);
-                Toast.makeText(CreateAccountActivity.this, "Asignaturas dominadas borradas", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateAccountActivity.this, R.string.asig_dom_borradas, Toast.LENGTH_SHORT).show();
             }
         });
 

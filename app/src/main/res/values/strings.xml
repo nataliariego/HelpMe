@@ -144,4 +144,11 @@
     <string name="uo277516">UO277516</string>
     <string name="uo276922">UO276922</string>
     <string name="app_version">v1.0.0</string>
+
+    <string name="amigos">Amigos</string>
+    <string name="editar_imagen">  Editar imagen  </string>
+    <string name="urlexample">   https://exampleofanurl.com</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="crear_cuenta">Crear una cuenta</string>
+    <string name="asig_dom_borradas">Asignaturas dominadas borradas</string>
 </resources>
