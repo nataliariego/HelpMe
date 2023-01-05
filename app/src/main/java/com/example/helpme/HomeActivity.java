@@ -101,11 +101,6 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
         });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
     /**
      * Redirecciona al Activity ListarDudasActivity.
      */
@@ -134,7 +129,6 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
         dudaViewModel.getAllDudas().observe(this, dudasResult -> {
             if (dudasResult != null) {
                 dudasResult.forEach(d -> {
-                    Log.i(TAG, d.getTitulo() + " " + d.getAlumnoId());
                     DudaDto newDuda = new DudaDto();
                     newDuda.id=d.getId();
                     newDuda.titulo = d.getTitulo();

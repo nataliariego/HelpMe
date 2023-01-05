@@ -125,4 +125,21 @@ public class DateUtils {
         return String.valueOf(nowDateTime
                 .format(DateTimeFormatter.ofPattern(DEFAULT_DATETIME_PATTERN, DEFAULT_LOCALE)));
     }
+
+    public static String format(final String date) {
+        String filledFormat = "%02d";
+
+        String part1 = date.split(" ")[0]; // dd/MM/YYYY
+        String part2 = date.split(" ")[1]; //HH:mm:ss
+
+        int day = Integer.parseInt(part1.split("/")[0]);
+        int month = Integer.parseInt(part1.split("/")[1]);
+        String year = part1.split("/")[2];
+
+        int hour = Integer.parseInt(part2.split(":")[0]);
+        int minute = Integer.parseInt(part2.split(":")[1]);
+        int second = Integer.parseInt(part2.split(":")[2]);
+
+        return String.format("%02d/%02d/%s %02d:%02d:%02d", day, month, year, hour, minute, second);
+    }
 }
