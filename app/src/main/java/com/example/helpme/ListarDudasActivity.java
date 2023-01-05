@@ -62,7 +62,7 @@ public class ListarDudasActivity extends AppCompatActivity {
         //Rellenar lista de dudas y en el adapter
         cargarDudas();
 
-        //Navegacion:
+        //Navegacion
         navegacion = findViewById(R.id.bottomNavigationView);
         IntentExtras.getInstance().handleNavigationView(navegacion, getBaseContext());
 
@@ -115,7 +115,6 @@ public class ListarDudasActivity extends AppCompatActivity {
         dudaViewModel.getAllDudas().observe(this, dudasResult -> {
             if (dudasResult != null) {
                 dudasResult.forEach(d -> {
-                    Log.i(TAG, d.getTitulo() + " " + d.getAlumnoId());
                     DudaDto newDuda = new DudaDto();
                     newDuda.titulo = d.getTitulo();
                     newDuda.descripcion = d.getDescripcion();

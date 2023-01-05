@@ -70,7 +70,7 @@ public class FriendProfileActivity extends AppCompatActivity {
 
         String[] info = alumno.split("---");
 
-        email = info[3];
+        this.email = info[3];
 
         textViewUO.setText(info[1]);
         textViewEmail.setText(info[3]);
