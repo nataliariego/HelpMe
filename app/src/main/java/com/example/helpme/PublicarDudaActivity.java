@@ -315,7 +315,10 @@ public class PublicarDudaActivity extends AppCompatActivity {
                         docData.put(Duda.ASIGNATURA_REF, asignaturaMap);
                         docData.put(Duda.REF_MATERIA, materiaMap);
                         docData.put(Duda.IS_RESUELTA, false);
-                        docData.put(Duda.FECHA, fecha);
+
+                        // TODO:Modificado
+                        docData.put(Duda.FECHA, String.format(DateUtils.format(fecha)));
+                        //docData.put(Duda.FECHA, fecha);
                         docData.put(Duda.URL_ADJUNTO, url_imagen);
 
 
