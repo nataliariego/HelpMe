@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_chat"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    tools:context=".ChatActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageButton
+            android:id="@+id/button_back_to_chat_list"
+            style="@style/Widget.AppCompat.ImageButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="5dp"
+            android:backgroundTint="@color/transparent"
+            android:contentDescription="@string/button_call_alumno_chat"
+            app:srcCompat="@drawable/ic_round_arrow_back_ios_24" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_receiver_user_chat"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="20dp"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            app:srcCompat="@drawable/button_rounded_corners_primary" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_user_receiver_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_nombre_completo" />
+
+            <TextView
+                android:id="@+id/text_user_receiver_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/chat_alumno_receiver_status" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_wrapper_phone_toolbar_chat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/button_call_alumno_receiver"
+                style="@style/Widget.AppCompat.ImageButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="end"
+                android:backgroundTint="@color/transparent"
+                android:contentDescription="@string/button_call_alumno_chat"
+                app:srcCompat="@drawable/ic_round_email_24" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/text_mensaje_enviar_chat"
+        style="@style/Widget.Material3.TextInputEditText.OutlinedBox.Dense"
+        android:layout_width="309dp"
+        android:layout_height="55dp"
+        android:autofillHints=""
+        android:background="@drawable/rectangle_rounded_shadow"
+        android:cursorVisible="false"
+        android:elegantTextHeight="false"
+        android:elevation="10dp"
+        android:ellipsize="none"
+        android:ems="10"
+        android:focusable="true"
+        android:fontFamily="@font/roboto"
+        android:freezesText="false"
+        android:gravity="center_vertical"
+        android:hint="@string/hint_mensaje_chat"
+        android:inputType="textPersonName"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"
+        android:singleLine="false"
+        android:textAllCaps="false"
+        android:textColor="@color/primary"
+        android:textColorHighlight="@color/primary"
+        android:textColorHint="@color/text_color_hint"
+        android:textDirection="ltr"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.156"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.974" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_conversacion_chat"
+        android:layout_width="match_parent"
+        android:layout_height="606dp"
+        android:clipToPadding="false"
+        android:paddingLeft="15dp"
+        android:paddingTop="0dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="0dp"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/button_upload_file_chat"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:backgroundTint="@color/transparent"
+        android:contentDescription="@string/button_subir_archivo_chat"
+        android:elevation="10dp"
+        android:rotation="10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.663"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.969"
+        app:srcCompat="@drawable/ic_round_attach_file_24"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <ImageButton
+        android:id="@+id/button_enviar_mensaje_chat"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:background="@drawable/button_rounded_corners_primary"
+        android:contentDescription="@string/enviar_mensaje"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.955"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.976"
+        app:srcCompat="@drawable/ic_baseline_send_24" />
+
+    <ImageButton
+        android:id="@+id/button_camera_chat"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:backgroundTint="@color/transparent"
+        android:contentDescription="@string/button_camera_chat"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.743"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.969"
+        app:srcCompat="@drawable/ic_round_camera_alt_24" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

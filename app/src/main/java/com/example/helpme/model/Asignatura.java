@@ -12,11 +12,14 @@ public class Asignatura implements Parcelable {
     public static final String NOMBRE = "nombre";
     public static final String MATERIA = "materia";
     public static final String CURSO = "curso";
+    public static final String ID = "id";
 
     private String id;
     private String nombre;
     private String curso;
     private String materia;
+
+
 
     public Asignatura(String id, String nombre, String curso, String materia) {
         this.id = id;
@@ -24,6 +27,18 @@ public class Asignatura implements Parcelable {
         this.curso = curso;
         this.materia = materia;
     }
+
+    public Asignatura() {
+
+    }
+    public Asignatura(String curso, String materia, String nombre) {
+
+        this.nombre = nombre;
+        this.curso = curso;
+        this.materia = materia;
+    }
+
+
 
     protected Asignatura(Parcel in) {
         id = in.readString();

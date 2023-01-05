@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_duda_resumen"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/layout_main_resumen_2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:foregroundGravity="center_vertical"
+        app:flow_verticalAlign="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+        <!--            android:id="@+id/layout_wrapper_img_perfil_alumno"-->
+        <!--            android:layout_width="112dp"-->
+        <!--            android:layout_height="123dp"-->
+        <!--            app:layout_gravity="center">-->
+
+
+        <!--            <androidx.cardview.widget.CardView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:foregroundGravity="center"-->
+        <!--                app:cardCornerRadius="50dp"-->
+        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--                app:layout_constraintEnd_toEndOf="parent"-->
+        <!--                app:layout_constraintStart_toStartOf="parent"-->
+        <!--                app:layout_constraintTop_toTopOf="parent">-->
+
+        <!--                <ImageView-->
+        <!--                    android:id="@+id/img_perfil_alumno_duda"-->
+        <!--                    android:layout_width="70dp"-->
+        <!--                    android:layout_height="70dp"-->
+        <!--                    android:layout_centerHorizontal="true"-->
+        <!--                    android:layout_centerVertical="true"-->
+        <!--                    android:layout_gravity="center"-->
+        <!--                    android:adjustViewBounds="true"-->
+        <!--                    android:baselineAlignBottom="false"-->
+        <!--                    android:contentDescription="@string/resumen_img_perfil_alumno_descripcion"-->
+        <!--                    android:foregroundGravity="center"-->
+        <!--                    android:scaleType="fitXY"-->
+        <!--                    app:srcCompat="@drawable/profile_placeholcer_primary_48" />-->
+        <!--            </androidx.cardview.widget.CardView>-->
+
+        <!--            <TextView-->
+        <!--                android:id="@+id/tx_siglas_alumno_avatar"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="match_parent"-->
+        <!--                android:fontFamily="@font/roboto_medium"-->
+        <!--                android:gravity="center"-->
+        <!--                android:text="@string/avatar_placeholder_text"-->
+        <!--                android:textAlignment="center"-->
+        <!--                android:textColor="@color/white"-->
+        <!--                android:textSize="25sp" />-->
+        <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_wrapper"
+            android:layout_width="122dp"
+            android:layout_height="123dp"
+            app:layout_gravity="center">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/img_perfil_alumno_respuesta"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                app:srcCompat="@drawable/button_rounded_corners_primary"
+                tools:ignore="ImageContrastCheck" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/resumen_duda_detalles"
+            android:layout_width="310dp"
+            android:layout_height="123dp"
+            android:gravity="clip_vertical|center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txNombreAlRespuesta"
+                android:layout_width="228dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="Nombre Alumno"
+                android:textColor="@color/primary"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:id="@+id/layout_resumen_datos_alumno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/layout_resumen_duda_datos_alumno_nombre_fecha"
+                    android:layout_width="270dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txFechaRespuesta"
+                        android:layout_width="257dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
+                        android:text="@string/txFechaSubidaDuda"
+                        android:textColor="#546E7A"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txRespuesta"
+                        android:layout_width="254dp"
+                        android:layout_height="73dp"
+                        android:fontFamily="@font/roboto"
+                        android:text="Respuesta"
+                        android:textColor="@color/primary"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.gridlayout.widget.GridLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

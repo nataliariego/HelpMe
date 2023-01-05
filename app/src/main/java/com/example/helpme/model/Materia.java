@@ -1,6 +1,9 @@
 package com.example.helpme.model;
 
-public class Materia {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Materia{
     /* Campos de la base de datos */
     public static final String COLLECTION = "MATERIA";
     public static final String ABREVIATURA = "abreviatura";
@@ -10,6 +13,7 @@ public class Materia {
     private String denominacion;
     private String abreviatura;
 
+    public Materia(){}
     public String getAbreviatura() {
         return abreviatura;
     }
@@ -17,6 +21,8 @@ public class Materia {
     public void setAbreviatura(String abreviatura) {
         this.abreviatura = abreviatura;
     }
+
+
 
     public Materia(String id, String denominacion, String abreviatura) {
         this.id = id;
@@ -48,4 +54,5 @@ public class Materia {
                 ", abreviatura='" + abreviatura + '\'' +
                 '}';
     }
+
 }

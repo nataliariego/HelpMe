@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_linea_asignatura_dominada"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="25dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:context=".LineaAsignaturaDominadaFragment">
+
+    <TextView
+        android:id="@+id/text_asignatura_dominada"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center_vertical"
+        android:text="@string/hint_asignatura_dominada_seleccionada"
+        android:textAlignment="center"
+        android:textColor="@color/primary"
+        android:textSize="16sp" />
+
+</LinearLayout>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layaoutResolverDuda"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ResolveActivity">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/containerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
+
+
+
+
+                <LinearLayout
+                    android:id="@+id/layout_listar_dudas_wrapper_resolve"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0">
+
+                        <androidx.fragment.app.FragmentContainerView
+                            android:id="@+id/fragment_toolbar_listar_dudas"
+                            android:name="com.example.helpme.TopToolbarFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            tools:layout="@layout/fragment_top_toolbar" />
+
+                        <TextView
+                            android:id="@+id/tituloDuda"
+                            android:layout_width="382dp"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="10dp"
+                            android:text="Aqui el Titulo de la duda a resolver"
+                            android:textColor="@color/primary"
+                            android:textSize="20dp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.379"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.094" />
+
+                        <TextView
+                            android:id="@+id/textDescripcion"
+                            android:layout_width="374dp"
+                            android:layout_height="65dp"
+                            android:layout_marginLeft="10dp"
+                            android:text="Aqui la descripcion de la duda"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.366"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tituloDuda"
+                            app:layout_constraintVertical_bias="0.017" />
+
+
+                        <LinearLayout
+                            android:id="@+id/layout_listar_dudas_wrapper_aux"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+
+                                <TextView
+                                    android:id="@+id/textDescargar"
+                                    android:layout_width="141dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_weight="1"
+                                    android:text="Pulsa para mostrar la imagen" />
+
+                                <Button
+                                    android:id="@+id/buttonDescragar"
+                                    android:layout_width="6dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginRight="30dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/rounded_corners_boton"
+                                    android:backgroundTint="@color/primary"
+                                    android:fontFamily="@font/roboto"
+                                    android:text="Mostrar"
+                                    android:textColor="@color/white" />
+
+                        </LinearLayout>
+
+                        <EditText
+                            android:id="@+id/editTextRespuesta"
+                            android:layout_width="382dp"
+                            android:layout_height="160dp"
+                            android:layout_marginLeft="10dp"
+                            android:background="@drawable/rounded_corners_publicarduda"
+                            android:ems="10"
+                            android:hint="Escribe tu respuesta"
+                            android:inputType="textPersonName"
+                            android:minHeight="48dp"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:textAlignment="textStart"
+                            android:textColorHint="@color/text_gray"
+                            android:textDirection="ltr"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.413"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/layout_listar_dudas_wrapper_aux"
+                            app:layout_constraintVertical_bias="0.042" />
+
+                        <Button
+                            android:id="@+id/btnResolver"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="150dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="@drawable/rounded_corners_boton"
+                            android:backgroundTint="@color/primary"
+                            android:fontFamily="@font/roboto"
+                            android:text="Responder"
+                            android:textColor="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.486"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/editTextRespuesta"
+                            app:layout_constraintVertical_bias="0.092" />
+
+                        <TextView
+                            android:id="@+id/textRespuestas"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:text="Todas las respuestas(0)"
+                            android:textColor="@color/primary"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.042"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/btnResolver"
+                            app:layout_constraintVertical_bias="0.004" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerRespuestas"
+                            android:layout_width="395dp"
+                            android:layout_height="213dp"
+                            android:layout_marginBottom="44dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.318"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textRespuestas"
+                            app:layout_constraintVertical_bias="1.0" />
+
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/imageViewMostarr"
+                    android:layout_width="350dp"
+                    android:layout_height="468dp"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:srcCompat="@drawable/imagen_clip" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

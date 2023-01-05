@@ -1,8 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="asiganturas_array">
-        <item>Sin definir</item>
-        <item>Sistemas inteligentes</item>
-        <item>SEW</item>
+    <string-array name="asignaturas_array">
+
+        <!-- Primer curso -->
+        <item>Álgebra Lineal</item>
+        <item>Cálculo</item>
+        <item>Empresa</item>
+        <item>Fundamentos de Informática</item>
+        <item>Introducción a la Programación</item>
+
+        <item>Ondas y Electromagnetismo</item>
+        <item>Estadística</item>
+        <item>Fundamentos de Computadores y Redes</item>
+        <item>Autómatas y Matemáticas Discretas</item>
+        <item>Metodología de la Programación</item>
+
+        <!-- Segundo curso -->
+        <item>Tecnología Electrónica de Computadores</item>
+        <item>Arquitectura de Computadores</item>
+        <item>Estructuras de Datos</item>
+        <item>Comunicación Persona-Máquina</item>
+        <item>Computabilidad</item>
+
+        <item>Sistemas Operativos</item>
+        <item>Tecnologías y Paradigmas de Programación</item>
+        <item>Bases de Datos</item>
+        <item>Computación Numérica</item>
+        <item>Algoritmia</item>
+
+        <!-- Tercer curso -->
+        <item>Repositorios de Información</item>
+        <item>Software y Estándares para la Web</item>
+        <item>Ingeniería del Proceso Sotware</item>
+        <item>Diseño del Software</item>
+
+        <item>Sistemas Distribuidos e Internet</item>
+        <item>Sistemas Distribuidos y Redes</item>
+        <item>Arquitectura del Software</item>
+        <item>Diseño de Lenguajes de Programación</item>
+        <item>Seguridad de Sistemas Informáticos</item>
+
+        <!-- Cuarto curso -->
+        <item>Sistemas Inteligentes</item>
+        <item>Ingeniería de Requisitos</item>
+        <item>Calidad, Validación y Verificación Software</item>
+
+        <item>Planificacion y Gestión de Proyectos Informáticos</item>
+        <item>Aspectos Sociales, Legales y Éticos de la Informática</item>
+
+        <!--  Optativas -->
+        <item>Integración de Aplicaciones Empresariales</item>
+        <item>Informática Forense y Auditoría</item>
+        <item>Software de Modelado de Ingeniería</item>
+        <item>Software para Dispositivos Móviles</item>
+        <item>Realidad y Accesibilidad Aumentadas</item>
+        <item>Sistemas de Información para la web</item>
+        <item>Software de Entretenimiento y Videojuegos</item>
+        <item>Software para Robots</item>
+        <item>Informática Audiovisual</item>
+
+    </string-array>
+
+    <string-array name="materias_array">
+        <item>Fundamentos Matemáticos</item>
+        <item>Fundamentos Informáticos</item>
+        <item>Programación</item>
+        <item>Soporte físico y Hardware</item>
+        <item>Práctica Profesional</item>
+        <item>Sistemas de Información</item>
+        <item>Persistencia</item>
+        <item>Ingeniería del Software</item>
+        <item>Interacción y Multimedia</item>
+    </string-array>
+
+
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>Reply</item>
+        <item>Reply to all</item>
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>reply</item>
+        <item>reply_all</item>
     </string-array>
 </resources>

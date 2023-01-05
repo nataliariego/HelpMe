@@ -1,21 +1,25 @@
 package com.example.helpme;
 
-import android.app.PendingIntent;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.helpme.extras.IntentExtras;
 import com.example.helpme.model.Duda;
+import com.example.helpme.navigation.impl.ActivityNavigationImpl;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -24,23 +28,29 @@ import java.util.List;
 import java.util.Locale;
 
 import adapter.DudaAdapter;
+import auth.Authentication;
 import dto.DudaDto;
+import network.NetworkStatusChecker;
+import network.NetworkStatusHandler;
 import viewmodel.DudaViewModel;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements NetworkStatusHandler {
 
     public static final String TAG = "HOME_ACTIVITY";
+    public static final String DUDA_SELECCIONADA = "duda_seleccionada";
 
     private TextView txDayOfTheWeek;
     private TextView txDateFormatted;
     private Button btVerTodasDudas;
     private RecyclerView listadoDudasHomeRecycler;
-    private ConstraintLayout btNuevaDuda;
+    private Button btNuevaDuda;
 
     private DudaAdapter dudaAdapter;
     private DudaViewModel dudaViewModel = new DudaViewModel();
 
     private List<DudaDto> dudas = new ArrayList<>();
+
+    private BottomNavigationView navegacion;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -54,8 +64,13 @@ public class HomeActivity extends AppCompatActivity {
 
         initCalendarData();
 
+        if (!Authentication.getInstance().isSigned()) {
+            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+            finish();
+        }
+
         btVerTodasDudas = (Button) findViewById(R.id.btVerTodasDudas);
-        btNuevaDuda = (ConstraintLayout) findViewById(R.id.bt_nueva_duda_home); // Es un layout no un boton
+        btNuevaDuda = (Button) findViewById(R.id.bt_nueva_duda_home); // Es un layout no un boton
         listadoDudasHomeRecycler = (RecyclerView) findViewById(R.id.listado_dudas_home_recycler);
 
         listadoDudasHomeRecycler.setHasFixedSize(true);
@@ -64,10 +79,10 @@ public class HomeActivity extends AppCompatActivity {
 
         cargarDudas();
 
-        dudaAdapter = new DudaAdapter(dudas);
-        listadoDudasHomeRecycler.setAdapter(dudaAdapter);
-        dudaAdapter.notifyDataSetChanged();
 
+        //Navegación
+        navegacion = findViewById(R.id.bottomNavigationView);
+        IntentExtras.getInstance().handleNavigationView(navegacion, getBaseContext());
 
         /* Redirecciones a otras pantallas */
 
@@ -86,11 +101,17 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
     /**
      * Redirecciona al Activity ListarDudasActivity.
      */
     private void redirectPantallaListadoDudas() {
         Intent listadoDudasIntent = new Intent(HomeActivity.this, ListarDudasActivity.class);
+        // Para transiciones
         startActivity(listadoDudasIntent);
     }
 
@@ -99,48 +120,61 @@ public class HomeActivity extends AppCompatActivity {
      */
     private void redirectPantallaPublicarNuevaDuda() {
         Intent publicarDudasIntent = new Intent(HomeActivity.this, PublicarDudaActivity.class);
-        startActivity(publicarDudasIntent);
+
+        // Para transiciones
+        startActivity(publicarDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    protected void onResume() {
-        super.onResume();
 
-        cargarDudas();
-
-        dudaAdapter = new DudaAdapter(dudas);
-        listadoDudasHomeRecycler.setAdapter(dudaAdapter);
-
-        dudaAdapter.notifyDataSetChanged();
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void cargarDudas() {
         dudas.clear();
 
         dudaViewModel.getAllDudas().observe(this, dudasResult -> {
-            //this.dudas = dudas;
-
-            Log.i(TAG, "pasando por el observer... " + dudasResult.get(0).getAlumnoId() + " " + dudasResult.get(0).getAsignaturaId());
-
             if (dudasResult != null) {
                 dudasResult.forEach(d -> {
                     Log.i(TAG, d.getTitulo() + " " + d.getAlumnoId());
                     DudaDto newDuda = new DudaDto();
+                    newDuda.id=d.getId();
                     newDuda.titulo = d.getTitulo();
+                    newDuda.descripcion=d.getDescripcion();
                     newDuda.alumno = d.getAlumnoId();
                     newDuda.asignatura = d.getAsignaturaId();
+                    newDuda.materia = d.getMateriaId();
                     newDuda.fecha = d.getFecha();
+                    newDuda.url_adnjuto=d.getUrl_adjunto();
 
                     dudas.add(newDuda);
                 });
             }
+
+
+            dudaAdapter = new DudaAdapter(dudas,
+                    new DudaAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(DudaDto duda) {
+                            clikonIntem(duda);
+                        }
+                    });
+            listadoDudasHomeRecycler.setAdapter(dudaAdapter);
+
+            dudaAdapter.notifyDataSetChanged();
         });
     }
 
-    private void printDudas() {
+    public void clikonIntem(DudaDto duda) {
+        Duda dudaCreada = crearDuda(duda);
+        //Paso el modo de apertura
+        Intent intent = new Intent(HomeActivity.this,ResolveActivity.class);
+        intent.putExtra(DUDA_SELECCIONADA, dudaCreada);
+        //Transacion de barrido
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+    }
 
+    private Duda crearDuda(DudaDto duda) {
+        Duda d = new Duda(duda.titulo,duda.descripcion,duda.alumno,duda.asignatura,duda.materia,duda.isResuelta,duda.fecha,duda.id,duda.url_adnjuto);
+        return d;
     }
 
     /**
@@ -158,8 +192,22 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    private void cargarDudasInit() {
-        Duda d1 = new Duda("Duda 1", "asdfasfd", "asdfasdf", "000", "999", false, "20/10/2022 12:00:01");
-//        dudas.add(d1);
+
+    @Override
+    public void checkConnection() {
+        NetworkStatusChecker.getInstance().handleConnection(getApplicationContext(), new NetworkStatusChecker.ConnectionCallback() {
+            @Override
+            public void callback(boolean isConnected) {
+                handleConnection(isConnected);
+            }
+        });
+    }
+
+    @Override
+    public void handleConnection(boolean isConnected) {
+        if (!isConnected) {
+            startActivity(new Intent(HomeActivity.this, NoWifiConnectionActivity.class));
+            finish();
+        }
     }
 }

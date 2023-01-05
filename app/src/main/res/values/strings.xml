@@ -23,9 +23,132 @@
     <string name="textoExplicativoPublicarPrueba">Recuerda que una duda ha de ser muy concreta y fácil de entender. Puedes aportar imágenes o código si lo necesitas.</string>
     <string name="tituloDudaNueva">Titulo</string>
     <string name="descripción">Descripción</string>
-    <string name="adjuntar">Adjuntar archivos</string>
+    <string name="adjuntar">Adjuntar imagen</string>
     <string name="publicar">Publicar</string>
     <string name="tituloAsignatura">Asignatura</string>
     <string name="dudaPublicada">Duda publicada</string>
     <string name="camposRellenados">Error: Campos incorrectos</string>
+    <string name="login_email">Correo electrónico</string>
+    <string name="contentDescription_logo">HelpMe es una aplicación para resolución de dudas y realizar tutorías entre alumnos</string>
+    <string name="hint_psasword_login">Contraseña</string>
+    <string name="hint_contraseña_login">Contraseña</string>
+    <string name="login">Iniciar Sesión</string>
+    <string name="crear_cuenta_login">Crear una cuenta</string>
+    <string name="login_titulo">Inicio sesión</string>
+    <string name="button_create_account">Crear una cuenta</string>
+    <string name="create_account_login">¿Ya tienes una cuenta?</string>
+    <string name="hint_uo">UOXXXXXX</string>
+    <string name="hint_nombre_completo">Nombre Completo</string>
+    <string name="hint_repetir_password">Repetir contraseña</string>
+
+    <string name="title_activity_profile">ProfileActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="UO">UO277516</string>
+    <string name="email">UO277516@uniovi.es</string>
+    <string name="editicon">editicon</string>
+    <string name="asignaturasProfile">Asignaturas</string>
+    <string name="curso">Curso</string>
+    <string name="nombre_completo">Nombre completo</string>
+    <string name="guardar">Guardar</string>
+
+    <string name="tituloMenuHome">Home</string>
+    <string name="tituloMenuChat">Chat</string>
+    <string name="tituloMenuDudas">Dudas</string>
+    <string name="tituloMenuCuenta">Cuenta</string>
+    <string name="tituloConectados">Compañeros conectados</string>
+    <string name="nombreAlumno">Nombre Alumno</string>
+    <string name="asignaturas_dominadas">Asignaturas dominadas</string>
+    <string name="verPeefil">Ver perfil</string>
+    <string name="ajustes_cuenta_titulo">Ajustes</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages AppCustomPreferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync AppCustomPreferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="volver">Volver</string>
+    <string name="faq">Preguntas y respuestas frecuentes</string>
+    <string name="ajustes">Ajustes</string>
+    <string name="privacidad_seguridad">Privacidad y seguridad</string>
+    <string name="reset_password">Restablecer contraseña</string>
+    <string name="asignaturas_dominadas_hint">Selecciona las asignaturas</string>
+    <string name="ver_asignaturas_create_account">Ver asignaturas seleccionadas</string>
+    <string name="hint_asignatura_dominada_seleccionada">ASIGNATURA DOMINADA</string>
+    <string name="contentDescription_boton_eliminar_asignatura_dominada">Eliminar la asignatura dominada</string>
+    <string name="asignaturas_sheet_explicacion_eliminacion">Pulsa sobre el botón para eliminar las asignaturas</string>
+    <string name="verificar_correo">Verificar correo electrónico</string>
+    <string name="eliminar_cuenta">Eliminar cuenta</string>
+    <string name="cerrar_sesion">Cerrar sesión</string>
+    <string name="email_verificado">Correo electrónico verificado</string>
+    <string name="icono_verificacion_contentDescripcion">El email ha sido verificado</string>
+    <string name="enviar_mensaje">Enviar el mensaje</string>
+    <string name="hint_mensaje_chat">Mensaje</string>
+    <string name="mensaje_contenido_prueba">Hola, qué tal ?</string>
+    <string name="hora_envio_mensaje_default">Hace 2 segundos</string>
+    <string name="add_chat">Iniciar una nueva conversación</string>
+    <string name="chats">Chats</string>
+    <string name="img_receiver_chat">Imagen de perfil del usuario del chat</string>
+    <string name="placeholder_chat_receiver_name">Nombre del alumno (receiver)</string>
+    <string name="placeholder_ultimo_mensaje_chat">último mensaje del chat...</string>
+    <string name="placeholder_hora_envio_ultimo_mensaje_chat">11:30</string>
+    <string name="chat_listado_alumnos">Alumnos</string>
+    <string name="img_profile_alumno_chat">Imagen de perfil del alumno</string>
+    <string name="placeholder_nombre_alumno_chat">Nombre del alumno</string>
+    <string name="uo_alumno_chat">UO112233</string>
+    <string name="estado_envio_mensaje_chat">ENVIADO</string>
+    <string name="button_subir_archivo_chat">Subir un documento al chatpara enviar</string>
+    <string name="button_camera_chat">Abrir la cámara para enviar una foto al chat</string>
+    <string name="text_mensaje_contentDescription">Escribe aquí el mensaje que quieres enviar al otro usuario</string>
+    <string name="button_call_alumno_chat">Llamar al alumno del chat</string>
+    <string name="sin_conexion_titulo">Sin conexión</string>
+    <string name="sin_conexion_descripcion">No es posible conectarse con el servidor, revisa los ajustes de conexión de tu dispositivo. Perdona las molestias</string>
+    <string name="placeholder_mime_message">pdf</string>
+    <string name="placeholder_message_document_name">nombre_documento.pdf</string>
+    <string name="placeholder_document_message_metadata">1 página · 12kB</string>
+    <string name="contentDescripcion_mime_type">Tipo de contenido del documento</string>
+    <string name="hit_password">Contraseña</string>
+    <string name="chat_alumno_receiver_status">online</string>
+    <string name="respuestaEnviada">Respuesta enviada</string>
+    <string name="eliminar_asignatura_dominada">Restablecer asignaturas dominadas</string>
+    <string name="speakeable_add_asignatura">Añadir asignatura dominada</string>
+    <string name="ninguna_asignatura_dominada">No hay asignaturas dominadas seleccionadas</string>
+    <string name="nohayimagen">No hay imagen para mostrar</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="sin_asignaturas">Sin asignaturas</string>
+    <string name="iniciar_sesion">Iniciar sesión</string>
+    <string name="credenciales_incorrectas">Las credenciales no son correctas</string>
+    <string name="no_internet">No hay conexión a Internet</string>
+    <string name="account_settings">Ajustes de la cuenta</string>
+    <string name="olvida_contraseña">Recibirás un correo para restablecer la contraseña. Revisa la bandeja de spam.</string>
+    <string name="revisa_contraseña">Recibirás un correo para verificar el correo de tu cuenta. Revisa la bandeja de Spam.</string>
+    <string name="inicia_sesion">Inicia sesión</string>
+
+    <!-- FAQ Activity -->
+    <string name="desarrolladores">Desarrollado por:</string>
+    <string name="uo257239">UO257239</string>
+    <string name="uo277516">UO277516</string>
+    <string name="uo276922">UO276922</string>
+    <string name="app_version">v1.0.0</string>
+
+    <string name="amigos">Amigos</string>
+    <string name="editar_imagen">  Editar imagen  </string>
+    <string name="urlexample">   https://exampleofanurl.com</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="crear_cuenta">Crear una cuenta</string>
+    <string name="asig_dom_borradas">Asignaturas dominadas borradas</string>
 </resources>

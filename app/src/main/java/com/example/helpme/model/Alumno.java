@@ -6,24 +6,39 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Alumno implements Parcelable {
-    //    Nombre de los campos de la base de datos
+    /* Colección de referencia en Realtime database */
+    public static final String REFERENCE = "alumnos";
+    public static final String STATUS = "status";
+    /* ---- */
+
+    // Colección en FireStore
     public static final String COLLECTION = "ALUMNO";
+
     public static final String NOMBRE = "nombre";
     public static final String UO = "uo";
     public static final String URL_FOTO = "url_foto";
-
+    public static final String EMAIL = "email";
+    public static final String ASIGNATURAS_DOMINADAS = "asignaturasDominadas";
+    public static final String USER_ID = "user_id";
+    public static final String ID = "id";
 
     private String id;
     private String nombre;
     private String uo;
     private String url_foto;
+    private String email;
+    private String userId; // For Firebase Auth purposes
 
-    private List<Asignatura> asignaturasDominadas = new ArrayList<>();
+    private Map<String, Object> asignaturasDominadas;
 
-    public Alumno(String id, String nombre, String uo, String url_foto, List<Asignatura> asignaturasDominadas) {
+    public Alumno(){}
+
+    public Alumno(String id, String nombre, String uo, String url_foto, Map<String, Object> asignaturasDominadas) {
         this.id = id;
         this.nombre = nombre;
         this.uo = uo;
@@ -31,14 +46,29 @@ public class Alumno implements Parcelable {
         this.asignaturasDominadas = asignaturasDominadas;
     }
 
-    public Alumno(String id, String nombre, String uo){
+    public Alumno(String nombre, String uo, String url_foto, String email, String userId,
+                  Map<String, Object> asignaturasDominadas) {
+        this.nombre = nombre;
+        this.uo = uo;
+        this.url_foto = url_foto;
+        this.email = email;
+        this.userId = userId;
+        this.asignaturasDominadas = asignaturasDominadas;
+    }
+
+    public Alumno(String id, String nombre, String uo) {
         this(id, nombre, uo, null, null);
+    }
+    public Alumno(String id, String nombre, String uo, String url_foto) {
+        this(id, nombre, uo);
+        this.url_foto = url_foto;
     }
 
     public Alumno(Parcel in) {
-        id = in.readString();
+//        id = in.readString();
         nombre = in.readString();
         uo = in.readString();
+        url_foto = in.readString();
     }
 
     public static final Creator<Alumno> CREATOR = new Creator<Alumno>() {
@@ -52,7 +82,6 @@ public class Alumno implements Parcelable {
             return new Alumno[size];
         }
     };
-
 
 
     public String getId() {
@@ -79,17 +108,33 @@ public class Alumno implements Parcelable {
         this.uo = uo;
     }
 
-    public List<Asignatura> getAsignaturasDominadas() {
+    public Map<String, Object> getAsignaturasDominadas() {
         return asignaturasDominadas;
     }
 
-    public void setAsignaturasDominadas(List<Asignatura> asignaturasDominadas) {
+    public void setAsignaturasDominadas(Map<String, Object> asignaturasDominadas) {
         this.asignaturasDominadas = asignaturasDominadas;
     }
 
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -105,5 +150,18 @@ public class Alumno implements Parcelable {
 
     public void setUrl_foto(String url_foto) {
         this.url_foto = url_foto;
+    }
+
+    @Override
+    public String toString() {
+        return "Alumno{" +
+                "id='" + id + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", uo='" + uo + '\'' +
+                ", url_foto='" + url_foto + '\'' +
+                ", email='" + email + '\'' +
+                ", userId='" + userId + '\'' +
+                ", asignaturasDominadas=" + asignaturasDominadas +
+                '}';
     }
 }

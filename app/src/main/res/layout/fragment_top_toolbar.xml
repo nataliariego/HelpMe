@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_top_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="15dp"
+    android:paddingTop="15dp"
+    android:paddingRight="15dp"
+    tools:context=".TopToolbarFragment">
+
+    <ImageButton
+        android:id="@+id/button_toolbar_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/button_rounded_gray_light"
+        android:backgroundTint="@color/tertiary_light"
+        android:contentDescription="@string/volver"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:src="@drawable/ic_round_arrow_back_ios_24" />
+
+    <ImageButton
+        android:id="@+id/button_toolbar_faq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:backgroundTint="@color/transparent"
+        android:contentDescription="@string/faq"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:src="@drawable/ic_baseline_help_outline_24" />
+
+    <ImageButton
+        android:id="@+id/button_toolbar_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="176dp"
+        android:layout_marginEnd="-9dp"
+        android:layout_toStartOf="@+id/button_toolbar_faq"
+        android:layout_toEndOf="@+id/toolbar_logo"
+        android:backgroundTint="@color/transparent"
+        android:contentDescription="@string/faq"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:src="@drawable/ic_baseline_settings_24" />
+
+    <ImageView
+        android:id="@+id/toolbar_logo"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:contentDescription="@string/contentDescription_logo"
+        android:src="@drawable/helpme_logo_500_250px"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/logo_200_100px" />
+</RelativeLayout>
