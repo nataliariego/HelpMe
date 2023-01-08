@@ -5,14 +5,14 @@ plugins {
 
 android {
     namespace 'com.example.helpme'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.helpme"
-        minSdk 21
-        targetSdk 32
+        minSdk 24
+        targetSdk 33
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
