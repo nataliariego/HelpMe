@@ -3,16 +3,15 @@ package com.example.helpme;
 import static com.example.helpme.extras.IntentExtras.CHAT_SELECCIONADO;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.media.MediaPlayer;
-import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.PersistableBundle;
 import android.provider.OpenableColumns;
 import android.text.Editable;
@@ -25,8 +24,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -41,7 +38,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Chat;
 import com.example.helpme.model.Mensaje;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -49,14 +45,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import adapter.MensajeAdapter;
 import chat.AlumnoStatus;
@@ -65,15 +61,13 @@ import chat.MensajeStatus;
 import dto.AlumnoDto;
 import dto.ChatSummaryDto;
 import dto.MensajeDto;
+import util.ContentTypeUtils;
 import util.DateUtils;
 
 public class ChatActivity extends AppCompatActivity {
 
     public static final String TAG = "CHAT_ACTIVITY";
 
-    /* Identicar intent que accede a la cámara del dispositivo */
-    public static final int CAMERA_IMAGE_CHAT = 1000;
-    public static final int ADJUNTO_CHAT_REQUEST_CODE = 1001;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1002;
 
     private EditText txMensajeAEnviar;
@@ -90,37 +84,27 @@ public class ChatActivity extends AppCompatActivity {
 
     private RecyclerView recyclerConversacionChat;
 
-    private DatabaseReference dbReference = FirebaseDatabase.getInstance(ChatService.DB_URL).getReference();
-    private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
-    private FirebaseFirestore dbStore = FirebaseFirestore.getInstance();
+    private final DatabaseReference dbReference = FirebaseDatabase.getInstance(ChatService.DB_URL).getReference();
+    private final FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
 
-    private AlumnoDto alumnoB = new AlumnoDto();
+    private final AlumnoDto alumnoB = new AlumnoDto();
 
     private ChatSummaryDto originChatDataDto;
 
     private MensajeAdapter msgAdapter;
-    private List<MensajeDto> chatMessages = new ArrayList<>();
+    private final List<MensajeDto> chatMessages = new ArrayList<>();
 
     private Bitmap selectedImageToSend;
 
     /* Permisos grabar audio */
     private boolean permissionToRecordAccepted = false;
-    private String[] permissions = {Manifest.permission.RECORD_AUDIO};
-
-    /* Grabacion de audio */
-    private MediaRecorder recorder = null;
-    private MediaPlayer player = null;
-
-    private boolean grabandoAudio = false;
-
-    private String audioOutputFileName = null;
 
     /* Online, Offline, Escribiendo...*/
     private static final String ONLINE_STATUS = AlumnoStatus.ONLINE.toString().toLowerCase();
-    private static final String OFFLINE_STATUS = AlumnoStatus.OFFLINE.toString().toLowerCase();
     private static final String TYPING_STATUS = AlumnoStatus.ESCRIBIENDO.toString().toLowerCase();
     private String status = ONLINE_STATUS;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,148 +117,117 @@ public class ChatActivity extends AppCompatActivity {
 
         } else {
             Toast.makeText(this, R.string.inicia_sesion, Toast.LENGTH_SHORT).show();
-
-            //AlumnoDto alumno = (AlumnoDto) savedInstanceState.getSerializable(ListadoAlumnosChatActivity.ALUMNO_SELECCIONADO_CHAT);
-            //Log.i(TAG, "ALUMNO-DTO-SAVED-INSTANCE-NN: " + alumno.toString());
         }
 
 
         initFields();
 
         /* Accion enviar mensaje */
-        btEnviarMensaje.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onClick(View view) {
-                Log.i(TAG, "Enviando mensaje...");
+        btEnviarMensaje.setOnClickListener(view -> {
+            Log.i(TAG, "Enviando mensaje...");
 
-//                if (grabandoAudio == false) {
-//                    startRecording();
-//                }
+            String contenidoMensaje = txMensajeAEnviar.getText().toString();
 
-                String contenidoMensaje = txMensajeAEnviar.getText().toString();
+            if (contenidoMensaje.trim().isEmpty()) {
+                Toast.makeText(ChatActivity.this, "Escribe un mensaje", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                if (contenidoMensaje.trim().isEmpty()) {
-                    Toast.makeText(ChatActivity.this, "Escribe un mensaje", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            MensajeDto newMsgDto = new MensajeDto();
+            newMsgDto.contenido = contenidoMensaje;
+            newMsgDto.createdAt = DateUtils.getNowWithPredefinedFormat();
+            newMsgDto.status = MensajeStatus.ENVIADO;
 
-                MensajeDto newMsgDto = new MensajeDto();
-                newMsgDto.contenido = contenidoMensaje;
-                newMsgDto.createdAt = DateUtils.getNowWithPredefinedFormat();
-                newMsgDto.status = MensajeStatus.ENVIADO;
+            assert userInSession != null;
+            Log.d(TAG, originChatDataDto.receiverUid + " " + userInSession.getUid());
 
-                Log.d(TAG, originChatDataDto.receiverUid + " " + userInSession.getUid());
-
-                if (originChatDataDto != null) {
-                    ChatService.getInstance().sendMessage(newMsgDto, originChatDataDto, userInSession.getUid(), new ChatService.MensajeCallback() {
-                        @Override
-                        public void callback() {
-                            txMensajeAEnviar.setText("");
-                            recyclerConversacionChat.smoothScrollToPosition(View.FOCUS_DOWN);
-                        }
-                    });
-                }
+            if (originChatDataDto != null) {
+                ChatService.getInstance().sendMessage(newMsgDto, originChatDataDto, userInSession.getUid(), () -> {
+                    txMensajeAEnviar.setText("");
+                    recyclerConversacionChat.smoothScrollToPosition(View.FOCUS_DOWN);
+                });
             }
         });
 
         /* Abre el explorador de archivos del dispositivo */
         ActivityResultLauncher<Intent> fileLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                            /* Documento o imagen seleccionado del dispositivo */
-                            Log.d(TAG, "Documento recibido...");
-                            Log.d(TAG, result.getData().toString());
-                            Uri selectedMediaUri = result.getData().getData();
-                            Cursor cursor = getContentResolver().query(selectedMediaUri, null, null, null, null);
-                            int filenameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                new ActivityResultContracts.StartActivityForResult(), result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        /* Documento o imagen seleccionado del dispositivo */
+                        Log.d(TAG, "Documento recibido...");
+                        Log.d(TAG, result.getData().toString());
+                        Uri selectedMediaUri = result.getData().getData();
+                        @SuppressLint("Recycle") Cursor cursor = getContentResolver().query(selectedMediaUri, null, null, null, null);
+                        int filenameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
 
-                            cursor.moveToFirst();
+                        cursor.moveToFirst();
 
-                            String filename = cursor.getString(filenameIndex);
+                        String filename = cursor.getString(filenameIndex);
 
-                            /* Subir el archivo seleccionado a Firebase */
-                            uploadFile(selectedMediaUri, filename);
-                        } else {
-                            Log.d(TAG, "SUBIDA CANCELADA.");
-                        }
+                        /* Subir el archivo seleccionado a Firebase */
+                        uploadFile(selectedMediaUri, filename);
+                    } else {
+                        Log.d(TAG, "SUBIDA CANCELADA.");
                     }
                 }
         );
 
         /* Accion seleccionar archivo para enviar */
-        btSubirArchivoChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "BT-ADJUNTAR ARCHIVO: ");
+        btSubirArchivoChat.setOnClickListener(view -> {
+            Log.d(TAG, "BT-ADJUNTAR ARCHIVO: ");
 
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("*/*");
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("*/*");
 
-                fileLauncher.launch(intent);
-            }
+            fileLauncher.launch(intent);
         });
 
         /* Accion volver a la lista de chats */
-        btVolverListaChats.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(ChatActivity.this, ListarChatsActivity.class));
-            }
-        });
+        btVolverListaChats.setOnClickListener(view -> startActivity(new Intent(ChatActivity.this, ListarChatsActivity.class)));
 
         /* Accion llamar al alumno del chat */
-        btLlamarReceiver.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (originChatDataDto != null) {
-                    Intent email = new Intent(Intent.ACTION_SEND);
-                    //userInSession.getEmail()
-                    email.putExtra(Intent.EXTRA_EMAIL, new String[]{"kikocoya@gmail.com"});
-                    email.putExtra(Intent.EXTRA_SUBJECT, "HelpMe App - Un compañero necesita tu ayuda.");
-                    email.putExtra(Intent.EXTRA_TEXT, "Hola, soy " + userInSession.getDisplayName() + "\n\n\nHelpMe App");
+        btLlamarReceiver.setOnClickListener(view -> {
+            if (originChatDataDto != null) {
+                Intent email = new Intent(Intent.ACTION_SEND);
+                //userInSession.getEmail()
+                email.putExtra(Intent.EXTRA_EMAIL, new String[]{"kikocoya@gmail.com"});
+                email.putExtra(Intent.EXTRA_SUBJECT, "HelpMe App - Un compañero necesita tu ayuda.");
+                assert userInSession != null;
+                email.putExtra(Intent.EXTRA_TEXT, "Hola, soy " + userInSession.getDisplayName() + "\n\n\nHelpMe App");
 
-                    email.setType("text/plain");
+                email.setType("text/plain");
 
-                    startActivity(Intent.createChooser(email, "Enviando correo..."));
-                }
+                startActivity(Intent.createChooser(email, "Enviando correo..."));
             }
         });
 
         /* Abre la galería de imágenes del dispositivo */
         ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == RESULT_OK) {
-                            Bundle bundle = result.getData().getExtras();
-                            selectedImageToSend = (Bitmap) bundle.get("data");
-                            Log.d(TAG, "Imagen recibida");
+                new ActivityResultContracts.StartActivityForResult(), result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        assert result.getData() != null;
+                        Bundle bundle = result.getData().getExtras();
+                        selectedImageToSend = (Bitmap) bundle.get("data");
+                        Log.d(TAG, "Imagen recibida");
 
-                            ImageView selected = new ImageView(getApplicationContext());
-                            selected.setImageBitmap(selectedImageToSend);
-                            uploadImage(selected);
+                        ImageView selected = new ImageView(getApplicationContext());
+                        selected.setImageBitmap(selectedImageToSend);
+                        uploadImage(selected);
 
-                        } else if (result.getResultCode() == RESULT_CANCELED) {
-                            Toast.makeText(getApplicationContext(), "Acción cancelada", Toast.LENGTH_SHORT);
-                        }
-
-
+                    } else if (result.getResultCode() == RESULT_CANCELED) {
+                        Toast.makeText(getApplicationContext(), "Acción cancelada", Toast.LENGTH_SHORT).show();
                     }
+
+
                 }
         );
 
         /* Accion sacar foto para enviar por chat */
-        btCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "CAMERA: ");
+        btCamera.setOnClickListener(view -> {
+            Log.d(TAG, "CAMERA: ");
 
-                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                galleryLauncher.launch(intent);
-            }
+            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            galleryLauncher.launch(intent);
         });
 
         if (originChatDataDto != null) {
@@ -308,11 +261,13 @@ public class ChatActivity extends AppCompatActivity {
         dbReference.child(Alumno.REFERENCE)
                 .child(originChatDataDto.receiverUid)
                 .addValueEventListener(new ValueEventListener() {
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
                             Map<String, Object> resData = ((HashMap<String, Object>) snapshot.getValue());
-                            String remoteStatus = resData.get(Alumno.STATUS).toString();
+                            assert resData != null;
+                            String remoteStatus = Objects.requireNonNull(resData.get(Alumno.STATUS)).toString();
 
                             if (remoteStatus.equals(ONLINE_STATUS)) {
                                 txStatusUsuarioReceiver.setText("online");
@@ -357,21 +312,10 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_RECORD_AUDIO_PERMISSION:
-                permissionToRecordAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                break;
+        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
+            permissionToRecordAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
         }
         if (!permissionToRecordAccepted) finish();
-    }
-
-    /**
-     * Obtiene el directorio de salida del audio grabado.
-     *
-     * @return
-     */
-    private String getAudioOutputFileName() {
-        return Environment.DIRECTORY_MUSIC + "/audio_test.3gp";
     }
 
     @Override
@@ -383,31 +327,52 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void uploadImage(ImageView imageView) {
         if (originChatDataDto == null) {
             return;
         }
 
-        ChatService.getInstance().uploadImage(imageView, originChatDataDto, new ChatService.MensajeCallback() {
-            @Override
-            public void callback() {
-                Log.d(TAG, "Imagen subida al servidor!");
-                msgAdapter.notifyDataSetChanged();
-            }
+        Log.i(TAG, "bytes: " + ContentTypeUtils.getImageBytes(imageView)
+                + "\t" + ContentTypeUtils.isImageSizeValid(imageView));
+
+        if(ContentTypeUtils.isImageSizeValid(imageView)){
+            Toast.makeText(this, "Tamaño subida máximo: 1MB", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        ChatService.getInstance().uploadImage(imageView, originChatDataDto, () -> {
+            Log.d(TAG, "Imagen subida al servidor!");
+            msgAdapter.notifyDataSetChanged();
         });
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void uploadFile(final Uri fileUri, final String filename) {
         if (originChatDataDto == null) {
             return;
         }
 
-        ChatService.getInstance().uploadFile(fileUri, originChatDataDto, filename, new ChatService.MensajeCallback() {
-            @Override
-            public void callback() {
-                Log.d(TAG, "Cambio recibido !");
-                msgAdapter.notifyDataSetChanged();
-            }
+        AssetFileDescriptor fileDescriptor = null;
+        try {
+            fileDescriptor = getApplicationContext().getContentResolver().openAssetFileDescriptor(fileUri, "r");
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "Error al buscar el archivo. " + e.getMessage());
+            e.printStackTrace();
+        }
+        long fileSize = fileDescriptor.getLength();
+
+        if (fileSize >= ContentTypeUtils.MAX_FILE_SIZE_TO_UPLOAD) {
+            Log.e(TAG, "Error de subida. Solo se admiten archivos inferiores a 1MB.");
+            Toast.makeText(this, "Tamaño máximo de subida: 1MB", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Log.i(TAG, "\nTamaño del archivo a subir: " + fileSize + " bytes");
+
+        ChatService.getInstance().uploadFile(fileUri, originChatDataDto, filename, () -> {
+            Log.d(TAG, "Cambio recibido !");
+            msgAdapter.notifyDataSetChanged();
         });
     }
 
@@ -451,6 +416,7 @@ public class ChatActivity extends AppCompatActivity {
                 .child(Mensaje.REFERENCE)
                 .addValueEventListener(new ValueEventListener() {
 
+                    @SuppressLint("NotifyDataSetChanged")
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -462,13 +428,14 @@ public class ChatActivity extends AppCompatActivity {
 
                                 MensajeDto newMessage = new MensajeDto();
 
-                                String content = resData.get(Mensaje.CONTENT).toString();
-                                String createdAt = resData.get(Mensaje.CREATED_AT).toString();
+                                assert resData != null;
+                                String content = Objects.requireNonNull(resData.get(Mensaje.CONTENT)).toString();
+                                String createdAt = Objects.requireNonNull(resData.get(Mensaje.CREATED_AT)).toString();
 
                                 newMessage.contenido = content;
                                 newMessage.createdAt = createdAt;
-                                newMessage.mimeType = resData.get(Mensaje.MESSAGE_TYPE).toString();
-                                newMessage.userUid = resData.get(Mensaje.SENDER).toString();
+                                newMessage.mimeType = Objects.requireNonNull(resData.get(Mensaje.MESSAGE_TYPE)).toString();
+                                newMessage.userUid = Objects.requireNonNull(resData.get(Mensaje.SENDER)).toString();
 
                                 Object status = resData.get(Mensaje.STATUS);
 
@@ -486,13 +453,8 @@ public class ChatActivity extends AppCompatActivity {
                                         dbReference.child(Chat.REFERENCE)
                                                 .child(originChatDataDto.chatId)
                                                 .child(Mensaje.REFERENCE)
-                                                .child(ds.getKey())
-                                                .updateChildren(statusPayload).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void unused) {
-                                                        newMessage.status = MensajeStatus.LEIDO;
-                                                    }
-                                                });
+                                                .child(Objects.requireNonNull(ds.getKey()))
+                                                .updateChildren(statusPayload).addOnSuccessListener(unused -> newMessage.status = MensajeStatus.LEIDO);
                                     }
 
                                     newMessage.status = msgStatus;
@@ -501,20 +463,20 @@ public class ChatActivity extends AppCompatActivity {
                                 }
 
                                 newMessage.status = resData.get(Mensaje.STATUS) != null
-                                        ? MensajeStatus.valueOf(resData.get(Mensaje.STATUS).toString())
+                                        ? MensajeStatus.valueOf(Objects.requireNonNull(resData.get(Mensaje.STATUS)).toString())
                                         : MensajeStatus.LEIDO;
 
 
                                 if (resData.get(Mensaje.FILE_PRETTY_TYPE) != null) {
-                                    newMessage.prettyType = resData.get(Mensaje.FILE_PRETTY_TYPE).toString();
+                                    newMessage.prettyType = Objects.requireNonNull(resData.get(Mensaje.FILE_PRETTY_TYPE)).toString();
                                 }
 
                                 if (resData.get(Mensaje.FILE_SIZE) != null) {
-                                    newMessage.prettySize = resData.get(Mensaje.FILE_SIZE).toString();
+                                    newMessage.prettySize = Objects.requireNonNull(resData.get(Mensaje.FILE_SIZE)).toString();
                                 }
 
                                 if (resData.get(Mensaje.FILE_NAME) != null) {
-                                    newMessage.filename = resData.get(Mensaje.FILE_NAME).toString();
+                                    newMessage.filename = Objects.requireNonNull(resData.get(Mensaje.FILE_NAME)).toString();
                                 }
 
                                 chatMessages.add(newMessage);
@@ -568,29 +530,16 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (status.equals(ONLINE_STATUS)) {
-                    ChatService.getInstance().changeCurrentUserStatus(AlumnoStatus.ESCRIBIENDO.toString().toLowerCase(), new ChatService.AlumnoStatusCallback() {
-                        @Override
-                        public void callback() {
-                            status = TYPING_STATUS;
-                        }
-                    });
+                    ChatService.getInstance().changeCurrentUserStatus(AlumnoStatus.ESCRIBIENDO.toString().toLowerCase(), () -> status = TYPING_STATUS);
                 }
             }
         });
 
-        txMensajeAEnviar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (!hasFocus) {
-                    if (status.equals(TYPING_STATUS) && txMensajeAEnviar.getText().length() > 0) {
-                        ChatService.getInstance().changeCurrentUserStatus(AlumnoStatus.ONLINE.toString().toLowerCase(), new ChatService.AlumnoStatusCallback() {
-                            @Override
-                            public void callback() {
-                                status = ONLINE_STATUS;
-                            }
-                        });
+        txMensajeAEnviar.setOnFocusChangeListener((view, hasFocus) -> {
+            if (!hasFocus) {
+                if (status.equals(TYPING_STATUS) && txMensajeAEnviar.getText().length() > 0) {
+                    ChatService.getInstance().changeCurrentUserStatus(AlumnoStatus.ONLINE.toString().toLowerCase(), () -> status = ONLINE_STATUS);
 
-                    }
                 }
             }
         });

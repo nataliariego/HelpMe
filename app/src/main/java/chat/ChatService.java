@@ -141,8 +141,8 @@ public class ChatService {
      * Subida de un archivo seleccionado en el chat al storage de Firebase.
      */
     public void uploadFile(final Uri fileUri, final ChatSummaryDto summary, final String filename, final MensajeCallback callback) {
-        //String refPath = "chats/" + summary.chatId + fileUri.getLastPathSegment();
         String docUid = UUID.randomUUID().toString();
+
         StorageReference uploadRef = chatStorageRef.child(summary.chatId).child(docUid);
         UploadTask uploadTask = uploadRef.putFile(fileUri);
 
