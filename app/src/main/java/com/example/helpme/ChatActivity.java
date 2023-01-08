@@ -49,6 +49,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -333,7 +334,7 @@ public class ChatActivity extends AppCompatActivity {
             return;
         }
 
-        Log.i(TAG, "bytes: " + ContentTypeUtils.getImageBytes(imageView)
+        Log.i(TAG, "bytes: " + Arrays.toString(ContentTypeUtils.getImageBytes(imageView))
                 + "\t" + ContentTypeUtils.isImageSizeValid(imageView));
 
         if(ContentTypeUtils.isImageSizeValid(imageView)){
@@ -347,7 +348,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint({"NotifyDataSetChanged", "Recycle"})
     private void uploadFile(final Uri fileUri, final String filename) {
         if (originChatDataDto == null) {
             return;
@@ -360,6 +361,7 @@ public class ChatActivity extends AppCompatActivity {
             Log.e(TAG, "Error al buscar el archivo. " + e.getMessage());
             e.printStackTrace();
         }
+        assert fileDescriptor != null;
         long fileSize = fileDescriptor.getLength();
 
         if (fileSize >= ContentTypeUtils.MAX_FILE_SIZE_TO_UPLOAD) {

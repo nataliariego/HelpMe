@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ContentTypeUtils {
 
@@ -58,22 +59,16 @@ public class ContentTypeUtils {
         return availableTypes;
     }
 
-    public static boolean isValidFile(final Uri uri) {
-        return isValidFile(uri);
-    }
-
     /**
      * Comprueba que el tamaño de la imagen es inferior a {@link #MAX_FILE_SIZE_TO_UPLOAD}
      *
-     * @param imageView
      * @return true si es válido y false en caso contrario.
      */
     public static boolean isImageSizeValid(final ImageView imageView) {
-        return imageView == null ? false : getImageBytes(imageView).length < MAX_FILE_SIZE_TO_UPLOAD;
+        return imageView != null && Objects.requireNonNull(getImageBytes(imageView)).length < MAX_FILE_SIZE_TO_UPLOAD;
     }
 
     /**
-     * @param imageView
      * @return Número de bytes de una imagen pasada como parámtro.
      */
     public static byte[] getImageBytes(final ImageView imageView) {
