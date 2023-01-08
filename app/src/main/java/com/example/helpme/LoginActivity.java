@@ -2,7 +2,6 @@ package com.example.helpme;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -11,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Objects;
 
 import auth.Authentication;
 import chat.AlumnoStatus;
@@ -30,7 +31,7 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
     private Button btLogin;
     private Button btCreateAnAccount;
 
-    private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
+    private final FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,19 +42,11 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
         initFields();
 
 
-        btCreateAnAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                redirectToCreateAnAccountView();
-            }
-        });
+        btCreateAnAccount.setOnClickListener(view -> redirectToCreateAnAccountView());
 
-        btLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (validateFields()) {
-                    signIn();
-                }
+        btLogin.setOnClickListener(view -> {
+            if (validateFields()) {
+                signIn();
             }
         });
     }
@@ -68,18 +61,13 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
      * Inicio de sesión.
      */
     private void signIn() {
-        String email = txEmail.getText().toString().trim().toLowerCase();
-        String pass = txPassword.getText().toString().trim();
+        String email = Objects.requireNonNull(txEmail.getText()).toString().trim().toLowerCase();
+        String pass = Objects.requireNonNull(txPassword.getText()).toString().trim();
         Authentication.getInstance().signIn(email, pass, new LoginCallback() {
             @Override
             public void onSuccess() {
                 /* Cambiar estado a ONLINE */
-                ChatService.getInstance().changeCurrentUserStatus(AlumnoStatus.ONLINE.toString().toLowerCase(), new ChatService.AlumnoStatusCallback() {
-                    @Override
-                    public void callback() {
-                        redirectToHomeView();
-                    }
-                });
+                ChatService.getInstance().changeCurrentUserStatus(AlumnoStatus.ONLINE.toString().toLowerCase(), () -> redirectToHomeView());
             }
 
             @Override
@@ -108,13 +96,13 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
      */
     private boolean validateFields() {
         /* Email no vacío */
-        if (!FormValidator.isNotEmpty(txEmail.getText().toString().trim())) {
+        if (!FormValidator.isNotEmpty(Objects.requireNonNull(txEmail.getText()).toString().trim())) {
             txEmail.setError(getText(R.string.email_empty));
             return false;
         }
 
         /* Contraseña no vacía */
-        if (!FormValidator.isNotEmpty(txPassword.getText().toString())) {
+        if (!FormValidator.isNotEmpty(Objects.requireNonNull(txPassword.getText()).toString())) {
             txPassword.setError(getText(R.string.password_empty));
             return false;
         }
@@ -150,12 +138,7 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
 
     @Override
     public void checkConnection() {
-        NetworkStatusChecker.getInstance().handleConnection(getApplicationContext(), new NetworkStatusChecker.ConnectionCallback() {
-            @Override
-            public void callback(boolean isConnected) {
-                handleConnection(isConnected);
-            }
-        });
+        NetworkStatusChecker.getInstance().handleConnection(getApplicationContext(), this::handleConnection);
     }
 
     @Override
