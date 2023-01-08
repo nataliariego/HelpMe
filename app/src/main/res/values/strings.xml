@@ -151,4 +151,5 @@
     <string name="cancelar">Cancelar</string>
     <string name="crear_cuenta">Crear una cuenta</string>
     <string name="asig_dom_borradas">Asignaturas dominadas borradas</string>
+    <string name="button_github_repo">Enlace al repositorio de github de la aplicación</string>
 </resources>

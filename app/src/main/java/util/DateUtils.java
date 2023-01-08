@@ -127,8 +127,6 @@ public class DateUtils {
     }
 
     public static String format(final String date) {
-        String filledFormat = "%02d";
-
         String part1 = date.split(" ")[0]; // dd/MM/YYYY
         String part2 = date.split(" ")[1]; //HH:mm:ss
 
