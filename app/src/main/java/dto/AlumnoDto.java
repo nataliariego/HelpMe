@@ -1,11 +1,11 @@
 package dto;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.PropertyName;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class AlumnoDto implements Serializable {
@@ -23,6 +23,7 @@ public class AlumnoDto implements Serializable {
     @Exclude
     public String password;
 
+    @NonNull
     @Override
     public String toString() {
         return "AlumnoDto{" +
