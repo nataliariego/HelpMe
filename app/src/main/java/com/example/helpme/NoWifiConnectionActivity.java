@@ -31,12 +31,7 @@ public class NoWifiConnectionActivity extends AppCompatActivity implements Netwo
 
     @Override
     public void checkConnection() {
-        NetworkStatusChecker.getInstance().handleConnection(getApplicationContext(), new NetworkStatusChecker.ConnectionCallback() {
-            @Override
-            public void callback(boolean isConnected) {
-                handleConnection(isConnected);
-            }
-        });
+        NetworkStatusChecker.getInstance().handleConnection(getApplicationContext(), isConnected -> handleConnection(isConnected));
     }
 
     @Override

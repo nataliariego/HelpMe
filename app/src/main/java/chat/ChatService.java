@@ -99,7 +99,6 @@ public class ChatService {
     /**
      * Subir una imagen al servicio de firebase cloud.
      *
-     * @param imageView
      * @param summary
      * @param callback
      */
@@ -247,8 +246,8 @@ public class ChatService {
 
                                 if (((HashMap<String, Object>) Objects.requireNonNull(ds.getValue())).get(Chat.ALUMNO_A) != null &&
                                         ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_B) != null &&
-                                        ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_A) == userInSession.getUid() ||
-                                        ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_B) == userInSession.getUid()) {
+                                        ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_A) == Objects.requireNonNull(userInSession).getUid() ||
+                                        ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_B) == Objects.requireNonNull(userInSession).getUid()) {
 
                                     String uidAlumnoA = Objects.requireNonNull(((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_A)).toString();
                                     String uidAlumnoB = Objects.requireNonNull(((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_B)).toString();
