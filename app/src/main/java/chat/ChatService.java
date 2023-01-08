@@ -7,20 +7,14 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Chat;
 import com.example.helpme.model.Mensaje;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -30,8 +24,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import dto.ChatSummaryDto;
 import dto.MensajeDto;
@@ -42,7 +36,6 @@ import util.StringUtils;
 public class ChatService {
 
     public static final String DEFAULT_MIME_IMG = "image/jpeg";
-    public static final String PDF_MIME_TYPE = "application/pdf";
 
     /* Firebase FireStore */
     public static final String DB_URL = "https://helpme-app-435b7-default-rtdb.europe-west1.firebasedatabase.app";
@@ -54,22 +47,17 @@ public class ChatService {
     /* Gestionar todas las conversaciones */ FirebaseDatabase db = FirebaseDatabase.getInstance(DB_URL);
 
     /* Firebase Store, se obtendrá la información de los usuarios */
-    private FirebaseFirestore store = FirebaseFirestore.getInstance();
 
     /* Cloud Storage */
-    private FirebaseStorage cloudStorage = FirebaseStorage.getInstance(CLOUD_STORAGE_URL);
-    private StorageReference storageRef = cloudStorage.getReference();
-    private StorageReference chatStorageRef = storageRef.child(BASE_PATH_CLOUD_STORAGE);
+    private final FirebaseStorage cloudStorage = FirebaseStorage.getInstance(CLOUD_STORAGE_URL);
+    private final StorageReference storageRef = cloudStorage.getReference();
+    private final StorageReference chatStorageRef = storageRef.child(BASE_PATH_CLOUD_STORAGE);
 
     private static ChatService instance;
 
     public static final String TAG = "CHAT_SERVICE";
 
-    private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
-
-    public StorageReference getChatStorageRef() {
-        return chatStorageRef;
-    }
+    private final FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
 
     public FirebaseStorage getCloudStorage() {
         return cloudStorage;
@@ -81,8 +69,6 @@ public class ChatService {
 
     /**
      * Envia un mensaje.
-     *
-     * @param msg
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void sendMessage(final MensajeDto msg, final ChatSummaryDto summary, final String userInSessionUid, MensajeCallback callback) {
@@ -92,6 +78,7 @@ public class ChatService {
 
         if (userInSessionUid == null
                 || userInSessionUid.equals(summary.receiverUid)) {
+            assert userInSession != null;
             Log.e(TAG, "El mensaje no se puede enviar. " + userInSession.getUid() + " " + summary.receiverUid);
             return;
         }
@@ -109,18 +96,8 @@ public class ChatService {
                 .child(Mensaje.REFERENCE)
                 .child(msg_id)
                 .updateChildren(payload)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        callback.callback();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.i(TAG, "ERROR AL ENVIAR EL MENSAJE");
-                    }
-                });
+                .addOnSuccessListener(unused -> callback.callback())
+                .addOnFailureListener(e -> Log.i(TAG, "ERROR AL ENVIAR EL MENSAJE"));
     }
 
     public void uploadImage(ImageView imageView, ChatSummaryDto summary, MensajeCallback callback) {
@@ -135,54 +112,33 @@ public class ChatService {
         String imageName = imgUid + ".jpg";
 
         UploadTask uploadTask = chatStorageRef.child(summary.chatId).child(imageName).putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.e(TAG, "Error al subir la imagen a Cloud Storage");
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
+        uploadTask.addOnFailureListener(exception -> Log.e(TAG, "Error al subir la imagen a Cloud Storage")).addOnSuccessListener(taskSnapshot -> {
+            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+            // ...
 
-                if (taskSnapshot.getTask().isSuccessful()) {
-                    Log.d(TAG, "Imagen subida: " + taskSnapshot.getMetadata());
-                    Map<String, Object> payload = new HashMap<>();
+            if (taskSnapshot.getTask().isSuccessful()) {
+                Log.d(TAG, "Imagen subida: " + taskSnapshot.getMetadata());
+                Map<String, Object> payload = new HashMap<>();
 
-                    payload.put(Mensaje.SENDER, userInSession.getUid());
-                    payload.put(Mensaje.RECEIVER, summary.receiverUid);
-                    payload.put(Mensaje.CONTENT, chatStorageRef.child(imageName).getPath());
-                    payload.put(Mensaje.MESSAGE_TYPE, "image/jpeg");
+                assert userInSession != null;
+                payload.put(Mensaje.SENDER, userInSession.getUid());
+                payload.put(Mensaje.RECEIVER, summary.receiverUid);
+                payload.put(Mensaje.CONTENT, chatStorageRef.child(imageName).getPath());
+                payload.put(Mensaje.MESSAGE_TYPE, "image/jpeg");
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        payload.put(Mensaje.CREATED_AT, DateUtils.getNowWithPredefinedFormat());
-                    }
-
-                    db.getReference().child(Chat.REFERENCE).child(summary.chatId).child(Mensaje.REFERENCE).child(imgUid).updateChildren(payload).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            callback.callback();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.e(TAG, "ERROR al subir la imagen al servidor. " + e.getMessage());
-                        }
-                    });
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    payload.put(Mensaje.CREATED_AT, DateUtils.getNowWithPredefinedFormat());
                 }
 
+                db.getReference().child(Chat.REFERENCE).child(summary.chatId).child(Mensaje.REFERENCE).child(imgUid).updateChildren(payload).addOnCompleteListener(task -> callback.callback()).addOnFailureListener(e -> Log.e(TAG, "ERROR al subir la imagen al servidor. " + e.getMessage()));
             }
+
         });
 
     }
 
     /**
      * Subida de un archivo seleccionado en el chat al storage de Firebase.
-     *
-     * @param fileUri
-     * @param summary
      */
     public void uploadFile(final Uri fileUri, final ChatSummaryDto summary, final String filename, final MensajeCallback callback) {
         //String refPath = "chats/" + summary.chatId + fileUri.getLastPathSegment();
@@ -190,62 +146,46 @@ public class ChatService {
         StorageReference uploadRef = chatStorageRef.child(summary.chatId).child(docUid);
         UploadTask uploadTask = uploadRef.putFile(fileUri);
 
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-                Log.e(TAG, "Error al subir el archivo a Firebase. " + exception.getMessage());
+        uploadTask.addOnFailureListener(exception -> {
+            // Handle unsuccessful uploads
+            Log.e(TAG, "Error al subir el archivo a Firebase. " + exception.getMessage());
+        }).addOnSuccessListener(taskSnapshot -> {
+            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+            Map<String, Object> payload = new HashMap<>();
+
+            String contentType = Objects.requireNonNull(taskSnapshot.getMetadata()).getContentType();
+
+            assert userInSession != null;
+            payload.put(Mensaje.SENDER, userInSession.getUid());
+            payload.put(Mensaje.RECEIVER, summary.receiverUid);
+            payload.put(Mensaje.CONTENT, "/chats/" + summary.chatId + "/" + docUid);
+
+            payload.put(Mensaje.MESSAGE_TYPE, taskSnapshot.getMetadata().getContentType());
+            payload.put(Mensaje.FILE_SIZE, StringUtils.prettyBytesSize(taskSnapshot.getTotalByteCount()));
+            payload.put(Mensaje.FILE_NAME, filename);
+
+            /* Ejemplo: application/msword --> word */
+            if (ContentTypeUtils.getAvailableTypes().containsKey(contentType)) {
+                payload.put(Mensaje.FILE_PRETTY_TYPE, ContentTypeUtils.getAvailableTypes().get(contentType));
             }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                Map<String, Object> payload = new HashMap<>();
 
-                String contentType = taskSnapshot.getMetadata().getContentType();
+            /* Metadatos para los PDF */
 
-                payload.put(Mensaje.SENDER, userInSession.getUid());
-                payload.put(Mensaje.RECEIVER, summary.receiverUid);
-                payload.put(Mensaje.CONTENT, "/chats/" + summary.chatId + "/" + docUid);
-
-                payload.put(Mensaje.MESSAGE_TYPE, taskSnapshot.getMetadata().getContentType());
-                payload.put(Mensaje.FILE_SIZE, StringUtils.prettyBytesSize(taskSnapshot.getTotalByteCount()));
-                payload.put(Mensaje.FILE_NAME, filename);
-
-                /* Ejemplo: application/msword --> word */
-                if (ContentTypeUtils.getAvailableTypes().containsKey(contentType)) {
-                    payload.put(Mensaje.FILE_PRETTY_TYPE, ContentTypeUtils.getAvailableTypes().get(contentType));
-                }
-
-                /* Metadatos para los PDF */
-//                if (taskSnapshot.getMetadata().getContentType().equals("application/pdf")) {
-//                    Uri tempUri = taskSnapshot.getUploadSessionUri();
-//                }
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    payload.put(Mensaje.CREATED_AT, DateUtils.getNowWithPredefinedFormat());
-                }
-
-                Log.d(TAG, "payload: " + payload.toString());
-
-                db.getReference()
-                        .child(Chat.REFERENCE)
-                        .child(summary.chatId)
-                        .child(Mensaje.REFERENCE)
-                        .child(docUid).updateChildren(payload).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    callback.callback();
-                                }
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.e(TAG, "Error al subir el archivo");
-                            }
-                        });
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                payload.put(Mensaje.CREATED_AT, DateUtils.getNowWithPredefinedFormat());
             }
+
+            Log.d(TAG, "payload: " + payload);
+
+            db.getReference()
+                    .child(Chat.REFERENCE)
+                    .child(summary.chatId)
+                    .child(Mensaje.REFERENCE)
+                    .child(docUid).updateChildren(payload).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            callback.callback();
+                        }
+                    }).addOnFailureListener(e -> Log.e(TAG, "Error al subir el archivo"));
         });
     }
 
@@ -263,23 +203,13 @@ public class ChatService {
     }
 
     /**
-     * Obtiene los mensajes del otro alumno (Alumno B) del chat.
-     *
-     * @param messages Lista de todos los mensajes.
-     * @return
-     */
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public List<MensajeDto> getReceiverMessages(final List<MensajeDto> messages) {
-        return messages.stream().filter(m -> m.userUid != userInSession.getUid()).collect(Collectors.toList());
-    }
-
-    /**
      * Cambia el estado en el chat del alumno en sesión.
      *
      * @param newStatus Nuevo estado de conexión.
      * @see #changeCurrentUserStatus(String, AlumnoStatusCallback)
      */
     public void changeCurrentUserStatus(final String newStatus, AlumnoStatusCallback callback) {
+        assert userInSession != null;
         changeAlumnoStatus(userInSession.getUid(), newStatus, callback);
     }
 
@@ -301,19 +231,11 @@ public class ChatService {
         db.getReference()
                 .child(Alumno.REFERENCE)
                 .child(alumnoUid)
-                .updateChildren(alumnoPayload).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.d(TAG, "Alumno en línea !");
-                        callback.callback();
-                    }
+                .updateChildren(alumnoPayload).addOnSuccessListener(unused -> {
+                    Log.d(TAG, "Alumno en línea !");
+                    callback.callback();
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, e.getMessage());
-                    }
-                });
+                .addOnFailureListener(e -> Log.e(TAG, e.getMessage()));
     }
 
     public static ChatService getInstance() {
