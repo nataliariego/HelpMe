@@ -2,27 +2,23 @@ package com.example.helpme;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.helpme.model.Alumno;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
+import java.util.Objects;
 
 import auth.Authentication;
 import controller.AlumnoController;
@@ -44,17 +40,17 @@ public class CreateAccountActivity extends AppCompatActivity {
     private TextInputEditText txRepeatPassword;
 
     private AutoCompleteTextView txSelectorAsignaturasDominadas;
-    private Button btAddAsignatura;
     private Button btVerAsignaturasDominadasSeleccionadas;
     private Button btEliminarAsignaturasDominadas;
     private Button btCreateAccount;
     private Button btRedirectToLogin;
+    private Button btAddAsignatura;
 
-    private static AlumnoController alumnoController = new AlumnoController();
-    private AsignaturaViewModel asignaturaViewModel = new AsignaturaViewModel();
-    private List<String> asignaturasDisponibles = new ArrayList<>();
+    private static final AlumnoController alumnoController = new AlumnoController();
+    private final AsignaturaViewModel asignaturaViewModel = new AsignaturaViewModel();
+    private final List<String> asignaturasDisponibles = new ArrayList<>();
     private ArrayAdapter asignaturasAutoCompleteAdapter;
-    private HashMap<String, Object> asignaturasDominadasSeleccionadas = new HashMap<>();
+    private final HashMap<String, Object> asignaturasDominadasSeleccionadas = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,24 +59,11 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         setTitle(R.string.crear_cuenta);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            initFields();
-        }
+        initFields();
 
-        btCreateAccount.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View view) {
-                signUp();
-            }
-        });
+        btCreateAccount.setOnClickListener(view -> signUp());
 
-        btRedirectToLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                redirectToLogin();
-            }
-        });
+        btRedirectToLogin.setOnClickListener(view -> redirectToLogin());
 
     }
 
@@ -90,8 +73,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         changeButtonColors(false);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                && asignaturasDisponibles.size() == 0) {
+        if (asignaturasDisponibles.size() == 0) {
             obtenerAsignaturasDisponibles();
         }
     }
@@ -121,7 +103,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initFields() {
         txUo = (EditText) findViewById(R.id.text_uo_create_account);
         txEmail = (EditText) findViewById(R.id.text_email_create_account);
@@ -134,61 +115,52 @@ public class CreateAccountActivity extends AppCompatActivity {
         txSelectorAsignaturasDominadas = (AutoCompleteTextView) findViewById(R.id.text_asignaturas_dominadas_create_account);
         btAddAsignatura = (Button) findViewById(R.id.button_add_asignatura_create_account);
         btEliminarAsignaturasDominadas = (Button) findViewById(R.id.buttonEliminarAsignaturasDominadas);
-        asignaturasAutoCompleteAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, asignaturasDisponibles);
+        asignaturasAutoCompleteAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, asignaturasDisponibles);
         txSelectorAsignaturasDominadas.setAdapter(asignaturasAutoCompleteAdapter);
 
+        addListeners();
+    }
+
+    /**
+     * Añade los eventos a los componentes del activity.
+     */
+    private void addListeners() {
         /* Evento click en boton añadir asignatura */
-        btAddAsignatura.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View view) {
-                if (String.valueOf(txSelectorAsignaturasDominadas.getText()).trim().toLowerCase(Locale.ROOT) != "null" &&
-                        !String.valueOf(txSelectorAsignaturasDominadas.getText()).isEmpty() &&
-                        String.valueOf(txSelectorAsignaturasDominadas.getText()).trim() != "") {
+        btAddAsignatura.setOnClickListener(view -> {
+            if (!String.valueOf(txSelectorAsignaturasDominadas.getText()).trim().toLowerCase(Locale.ROOT).equals("null") && !String.valueOf(txSelectorAsignaturasDominadas.getText()).isEmpty() && !String.valueOf(txSelectorAsignaturasDominadas.getText()).trim().equals("")) {
 
-                    String asigName = txSelectorAsignaturasDominadas.getText().toString();
+                String asigName = txSelectorAsignaturasDominadas.getText().toString();
 
-                    AsignaturaController.getInstance().findByName(asigName, new AsignaturaController.AsignaturaCallback() {
-                        @Override
-                        public void callback(Map<String, Object> payload) {
-                            int pos = asignaturasDominadasSeleccionadas.size() == 0 ? 1 : asignaturasDominadasSeleccionadas.size() - 1;
-                            asignaturasDominadasSeleccionadas.put(String.valueOf(pos), payload);
+                AsignaturaController.getInstance().findByName(asigName, payload -> {
+                    int pos = asignaturasDominadasSeleccionadas.size() == 0 ? 1 : asignaturasDominadasSeleccionadas.size() - 1;
+                    asignaturasDominadasSeleccionadas.put(String.valueOf(pos), payload);
 
-                            Log.i(TAG, payload.toString());
+                    Log.i(TAG, payload.toString());
 
-                            txSelectorAsignaturasDominadas.setText("");
-                            changeButtonColors(true);
-                        }
-                    });
-                }
+                    txSelectorAsignaturasDominadas.setText("");
+                    changeButtonColors(true);
+                });
             }
         });
 
         /* Evento click para restablecer las asignaturas dominadas seleccionadas */
-        btEliminarAsignaturasDominadas.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                asignaturasDominadasSeleccionadas.clear();
-                changeButtonColors(false);
-                Toast.makeText(CreateAccountActivity.this, R.string.asig_dom_borradas, Toast.LENGTH_SHORT).show();
-            }
+        btEliminarAsignaturasDominadas.setOnClickListener(view -> {
+            asignaturasDominadasSeleccionadas.clear();
+            changeButtonColors(false);
+            Toast.makeText(CreateAccountActivity.this, R.string.asig_dom_borradas, Toast.LENGTH_SHORT).show();
         });
 
         /* Evento click en ver asignaturas seleccionadas */
-        btVerAsignaturasDominadasSeleccionadas.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AsignaturasDominadasBottomSheetDialogFragment fragment = AsignaturasDominadasBottomSheetDialogFragment.newInstance(asignaturasDominadasSeleccionadas);
-                fragment.show(getSupportFragmentManager(), fragment.getTag());
+        btVerAsignaturasDominadasSeleccionadas.setOnClickListener(view -> {
+            AsignaturasDominadasBottomSheetDialogFragment fragment = AsignaturasDominadasBottomSheetDialogFragment.newInstance(asignaturasDominadasSeleccionadas);
+            fragment.show(getSupportFragmentManager(), fragment.getTag());
 
-            }
         });
     }
 
     /**
      * Obtiene todas las asignaturas disponibles en la aplicación.
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void obtenerAsignaturasDisponibles() {
         asignaturasDisponibles.clear();
         asignaturaViewModel.getAllAsignaturas().observe(this, availableSubjects -> {
@@ -218,39 +190,48 @@ public class CreateAccountActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    /**
+     * Crea una nueva cuenta de usuario en la aplicación con los siguientes datos:
+     * <ul>
+     *     <li>nombre del alumno</li>
+     *     <li>Identificador UO</li>
+     *     <li>Correo electrónico corporativo</li>
+     *     <li>contraseña. No se almacena en la base de datos.</li>
+     *     <li>imagen de perfil</li>
+     *     <li>Asignaturas dominadas por el alumno. (Opcional)</li>
+     * </ul>
+     */
     private void signUp() {
         if (validateFields()) {
             AlumnoDto alumno = new AlumnoDto();
             alumno.nombre = txCompleteName.getText().toString();
             alumno.uo = txUo.getText().toString();
             alumno.email = txEmail.getText().toString();
-            alumno.password = txPassword.getText().toString();
+            alumno.password = Objects.requireNonNull(txPassword.getText()).toString();
             alumno.urlFoto = "https://ui-avatars.com/api/?name=" + alumno.nombre;
             alumno.asignaturasDominadas = asignaturasDominadasSeleccionadas;
 
-            Log.i(TAG, "ALUMNO ANTES SIGNUP: " + alumno.toString());
-
-            Authentication.getInstance().signUp(alumno, new GenericCallback<String>() {
-                @Override
-                public void callback(String msg) {
-                    if (msg.equals(GenericCallback.SUCCESS_CODE)) {
-                        redirectToHomeView();
-                        Log.i(TAG, "SUCCESS");
-                    } else {
-                        Log.i(TAG, "ERROR");
-                    }
+            Authentication.getInstance().signUp(alumno, (GenericCallback<String>) msg -> {
+                if (msg.equals(GenericCallback.SUCCESS_CODE)) {
+                    redirectToHomeView();
+                    Log.i(TAG, "SUCCESS");
+                } else {
+                    Log.i(TAG, "ERROR");
                 }
             });
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    /**
+     * Validacion de los campos del formulario del activity de crear una cuenta.
+     *
+     * @return true si validan todos los campos y false en caso contrario.
+     */
     private boolean validateFields() {
 
         String email = txEmail.getText().toString();
-        String password = txPassword.getText().toString();
-        String passwordRepeated = txRepeatPassword.getText().toString();
+        String password = Objects.requireNonNull(txPassword.getText()).toString();
+        String passwordRepeated = Objects.requireNonNull(txRepeatPassword.getText()).toString();
         String uo = txUo.getText().toString();
 
         if (!FormValidator.isNotEmpty(uo)) {
@@ -258,13 +239,9 @@ public class CreateAccountActivity extends AppCompatActivity {
             return false;
         }
 
-        alumnoController.findByUO(uo, new AlumnoController.AlumnoCallback() {
-            @Override
-            public void callback(Alumno alumno) {
-                if (alumno != null) {
-                    Toast.makeText(getApplicationContext(), getText(R.string.uo_already_exists), Toast.LENGTH_LONG)
-                            .show();
-                }
+        alumnoController.findByUO(uo, alumno -> {
+            if (alumno != null) {
+                Toast.makeText(getApplicationContext(), getText(R.string.uo_already_exists), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -294,27 +271,17 @@ public class CreateAccountActivity extends AppCompatActivity {
         }
 
         if (!FormValidator.passwordMatched(password, passwordRepeated)) {
-            Toast.makeText(getApplicationContext(), getText(R.string.password_not_matching), Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), getText(R.string.password_not_matching), Toast.LENGTH_SHORT).show();
             return false;
         }
-
         return true;
     }
 
+    /**
+     * Redirecciona a la vista de inicio.
+     */
     public void redirectToHomeView() {
         Intent intent = new Intent(CreateAccountActivity.this, HomeActivity.class);
         startActivity(intent);
-    }
-
-    /**
-     * Elimina la asignatura dominada seleccionada.
-     *
-     * @param nombreAsignatura Nombre de la asignatura.
-     */
-    public void eliminarAsignaturaSeleccionada(String nombreAsignatura) {
-        if (asignaturasDominadasSeleccionadas.containsKey(nombreAsignatura)) {
-            Log.d(TAG, nombreAsignatura);
-            asignaturasDominadasSeleccionadas.remove(nombreAsignatura);
-        }
     }
 }
