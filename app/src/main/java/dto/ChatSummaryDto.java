@@ -14,8 +14,6 @@ public class ChatSummaryDto implements Serializable {
     public String receiverName;
 
     public String receiverUid;
-    public String lastMessage;
-    public String lastMessageTimestamp;
     public String receiverProfileImage;
     public Map<String, Object> messages;
 }
