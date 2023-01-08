@@ -2,14 +2,17 @@ package com.example.helpme;
 
 import static com.example.helpme.extras.IntentExtras.CHAT_SELECCIONADO;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,9 +21,6 @@ import com.example.helpme.extras.IntentExtras;
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Chat;
 import com.example.helpme.model.Mensaje;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import adapter.ChatAdapter;
 import chat.ChatService;
@@ -44,19 +46,17 @@ import dto.ChatSummaryDto;
 
 public class ListarChatsActivity extends AppCompatActivity {
     public static final String TAG = "LISTAR_CHATS_ACTIVITY";
+    public static final String CHAT_UIDS = "CHAT_UIDS";
 
-    private DatabaseReference dbReference = FirebaseDatabase.getInstance(ChatService.DB_URL).getReference();
-    private FirebaseFirestore dbStore = FirebaseFirestore.getInstance();
-    private FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
-
-    private ChatAdapter chatAdapter;
+    private final DatabaseReference dbReference = FirebaseDatabase.getInstance(ChatService.DB_URL).getReference();
+    private final FirebaseFirestore dbStore = FirebaseFirestore.getInstance();
+    private final FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
 
     private RecyclerView recyclerListadoChats;
-    private List<ChatSummaryDto> chats = new ArrayList<>();
-
     private FloatingActionButton fabNuevoChat;
-    private BottomNavigationView navegacion;
 
+    private final List<ChatSummaryDto> chats = new ArrayList<>();
+    private ChatAdapter chatAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,47 +64,59 @@ public class ListarChatsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_listar_chats);
         setTitle("Chats");
 
-        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         initFields();
 
-        Log.i(TAG, "USUARIO EN SESIÓN: " + userInSession.getEmail());
-
-        Log.d(TAG, "version android: " + Build.VERSION.SDK_INT);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            chatAdapter = new ChatAdapter(chats, new ChatAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(ChatSummaryDto item) {
-                    Intent intent = new Intent(ListarChatsActivity.this, ChatActivity.class);
-                    intent.putExtra(CHAT_SELECCIONADO, item);
-                    startActivity(intent);
-                }
+            chatAdapter = new ChatAdapter(chats, item -> {
+                Intent intent = new Intent(ListarChatsActivity.this, ChatActivity.class);
+                intent.putExtra(CHAT_SELECCIONADO, item);
+                startActivity(intent);
             });
         }
 
         recyclerListadoChats.setAdapter(chatAdapter);
 
-        //Navegación
-        navegacion = findViewById(R.id.bottomNavigationView);
+        BottomNavigationView navegacion = findViewById(R.id.bottomNavigationView);
         IntentExtras.getInstance().handleNavigationView(navegacion, getBaseContext());
 
+        registerForContextMenu(recyclerListadoChats);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void onContextMenuClosed(@NonNull Menu menu) {
+        super.onContextMenuClosed(menu);
+        Log.d(TAG, "menu cerrado");
+        chatAdapter.resetChatStyles();
     }
 
     private void initFields() {
         recyclerListadoChats = findViewById(R.id.recycler_listado_chats);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
         recyclerListadoChats.setLayoutManager(layoutManager);
-
         fabNuevoChat = (FloatingActionButton) findViewById(R.id.fab_nuevo_chat);
 
-        fabNuevoChat.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(ListarChatsActivity.this, ListadoAlumnosChatActivity.class));
-            }
-        });
+        addListeners();
+    }
 
+    private void addListeners() {
+        fabNuevoChat.setOnClickListener(view -> {
+            Intent intent = new Intent(ListarChatsActivity.this, ListadoAlumnosChatActivity.class);
+
+            if (chats.size() > 0) {
+
+                List<String> chatUids = chats.stream().map(chat -> chat.receiverUid).collect(Collectors.toList());
+                intent.putStringArrayListExtra(CHAT_UIDS, (ArrayList<String>) chatUids);
+            }
+
+            startActivity(intent);
+
+        });
     }
 
     @Override
@@ -117,17 +129,19 @@ public class ListarChatsActivity extends AppCompatActivity {
     private void cargarChats() {
         dbReference.child(Chat.REFERENCE)
                 .addValueEventListener(new ValueEventListener() {
+                    @SuppressLint("NotifyDataSetChanged")
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         chats.clear();
                         if (snapshot.exists()) {
                             for (DataSnapshot ds : snapshot.getChildren()) {
-                                if (((HashMap<String, Object>) ds.getValue()).get(Mensaje.REFERENCE) != null) {
+                                if (((HashMap<String, Object>) Objects.requireNonNull(ds.getValue())).get(Mensaje.REFERENCE) != null) {
                                     ChatSummaryDto summary = new ChatSummaryDto();
                                     summary.chatId = ds.getKey();
-                                    String uidAlumnoA = ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_A).toString();
-                                    String uidAlumnoB = ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_B).toString();
+                                    String uidAlumnoA = Objects.requireNonNull(((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_A)).toString();
+                                    String uidAlumnoB = Objects.requireNonNull(((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_B)).toString();
 
+                                    assert userInSession != null;
                                     Log.d(TAG, "UserInSession: " + userInSession.getUid() + "Alumno A: " + uidAlumnoA + " Uid Alumno B: " + uidAlumnoB);
 
                                     /* Mensajes del chat */
@@ -143,44 +157,38 @@ public class ListarChatsActivity extends AppCompatActivity {
                                         dbStore.collection(Alumno.COLLECTION)
                                                 .document(otherUserUid)
                                                 .get()
-                                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                        if (task.isSuccessful()) {
+                                                .addOnCompleteListener(task -> {
+                                                    if (task.isSuccessful()) {
 
-                                                            DocumentSnapshot res = task.getResult();
+                                                        DocumentSnapshot res = task.getResult();
 
-                                                            Log.d(TAG, res.toString());
+                                                        Log.d(TAG, res.toString());
 
-                                                            String nombre = res.get(Alumno.NOMBRE).toString();
+                                                        String nombre = Objects.requireNonNull(res.get(Alumno.NOMBRE)).toString();
 
-                                                            String urlFoto = res.get(Alumno.URL_FOTO) != null
-                                                                    ? res.get(Alumno.URL_FOTO).toString()
-                                                                    : "https://ui-avatars.com/api/?name=" + String.join(nombre);
+                                                        String urlFoto = res.get(Alumno.URL_FOTO) != null
+                                                                ? Objects.requireNonNull(res.get(Alumno.URL_FOTO)).toString()
+                                                                : "https://ui-avatars.com/api/?name=" + String.join(nombre);
 
-                                                            summary.receiverProfileImage = urlFoto;
-                                                            summary.receiverName = nombre;
-                                                            summary.receiverUid = otherUserUid;
+                                                        summary.receiverProfileImage = urlFoto;
+                                                        summary.receiverName = nombre;
+                                                        summary.receiverUid = otherUserUid;
 
 
-                                                            Log.d(TAG, "summary: " + summary.receiverName);
+                                                        Log.d(TAG, "summary: " + summary.receiverName);
 
-                                                            chats.add(summary);
+                                                        chats.add(summary);
 
-                                                            chatAdapter.notifyDataSetChanged();
+                                                        chatAdapter.notifyDataSetChanged();
 
 
-                                                            Log.d(TAG, nombre + " -- " + urlFoto);
-                                                        }
-
+                                                        Log.d(TAG, nombre + " -- " + urlFoto);
                                                     }
+
                                                 })
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Log.d(TAG, "Error al cargar los chats.\n" + e.getMessage());
-                                                        e.printStackTrace();
-                                                    }
+                                                .addOnFailureListener(e -> {
+                                                    Log.d(TAG, "Error al cargar los chats.\n" + e.getMessage());
+                                                    e.printStackTrace();
                                                 });
                                     }
                                 }

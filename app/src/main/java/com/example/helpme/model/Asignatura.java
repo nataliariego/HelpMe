@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 public class Asignatura implements Parcelable {
 
     public static final String COLLECTION = "ASIGNATURA";
-
     public static final String NOMBRE = "nombre";
     public static final String MATERIA = "materia";
     public static final String CURSO = "curso";
@@ -101,6 +100,7 @@ public class Asignatura implements Parcelable {
 
     }
 
+    @NonNull
     public String toString() {
         return nombre;
     }

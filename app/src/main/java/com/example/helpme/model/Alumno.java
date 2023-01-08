@@ -5,9 +5,6 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Alumno implements Parcelable {
@@ -36,7 +33,8 @@ public class Alumno implements Parcelable {
 
     private Map<String, Object> asignaturasDominadas;
 
-    public Alumno(){}
+    public Alumno() {
+    }
 
     public Alumno(String id, String nombre, String uo, String url_foto, Map<String, Object> asignaturasDominadas) {
         this.id = id;
@@ -59,6 +57,7 @@ public class Alumno implements Parcelable {
     public Alumno(String id, String nombre, String uo) {
         this(id, nombre, uo, null, null);
     }
+
     public Alumno(String id, String nombre, String uo, String url_foto) {
         this(id, nombre, uo);
         this.url_foto = url_foto;
@@ -152,6 +151,7 @@ public class Alumno implements Parcelable {
         this.url_foto = url_foto;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Alumno{" +

@@ -21,7 +21,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HelpMe"
-        tools:targetApi="31" >
+        tools:targetApi="27" >
         <activity
             android:name=".FriendProfileActivity"
             android:exported="false" >

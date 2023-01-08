@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/chat_cm_opt_delete"
+        android:title="Borrar chat"
+        android:tooltipText="Borrar el chat seleccionado" />
+    <item
+        android:id="@+id/chat_cm_opt_cancel"
+        android:title="Cancelar"
+        android:tooltipText="Deseleccionar el chat" />
+</menu>
