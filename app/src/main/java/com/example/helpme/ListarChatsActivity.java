@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import adapter.ChatAdapter;
 import chat.ChatService;
@@ -41,16 +42,17 @@ import dto.ChatSummaryDto;
 
 public class ListarChatsActivity extends AppCompatActivity {
     public static final String TAG = "LISTAR_CHATS_ACTIVITY";
+    public static final String CHAT_UIDS = "CHAT_UIDS";
 
     private final DatabaseReference dbReference = FirebaseDatabase.getInstance(ChatService.DB_URL).getReference();
     private final FirebaseFirestore dbStore = FirebaseFirestore.getInstance();
     private final FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
 
-    private ChatAdapter chatAdapter;
-
     private RecyclerView recyclerListadoChats;
-    private final List<ChatSummaryDto> chats = new ArrayList<>();
+    private FloatingActionButton fabNuevoChat;
 
+    private final List<ChatSummaryDto> chats = new ArrayList<>();
+    private ChatAdapter chatAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +60,7 @@ public class ListarChatsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_listar_chats);
         setTitle("Chats");
 
-        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         initFields();
-
-        Log.i(TAG, "USUARIO EN SESIÓN: " + userInSession.getEmail());
-
-        Log.d(TAG, "version android: " + Build.VERSION.SDK_INT);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             chatAdapter = new ChatAdapter(chats, item -> {
@@ -75,21 +72,32 @@ public class ListarChatsActivity extends AppCompatActivity {
 
         recyclerListadoChats.setAdapter(chatAdapter);
 
-        //Navegación
         BottomNavigationView navegacion = findViewById(R.id.bottomNavigationView);
         IntentExtras.getInstance().handleNavigationView(navegacion, getBaseContext());
-
     }
 
     private void initFields() {
         recyclerListadoChats = findViewById(R.id.recycler_listado_chats);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
         recyclerListadoChats.setLayoutManager(layoutManager);
+        fabNuevoChat = (FloatingActionButton) findViewById(R.id.fab_nuevo_chat);
 
-        FloatingActionButton fabNuevoChat = (FloatingActionButton) findViewById(R.id.fab_nuevo_chat);
+        addListeners();
+    }
 
-        fabNuevoChat.setOnClickListener(view -> startActivity(new Intent(ListarChatsActivity.this, ListadoAlumnosChatActivity.class)));
+    private void addListeners() {
+        fabNuevoChat.setOnClickListener(view -> {
+            Intent intent = new Intent(ListarChatsActivity.this, ListadoAlumnosChatActivity.class);
 
+            if (chats.size() > 0) {
+
+                List<String> chatUids = chats.stream().map(chat -> chat.receiverUid).collect(Collectors.toList());
+                intent.putStringArrayListExtra(CHAT_UIDS, (ArrayList<String>) chatUids);
+            }
+
+            startActivity(intent);
+
+        });
     }
 
     @Override

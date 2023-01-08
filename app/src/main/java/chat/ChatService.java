@@ -7,6 +7,7 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.example.helpme.model.Alumno;
@@ -14,7 +15,10 @@ import com.example.helpme.model.Chat;
 import com.example.helpme.model.Mensaje;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -22,10 +26,13 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import dto.ChatSummaryDto;
 import dto.MensajeDto;
@@ -36,26 +43,17 @@ import util.StringUtils;
 public class ChatService {
 
     public static final String DEFAULT_MIME_IMG = "image/jpeg";
-
-    /* Firebase FireStore */
     public static final String DB_URL = "https://helpme-app-435b7-default-rtdb.europe-west1.firebasedatabase.app";
-
-    /* Firebase Cloud Storage */
+    public static final String TAG = "CHAT_SERVICE";
     public static final String CLOUD_STORAGE_URL = "gs://helpme-app-435b7.appspot.com/";
     public static final String BASE_PATH_CLOUD_STORAGE = "chats";
 
-    /* Gestionar todas las conversaciones */ FirebaseDatabase db = FirebaseDatabase.getInstance(DB_URL);
+    FirebaseDatabase db = FirebaseDatabase.getInstance(DB_URL);
+    private static ChatService instance;
 
-    /* Firebase Store, se obtendrá la información de los usuarios */
-
-    /* Cloud Storage */
     private final FirebaseStorage cloudStorage = FirebaseStorage.getInstance(CLOUD_STORAGE_URL);
     private final StorageReference storageRef = cloudStorage.getReference();
     private final StorageReference chatStorageRef = storageRef.child(BASE_PATH_CLOUD_STORAGE);
-
-    private static ChatService instance;
-
-    public static final String TAG = "CHAT_SERVICE";
 
     private final FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -67,9 +65,7 @@ public class ChatService {
         return storageRef;
     }
 
-    /**
-     * Envia un mensaje.
-     */
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void sendMessage(final MensajeDto msg, final ChatSummaryDto summary, final String userInSessionUid, MensajeCallback callback) {
         String msg_id = UUID.randomUUID().toString();
@@ -100,7 +96,14 @@ public class ChatService {
                 .addOnFailureListener(e -> Log.i(TAG, "ERROR AL ENVIAR EL MENSAJE"));
     }
 
-    public void uploadImage(ImageView imageView, ChatSummaryDto summary, MensajeCallback callback) {
+    /**
+     * Subir una imagen al servicio de firebase cloud.
+     *
+     * @param imageView
+     * @param summary
+     * @param callback
+     */
+    public void uploadImage(final ImageView imageView, final ChatSummaryDto summary, final MensajeCallback callback) {
         imageView.setDrawingCacheEnabled(true);
         imageView.buildDrawingCache();
         Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
@@ -113,8 +116,6 @@ public class ChatService {
 
         UploadTask uploadTask = chatStorageRef.child(summary.chatId).child(imageName).putBytes(data);
         uploadTask.addOnFailureListener(exception -> Log.e(TAG, "Error al subir la imagen a Cloud Storage")).addOnSuccessListener(taskSnapshot -> {
-            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-            // ...
 
             if (taskSnapshot.getTask().isSuccessful()) {
                 Log.d(TAG, "Imagen subida: " + taskSnapshot.getMetadata());
@@ -132,9 +133,7 @@ public class ChatService {
 
                 db.getReference().child(Chat.REFERENCE).child(summary.chatId).child(Mensaje.REFERENCE).child(imgUid).updateChildren(payload).addOnCompleteListener(task -> callback.callback()).addOnFailureListener(e -> Log.e(TAG, "ERROR al subir la imagen al servidor. " + e.getMessage()));
             }
-
         });
-
     }
 
     /**
@@ -198,7 +197,6 @@ public class ChatService {
         Comparator<MensajeDto> msgComparator = Comparator.comparing(msg -> DateUtils.convertStringToLocalDateTime(msg.createdAt, 0));
         messages.sort(msgComparator);
 
-
         return messages;
     }
 
@@ -238,6 +236,42 @@ public class ChatService {
                 .addOnFailureListener(e -> Log.e(TAG, e.getMessage()));
     }
 
+    public boolean hasCurrentChatWithSpecificAlumno(final String alumnoUid, final AlumnoChatCallback callback) {
+        db.getReference()
+                .child(Chat.REFERENCE).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            Set<String> uids = new HashSet<>();
+                            for (DataSnapshot ds : snapshot.getChildren()) {
+
+                                if (((HashMap<String, Object>) Objects.requireNonNull(ds.getValue())).get(Chat.ALUMNO_A) != null &&
+                                        ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_B) != null &&
+                                        ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_A) == userInSession.getUid() ||
+                                        ((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_B) == userInSession.getUid()) {
+
+                                    String uidAlumnoA = Objects.requireNonNull(((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_A)).toString();
+                                    String uidAlumnoB = Objects.requireNonNull(((HashMap<String, Object>) ds.getValue()).get(Chat.ALUMNO_B)).toString();
+
+                                    uids.add(uidAlumnoA);
+                                    uids.add(uidAlumnoB);
+                                }
+                            }
+                            Set<String> filteredUids = uids.stream().filter(uid -> !uid.equals(userInSession.getUid())).collect(Collectors.toSet());
+                            callback.callback(filteredUids);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+        return false;
+
+    }
+
     public static ChatService getInstance() {
         if (instance == null) {
             instance = new ChatService();
@@ -251,5 +285,9 @@ public class ChatService {
 
     public interface AlumnoStatusCallback {
         void callback();
+    }
+
+    public interface AlumnoChatCallback {
+        void callback(Set<String> uidsAlumnosChat);
     }
 }

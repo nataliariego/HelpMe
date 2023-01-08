@@ -100,6 +100,7 @@ public class AlumnoController {
                             alumno.setUo(documentSnapshot.getString(Alumno.UO));
                             alumno.setUrl_foto(documentSnapshot.getString(Alumno.URL_FOTO));
                             alumno.setAsignaturasDominadas((Map<String, Object>) documentSnapshot.get("asignaturasDominadas"));
+                            alumno.setId(documentSnapshot.getId());
 
                             alumnos.add(alumno);
                         }
