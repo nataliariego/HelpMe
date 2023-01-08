@@ -4,13 +4,10 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpme.extras.IntentExtras;
 import com.example.helpme.model.Duda;
-import com.example.helpme.navigation.impl.ActivityNavigationImpl;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.time.LocalDate;
@@ -56,9 +52,6 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        // Resetea los estilos del spashScreen
-        //setTheme(R.style.Theme_HelpMe);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
@@ -78,7 +71,6 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
         listadoDudasHomeRecycler.setLayoutManager(layoutManager);
 
         cargarDudas();
-
 
         //Navegación
         navegacion = findViewById(R.id.bottomNavigationView);
@@ -115,11 +107,8 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
      */
     private void redirectPantallaPublicarNuevaDuda() {
         Intent publicarDudasIntent = new Intent(HomeActivity.this, PublicarDudaActivity.class);
-
-        // Para transiciones
         startActivity(publicarDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -130,19 +119,18 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
             if (dudasResult != null) {
                 dudasResult.forEach(d -> {
                     DudaDto newDuda = new DudaDto();
-                    newDuda.id=d.getId();
+                    newDuda.id = d.getId();
                     newDuda.titulo = d.getTitulo();
-                    newDuda.descripcion=d.getDescripcion();
+                    newDuda.descripcion = d.getDescripcion();
                     newDuda.alumno = d.getAlumnoId();
                     newDuda.asignatura = d.getAsignaturaId();
                     newDuda.materia = d.getMateriaId();
                     newDuda.fecha = d.getFecha();
-                    newDuda.url_adnjuto=d.getUrl_adjunto();
+                    newDuda.url_adnjuto = d.getUrl_adjunto();
 
                     dudas.add(newDuda);
                 });
             }
-
 
             dudaAdapter = new DudaAdapter(dudas,
                     new DudaAdapter.OnItemClickListener() {
@@ -159,15 +147,13 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
 
     public void clikonIntem(DudaDto duda) {
         Duda dudaCreada = crearDuda(duda);
-        //Paso el modo de apertura
-        Intent intent = new Intent(HomeActivity.this,ResolveActivity.class);
+        Intent intent = new Intent(HomeActivity.this, ResolveActivity.class);
         intent.putExtra(DUDA_SELECCIONADA, dudaCreada);
-        //Transacion de barrido
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
 
     private Duda crearDuda(DudaDto duda) {
-        Duda d = new Duda(duda.titulo,duda.descripcion,duda.alumno,duda.asignatura,duda.materia,duda.isResuelta,duda.fecha,duda.id,duda.url_adnjuto);
+        Duda d = new Duda(duda.titulo, duda.descripcion, duda.alumno, duda.asignatura, duda.materia, duda.isResuelta, duda.fecha, duda.id, duda.url_adnjuto);
         return d;
     }
 
@@ -185,7 +171,6 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
                     + " " + LocalDate.now().getYear());
         }
     }
-
 
     @Override
     public void checkConnection() {
