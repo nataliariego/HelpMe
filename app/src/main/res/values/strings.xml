@@ -154,4 +154,5 @@
     <string name="cancelar">Cancelar</string>
     <string name="crear_cuenta">Crear una cuenta</string>
     <string name="asig_dom_borradas">Asignaturas dominadas borradas</string>
+    <string name="cm_selected_chat_title">Opciones</string>
 </resources>

@@ -59,7 +59,8 @@
                 android:id="@+id/text_user_receiver_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/chat_alumno_receiver_status" />
+                android:text="@string/chat_alumno_receiver_status"
+                tools:visibility="gone" />
         </LinearLayout>
 
         <RelativeLayout

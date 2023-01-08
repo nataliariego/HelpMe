@@ -13,6 +13,8 @@ import androidx.annotation.RequiresApi;
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Chat;
 import com.example.helpme.model.Mensaje;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -271,6 +273,24 @@ public class ChatService {
 
     }
 
+    public void removeChat(final String chatId, final ChatCallback callback) {
+        db.getReference()
+                .child(Chat.REFERENCE)
+                .child(chatId)
+                .removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        callback.onSuccess();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onFailure();
+                    }
+                });
+    }
+
     public static ChatService getInstance() {
         if (instance == null) {
             instance = new ChatService();
@@ -288,5 +308,11 @@ public class ChatService {
 
     public interface AlumnoChatCallback {
         void callback(Set<String> uidsAlumnosChat);
+    }
+
+    public interface ChatCallback {
+        void onSuccess();
+
+        void onFailure();
     }
 }

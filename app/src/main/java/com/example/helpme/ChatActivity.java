@@ -2,7 +2,6 @@ package com.example.helpme;
 
 import static com.example.helpme.extras.IntentExtras.CHAT_SELECCIONADO;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,7 +11,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -27,15 +25,11 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Chat;
 import com.example.helpme.model.Mensaje;
 import com.google.firebase.auth.FirebaseAuth;
@@ -76,7 +70,6 @@ public class ChatActivity extends AppCompatActivity {
 
     private ImageView imgPerfilUsuarioReceiver;
     private TextView txNombreUsuarioReceiver;
-    private TextView txStatusUsuarioReceiver;
 
     private ImageButton btSubirArchivoChat;
     private ImageButton btVolverListaChats;
@@ -246,68 +239,11 @@ public class ChatActivity extends AppCompatActivity {
 
         recyclerConversacionChat.setAdapter(msgAdapter);
 
-        actualizarEstadoAlumnoReceiver();
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    /**
-     * Actualiza en tiempo real el estado del alumnoB (Otro usuario) del chat.
-     */
-    private void actualizarEstadoAlumnoReceiver() {
-        dbReference.child(Alumno.REFERENCE)
-                .child(originChatDataDto.receiverUid)
-                .addValueEventListener(new ValueEventListener() {
-                    @SuppressLint("SetTextI18n")
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            Map<String, Object> resData = ((HashMap<String, Object>) snapshot.getValue());
-                            assert resData != null;
-                            String remoteStatus = Objects.requireNonNull(resData.get(Alumno.STATUS)).toString();
-
-                            if (remoteStatus.equals(ONLINE_STATUS)) {
-                                txStatusUsuarioReceiver.setText("online");
-
-                            } else if (remoteStatus.equals(TYPING_STATUS)) {
-                                txStatusUsuarioReceiver.setText("escribiendo...");
-
-                            } else {
-                                txStatusUsuarioReceiver.setVisibility(View.GONE);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e(TAG, "ACTUALIZAR ESTADO ALUMNO-B. " + error.getMessage());
-                    }
-                });
-    }
-
-    /**
-     * Comprueba si el micrófono está activado.
-     *
-     * @return true si el micrófono del dispositivo está activado y false en caso contrario.
-     */
-    private boolean microfonoActivo() {
-        return getPackageManager().hasSystemFeature(PackageManager.FEATURE_MICROPHONE);
-    }
-
-    private void obtenerPermisoMicrofono() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) ==
-                PackageManager.PERMISSION_DENIED) {
-
-            ActivityCompat.requestPermissions(this, new String[]{
-                    Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-            }, REQUEST_RECORD_AUDIO_PERMISSION);
-
-        }
     }
 
     @Override
@@ -319,15 +255,6 @@ public class ChatActivity extends AppCompatActivity {
         if (!permissionToRecordAccepted) finish();
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-
-        if (microfonoActivo()) {
-            obtenerPermisoMicrofono();
-        }
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     private void uploadImage(ImageView imageView) {
         if (originChatDataDto == null) {
@@ -337,7 +264,7 @@ public class ChatActivity extends AppCompatActivity {
         Log.i(TAG, "bytes: " + Arrays.toString(ContentTypeUtils.getImageBytes(imageView))
                 + "\t" + ContentTypeUtils.isImageSizeValid(imageView));
 
-        if(ContentTypeUtils.isImageSizeValid(imageView)){
+        if (ContentTypeUtils.isImageSizeValid(imageView)) {
             Toast.makeText(this, "Tamaño subida máximo: 1MB", Toast.LENGTH_LONG).show();
             return;
         }
@@ -507,7 +434,6 @@ public class ChatActivity extends AppCompatActivity {
         recyclerConversacionChat = (RecyclerView) findViewById(R.id.recycler_conversacion_chat);
         imgPerfilUsuarioReceiver = (ImageView) findViewById(R.id.img_receiver_user_chat);
         txNombreUsuarioReceiver = (TextView) findViewById(R.id.text_user_receiver_chat);
-        txStatusUsuarioReceiver = (TextView) findViewById(R.id.text_user_receiver_status);
         btSubirArchivoChat = (ImageButton) findViewById(R.id.button_upload_file_chat);
         btVolverListaChats = (ImageButton) findViewById(R.id.button_back_to_chat_list);
         btLlamarReceiver = (ImageButton) findViewById(R.id.button_call_alumno_receiver);

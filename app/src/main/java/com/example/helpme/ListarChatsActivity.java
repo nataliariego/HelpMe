@@ -7,6 +7,10 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,6 +78,21 @@ public class ListarChatsActivity extends AppCompatActivity {
 
         BottomNavigationView navegacion = findViewById(R.id.bottomNavigationView);
         IntentExtras.getInstance().handleNavigationView(navegacion, getBaseContext());
+
+        registerForContextMenu(recyclerListadoChats);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void onContextMenuClosed(@NonNull Menu menu) {
+        super.onContextMenuClosed(menu);
+        Log.d(TAG, "menu cerrado");
+        chatAdapter.resetChatStyles();
     }
 
     private void initFields() {
