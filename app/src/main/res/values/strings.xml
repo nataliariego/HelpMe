@@ -101,14 +101,16 @@
     <string name="mensaje_contenido_prueba">Hola, qué tal ?</string>
     <string name="hora_envio_mensaje_default">Hace 2 segundos</string>
     <string name="add_chat">Iniciar una nueva conversación</string>
+
     <string name="chats">Chats</string>
     <string name="img_receiver_chat">Imagen de perfil del usuario del chat</string>
     <string name="placeholder_chat_receiver_name">Nombre del alumno (receiver)</string>
-    <string name="placeholder_ultimo_mensaje_chat">último mensaje del chat...</string>
+    <string name="placeholder_ultimo_mensaje_chat">ultimo mensaje del chat</string>
     <string name="placeholder_hora_envio_ultimo_mensaje_chat">11:30</string>
     <string name="chat_listado_alumnos">Alumnos</string>
     <string name="img_profile_alumno_chat">Imagen de perfil del alumno</string>
     <string name="placeholder_nombre_alumno_chat">Nombre del alumno</string>
+
     <string name="uo_alumno_chat">UO112233</string>
     <string name="estado_envio_mensaje_chat">ENVIADO</string>
     <string name="button_subir_archivo_chat">Subir un documento al chatpara enviar</string>
@@ -144,6 +146,7 @@
     <string name="uo277516">UO277516</string>
     <string name="uo276922">UO276922</string>
     <string name="app_version">v1.0.0</string>
+    <string name="button_github_repo">Enlace al repositorio de github de la aplicación</string>
 
     <string name="amigos">Amigos</string>
     <string name="editar_imagen">  Editar imagen  </string>
@@ -151,5 +154,4 @@
     <string name="cancelar">Cancelar</string>
     <string name="crear_cuenta">Crear una cuenta</string>
     <string name="asig_dom_borradas">Asignaturas dominadas borradas</string>
-    <string name="button_github_repo">Enlace al repositorio de github de la aplicación</string>
 </resources>
