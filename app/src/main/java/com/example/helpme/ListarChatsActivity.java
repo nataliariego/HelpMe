@@ -180,7 +180,7 @@ public class ListarChatsActivity extends AppCompatActivity {
                                                         summary.receiverUid = otherUserUid;
 
                                                         chats.add(summary);
-
+                                                        toogleMessage(chats.isEmpty());
                                                         chatAdapter.notifyDataSetChanged();
                                                     }
                                                 })

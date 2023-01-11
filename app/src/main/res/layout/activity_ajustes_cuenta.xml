@@ -129,6 +129,26 @@
                 app:strokeColor="@color/tertiary_light" />
 
             <Button
+                android:id="@+id/button_eliminar_cuenta"
+                style="@style/Widget.Material3.ExtendedFloatingActionButton.Icon.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:backgroundTint="@color/error"
+                android:fontFamily="@font/roboto"
+                android:text="@string/eliminar_cuenta"
+                android:textAlignment="viewStart"
+                android:textColor="@color/tertiary"
+                android:textColorHighlight="@color/primary"
+                android:textColorLink="@color/primary"
+                android:textSize="14sp"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/ic_round_keyboard_arrow_right_24"
+                app:iconGravity="end"
+                app:iconPadding="0dp"
+                app:iconTint="@color/tertiary"
+                app:strokeColor="@color/tertiary_light" />
+
+            <Button
                 android:id="@+id/button_logout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -273,6 +273,73 @@ public class ChatService {
 
     }
 
+    public void markAlumnoAsDeleted(final String chatUid, final String alumnoUid) {
+        db.getReference()
+                .child(Chat.REFERENCE)
+                .child(chatUid)
+                .child(Mensaje.REFERENCE)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot msg : snapshot.getChildren()) {
+                            Map<String, Object> content = (Map<String, Object>) msg.getValue();
+
+                            if (content.get(Mensaje.SENDER).equals(alumnoUid)) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    markMessageAsDeleted(chatUid, alumnoUid, msg.getKey());
+                                }
+                                Log.d(TAG, "MSG CONTENT: " + content.get(Mensaje.CONTENT));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void markMessageAsDeleted(final String chatUid, final String alumnoUid, final String msgUid) {
+
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("deleted", true);
+        payload.put("deleted_at", DateUtils.getNowWithPredefinedFormat());
+
+        db.getReference()
+                .child(Chat.REFERENCE)
+                .child(chatUid)
+                .child(Mensaje.REFERENCE)
+                .child(msgUid)
+                .updateChildren(payload)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d(TAG, "MESSAGE DELETED SUCCESSFULLY");
+                    }
+                });
+    }
+
+    public void markChatAsDeleteForDeletedUser(final String userUid) {
+        db.getReference()
+                .child(Chat.REFERENCE)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            String chatUid = (String) ds.getKey();
+                            markAlumnoAsDeleted(chatUid, userUid);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
     public void removeChat(final String chatId, final ChatCallback callback) {
         db.getReference()
                 .child(Chat.REFERENCE)

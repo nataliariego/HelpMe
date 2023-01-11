@@ -28,4 +28,10 @@ public class MensajeDto {
     public String filename;
     public String prettySize; // Ej. 14KB, 1MB, etc.
 
+    /* Si el usuario se ha dado de baja en la aplicación */
+    public String deleted;
+
+    @PropertyName("deleted_at")
+    public String deletedAt;
+
 }

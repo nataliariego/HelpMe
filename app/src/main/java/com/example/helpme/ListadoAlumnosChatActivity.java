@@ -151,6 +151,7 @@ public class ListadoAlumnosChatActivity extends AppCompatActivity {
                                                     Intent intent = new Intent(ListadoAlumnosChatActivity.this, ChatActivity.class);
                                                     intent.putExtra(CHAT_SELECCIONADO, summary);
                                                     startActivity(intent);
+                                                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                                                 })
                                                 .addOnFailureListener(e -> {
                                                     Log.e(TAG, "No se ha podido registrar el alumno. " + e.getMessage());
