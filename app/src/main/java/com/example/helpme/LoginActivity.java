@@ -41,7 +41,6 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
 
         initFields();
 
-
         btCreateAnAccount.setOnClickListener(view -> redirectToCreateAnAccountView());
 
         btLogin.setOnClickListener(view -> {
@@ -87,6 +86,7 @@ public class LoginActivity extends AppCompatActivity implements NetworkStatusHan
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         intent.putExtra(USER_IN_SESSION, userInSession);
         startActivity(intent);
+        finish();
     }
 
     /**
