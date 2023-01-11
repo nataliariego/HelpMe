@@ -13,6 +13,9 @@ public class Mensaje {
     public static final String RESOURCE_URL = "resource_url";
     public static final String MESSAGE_TYPE = "type";
 
+    public static final String DELETED = "deleted";
+    public static final String DELETED_AT = "deleted_at";
+
     /* Metadatos para archivos */
     public static final String FILE_SIZE = "size";
     public static final String FILE_PAGES = "pages";

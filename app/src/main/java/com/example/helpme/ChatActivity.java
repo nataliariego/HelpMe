@@ -12,8 +12,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -62,6 +60,8 @@ import util.DateUtils;
 public class ChatActivity extends AppCompatActivity {
 
     public static final String TAG = "CHAT_ACTIVITY";
+    public static final String FILE_LAUNCHER = "fileLauncher";
+    public static final String GALLERY_LAUNCHER = "galleryLauncher";
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1002;
 
@@ -113,35 +113,29 @@ public class ChatActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.inicia_sesion, Toast.LENGTH_SHORT).show();
         }
 
-
         initFields();
+        addListeners();
 
-        /* Accion enviar mensaje */
-        btEnviarMensaje.setOnClickListener(view -> {
-            Log.i(TAG, "Enviando mensaje...");
+        if (originChatDataDto != null) {
+            /* Mostrar img perfil y nombre del alumnoB */
+            paintReceiverData();
 
-            String contenidoMensaje = txMensajeAEnviar.getText().toString();
-
-            if (contenidoMensaje.trim().isEmpty()) {
-                Toast.makeText(ChatActivity.this, "Escribe un mensaje", Toast.LENGTH_SHORT).show();
-                return;
+            if (originChatDataDto.messages != null) {
+                paintChatMessages();
             }
+        }
 
-            MensajeDto newMsgDto = new MensajeDto();
-            newMsgDto.contenido = contenidoMensaje;
-            newMsgDto.createdAt = DateUtils.getNowWithPredefinedFormat();
-            newMsgDto.status = MensajeStatus.ENVIADO;
+        msgAdapter = new MensajeAdapter(chatMessages);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
+        recyclerConversacionChat.setLayoutManager(layoutManager);
 
-            assert userInSession != null;
-            Log.d(TAG, originChatDataDto.receiverUid + " " + userInSession.getUid());
+        recyclerConversacionChat.setAdapter(msgAdapter);
 
-            if (originChatDataDto != null) {
-                ChatService.getInstance().sendMessage(newMsgDto, originChatDataDto, userInSession.getUid(), () -> {
-                    txMensajeAEnviar.setText("");
-                    recyclerConversacionChat.smoothScrollToPosition(View.FOCUS_DOWN);
-                });
-            }
-        });
+    }
+
+    private Map<String, ActivityResultLauncher> configureLaunchers() {
+
+        Map<String, ActivityResultLauncher> launchers = new HashMap();
 
         /* Abre el explorador de archivos del dispositivo */
         ActivityResultLauncher<Intent> fileLauncher = registerForActivityResult(
@@ -166,6 +160,69 @@ public class ChatActivity extends AppCompatActivity {
                 }
         );
 
+        /* Abre la galería de imágenes del dispositivo */
+        ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        assert result.getData() != null;
+                        Bundle bundle = result.getData().getExtras();
+                        selectedImageToSend = (Bitmap) bundle.get("data");
+                        Log.d(TAG, "Imagen recibida");
+
+                        ImageView selected = new ImageView(getApplicationContext());
+                        selected.setImageBitmap(selectedImageToSend);
+                        uploadImage(selected);
+
+                    } else if (result.getResultCode() == RESULT_CANCELED) {
+                        Toast.makeText(getApplicationContext(), "Acción cancelada", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        launchers.put(FILE_LAUNCHER, fileLauncher);
+        launchers.put(GALLERY_LAUNCHER, galleryLauncher);
+
+        return launchers;
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void addListeners() {
+        Map<String, ActivityResultLauncher> launchers = configureLaunchers();
+        ActivityResultLauncher fileLauncher = launchers.get(FILE_LAUNCHER);
+        ActivityResultLauncher galleryLauncher = launchers.get(GALLERY_LAUNCHER);
+
+
+        /* Accion enviar mensaje */
+        btEnviarMensaje.setOnClickListener(view -> {
+            Log.i(TAG, "Enviando mensaje...");
+
+            String contenidoMensaje = txMensajeAEnviar.getText().toString();
+
+            if (contenidoMensaje.trim().isEmpty()) {
+                Toast.makeText(ChatActivity.this, "Escribe un mensaje", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            MensajeDto newMsgDto = new MensajeDto();
+            newMsgDto.contenido = contenidoMensaje;
+            newMsgDto.createdAt = DateUtils.getNowWithPredefinedFormat();
+            newMsgDto.status = MensajeStatus.ENVIADO;
+
+            assert userInSession != null;
+            Log.d(TAG, originChatDataDto.receiverUid + " " + userInSession.getUid());
+
+            if (originChatDataDto != null) {
+                ChatService.getInstance().sendMessage(newMsgDto, originChatDataDto, userInSession.getUid(), () -> {
+                    msgAdapter.notifyDataSetChanged();
+                    txMensajeAEnviar.setText("");
+                    recyclerConversacionChat.smoothScrollToPosition(View.FOCUS_DOWN);
+                });
+            }
+
+
+        });
+
         /* Accion seleccionar archivo para enviar */
         btSubirArchivoChat.setOnClickListener(view -> {
             Log.d(TAG, "BT-ADJUNTAR ARCHIVO: ");
@@ -173,6 +230,7 @@ public class ChatActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
 
+            assert fileLauncher != null;
             fileLauncher.launch(intent);
         });
 
@@ -195,55 +253,20 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        /* Abre la galería de imágenes del dispositivo */
-        ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(), result -> {
-                    if (result.getResultCode() == RESULT_OK) {
-                        assert result.getData() != null;
-                        Bundle bundle = result.getData().getExtras();
-                        selectedImageToSend = (Bitmap) bundle.get("data");
-                        Log.d(TAG, "Imagen recibida");
-
-                        ImageView selected = new ImageView(getApplicationContext());
-                        selected.setImageBitmap(selectedImageToSend);
-                        uploadImage(selected);
-
-                    } else if (result.getResultCode() == RESULT_CANCELED) {
-                        Toast.makeText(getApplicationContext(), "Acción cancelada", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                }
-        );
-
         /* Accion sacar foto para enviar por chat */
         btCamera.setOnClickListener(view -> {
             Log.d(TAG, "CAMERA: ");
 
             Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            assert galleryLauncher != null;
             galleryLauncher.launch(intent);
         });
-
-        if (originChatDataDto != null) {
-            /* Mostrar img perfil y nombre del alumnoB */
-            paintReceiverData();
-
-            if (originChatDataDto.messages != null) {
-                paintChatMessages();
-            }
-        }
-
-        msgAdapter = new MensajeAdapter(chatMessages);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
-        recyclerConversacionChat.setLayoutManager(layoutManager);
-
-        recyclerConversacionChat.setAdapter(msgAdapter);
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        paintChatMessages();
     }
 
     @Override
@@ -366,6 +389,18 @@ public class ChatActivity extends AppCompatActivity {
                                 newMessage.mimeType = Objects.requireNonNull(resData.get(Mensaje.MESSAGE_TYPE)).toString();
                                 newMessage.userUid = Objects.requireNonNull(resData.get(Mensaje.SENDER)).toString();
 
+                                // Si el mensaje ha sido enviado por un alumno que ya se ha dado de baja
+                                try {
+                                    if (resData.get(Mensaje.DELETED) != null
+                                            && resData.get(Mensaje.DELETED_AT) != null) {
+                                        newMessage.deleted = String.valueOf(resData.get(Mensaje.DELETED));
+                                        newMessage.deletedAt = (String) resData.get(Mensaje.DELETED_AT);
+                                    }
+                                } catch (ClassCastException cce) {
+                                    Log.e(TAG, "Error al convertir los datos del mensaje eliminado. " + cce.getMessage());
+                                    cce.printStackTrace();
+                                }
+
                                 Object status = resData.get(Mensaje.STATUS);
 
                                 if (status != null) {
@@ -409,8 +444,7 @@ public class ChatActivity extends AppCompatActivity {
                                 }
 
                                 chatMessages.add(newMessage);
-
-
+                                msgAdapter.notifyDataSetChanged();
                             }
                             msgAdapter.sortMessages();
                             msgAdapter.notifyDataSetChanged();
@@ -442,34 +476,5 @@ public class ChatActivity extends AppCompatActivity {
         /* Completar dinámicamente la imagen de perfil y el nombre del alumno receiver */
         txNombreUsuarioReceiver.setText(alumnoB.nombre);
         Picasso.get().load(alumnoB.urlFoto).into(imgPerfilUsuarioReceiver);
-
-
-        txMensajeAEnviar.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (status.equals(ONLINE_STATUS)) {
-                    ChatService.getInstance().changeCurrentUserStatus(AlumnoStatus.ESCRIBIENDO.toString().toLowerCase(), () -> status = TYPING_STATUS);
-                }
-            }
-        });
-
-        txMensajeAEnviar.setOnFocusChangeListener((view, hasFocus) -> {
-            if (!hasFocus) {
-                if (status.equals(TYPING_STATUS) && txMensajeAEnviar.getText().length() > 0) {
-                    ChatService.getInstance().changeCurrentUserStatus(AlumnoStatus.ONLINE.toString().toLowerCase(), () -> status = ONLINE_STATUS);
-
-                }
-            }
-        });
     }
 }

@@ -115,6 +115,28 @@ public class Authentication {
     }
 
     /**
+     * Elimina la cuenta del usuario en sesión.
+     */
+    public void deleteAccount(final AlumnoController.DeleteAlumnoCallback callback) {
+        // Copia del uid del usuario en sesión
+        String userInSessionUid = FirebaseAuth.getInstance().getUid();
+
+        FirebaseAuth.getInstance().getCurrentUser().delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "Cuenta de usuario eliminada.");
+
+                            // Elimina cuenta de firebase del usuario.
+                            alumnoController.delete(userInSessionUid, callback);
+
+                        }
+                    }
+                });
+    }
+
+    /**
      * Comprueba si hay un usuario logeado.
      *
      */
