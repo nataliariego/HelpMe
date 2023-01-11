@@ -62,6 +62,8 @@ import util.DateUtils;
 public class ChatActivity extends AppCompatActivity {
 
     public static final String TAG = "CHAT_ACTIVITY";
+    public static final String FILE_LAUNCHER = "fileLauncher";
+    public static final String GALLERY_LAUNCHER = "galleryLauncher";
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1002;
 
@@ -116,6 +118,91 @@ public class ChatActivity extends AppCompatActivity {
 
         initFields();
 
+        addListeners();
+
+
+
+
+
+
+
+        if (originChatDataDto != null) {
+            /* Mostrar img perfil y nombre del alumnoB */
+            paintReceiverData();
+
+            if (originChatDataDto.messages != null) {
+                paintChatMessages();
+            }
+        }
+
+        msgAdapter = new MensajeAdapter(chatMessages);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
+        recyclerConversacionChat.setLayoutManager(layoutManager);
+
+        recyclerConversacionChat.setAdapter(msgAdapter);
+
+    }
+
+    private Map<String, ActivityResultLauncher> configureLaunchers(){
+
+        Map<String, ActivityResultLauncher> launchers = new HashMap();
+
+        /* Abre el explorador de archivos del dispositivo */
+        ActivityResultLauncher<Intent> fileLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        /* Documento o imagen seleccionado del dispositivo */
+                        Log.d(TAG, "Documento recibido...");
+                        Log.d(TAG, result.getData().toString());
+                        Uri selectedMediaUri = result.getData().getData();
+                        @SuppressLint("Recycle") Cursor cursor = getContentResolver().query(selectedMediaUri, null, null, null, null);
+                        int filenameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+
+                        cursor.moveToFirst();
+
+                        String filename = cursor.getString(filenameIndex);
+
+                        /* Subir el archivo seleccionado a Firebase */
+                        uploadFile(selectedMediaUri, filename);
+                    } else {
+                        Log.d(TAG, "SUBIDA CANCELADA.");
+                    }
+                }
+        );
+
+        /* Abre la galería de imágenes del dispositivo */
+        ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        assert result.getData() != null;
+                        Bundle bundle = result.getData().getExtras();
+                        selectedImageToSend = (Bitmap) bundle.get("data");
+                        Log.d(TAG, "Imagen recibida");
+
+                        ImageView selected = new ImageView(getApplicationContext());
+                        selected.setImageBitmap(selectedImageToSend);
+                        uploadImage(selected);
+
+                    } else if (result.getResultCode() == RESULT_CANCELED) {
+                        Toast.makeText(getApplicationContext(), "Acción cancelada", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        launchers.put(FILE_LAUNCHER, fileLauncher);
+        launchers.put(GALLERY_LAUNCHER, galleryLauncher);
+
+        return launchers;
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void addListeners(){
+        Map<String, ActivityResultLauncher> launchers = configureLaunchers();
+        ActivityResultLauncher fileLauncher = launchers.get(FILE_LAUNCHER);
+        ActivityResultLauncher galleryLauncher = launchers.get(GALLERY_LAUNCHER);
+
+
         /* Accion enviar mensaje */
         btEnviarMensaje.setOnClickListener(view -> {
             Log.i(TAG, "Enviando mensaje...");
@@ -141,30 +228,9 @@ public class ChatActivity extends AppCompatActivity {
                     recyclerConversacionChat.smoothScrollToPosition(View.FOCUS_DOWN);
                 });
             }
+
+            msgAdapter.notifyDataSetChanged();
         });
-
-        /* Abre el explorador de archivos del dispositivo */
-        ActivityResultLauncher<Intent> fileLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(), result -> {
-                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                        /* Documento o imagen seleccionado del dispositivo */
-                        Log.d(TAG, "Documento recibido...");
-                        Log.d(TAG, result.getData().toString());
-                        Uri selectedMediaUri = result.getData().getData();
-                        @SuppressLint("Recycle") Cursor cursor = getContentResolver().query(selectedMediaUri, null, null, null, null);
-                        int filenameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-
-                        cursor.moveToFirst();
-
-                        String filename = cursor.getString(filenameIndex);
-
-                        /* Subir el archivo seleccionado a Firebase */
-                        uploadFile(selectedMediaUri, filename);
-                    } else {
-                        Log.d(TAG, "SUBIDA CANCELADA.");
-                    }
-                }
-        );
 
         /* Accion seleccionar archivo para enviar */
         btSubirArchivoChat.setOnClickListener(view -> {
@@ -173,6 +239,7 @@ public class ChatActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
 
+            assert fileLauncher != null;
             fileLauncher.launch(intent);
         });
 
@@ -195,50 +262,14 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        /* Abre la galería de imágenes del dispositivo */
-        ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(), result -> {
-                    if (result.getResultCode() == RESULT_OK) {
-                        assert result.getData() != null;
-                        Bundle bundle = result.getData().getExtras();
-                        selectedImageToSend = (Bitmap) bundle.get("data");
-                        Log.d(TAG, "Imagen recibida");
-
-                        ImageView selected = new ImageView(getApplicationContext());
-                        selected.setImageBitmap(selectedImageToSend);
-                        uploadImage(selected);
-
-                    } else if (result.getResultCode() == RESULT_CANCELED) {
-                        Toast.makeText(getApplicationContext(), "Acción cancelada", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                }
-        );
-
         /* Accion sacar foto para enviar por chat */
         btCamera.setOnClickListener(view -> {
             Log.d(TAG, "CAMERA: ");
 
             Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            assert galleryLauncher != null;
             galleryLauncher.launch(intent);
         });
-
-        if (originChatDataDto != null) {
-            /* Mostrar img perfil y nombre del alumnoB */
-            paintReceiverData();
-
-            if (originChatDataDto.messages != null) {
-                paintChatMessages();
-            }
-        }
-
-        msgAdapter = new MensajeAdapter(chatMessages);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
-        recyclerConversacionChat.setLayoutManager(layoutManager);
-
-        recyclerConversacionChat.setAdapter(msgAdapter);
-
     }
 
     @Override
@@ -409,8 +440,7 @@ public class ChatActivity extends AppCompatActivity {
                                 }
 
                                 chatMessages.add(newMessage);
-
-
+                                msgAdapter.notifyDataSetChanged();
                             }
                             msgAdapter.sortMessages();
                             msgAdapter.notifyDataSetChanged();
