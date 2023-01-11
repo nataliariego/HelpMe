@@ -7,10 +7,10 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +21,8 @@ import com.example.helpme.extras.IntentExtras;
 import com.example.helpme.model.Alumno;
 import com.example.helpme.model.Chat;
 import com.example.helpme.model.Mensaje;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,9 +56,12 @@ public class ListarChatsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerListadoChats;
     private FloatingActionButton fabNuevoChat;
+    private TextView mensajeNoHayConversaciones;
 
     private final List<ChatSummaryDto> chats = new ArrayList<>();
     private ChatAdapter chatAdapter;
+
+    private boolean loadingChatsFinished;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +89,6 @@ public class ListarChatsActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-
         return super.onContextItemSelected(item);
     }
 
@@ -100,6 +104,9 @@ public class ListarChatsActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
         recyclerListadoChats.setLayoutManager(layoutManager);
         fabNuevoChat = (FloatingActionButton) findViewById(R.id.fab_nuevo_chat);
+        mensajeNoHayConversaciones = (TextView) findViewById(R.id.text_ningun_chat);
+
+        toogleMessage(false);
 
         addListeners();
     }
@@ -109,24 +116,22 @@ public class ListarChatsActivity extends AppCompatActivity {
             Intent intent = new Intent(ListarChatsActivity.this, ListadoAlumnosChatActivity.class);
 
             if (chats.size() > 0) {
-
                 List<String> chatUids = chats.stream().map(chat -> chat.receiverUid).collect(Collectors.toList());
                 intent.putStringArrayListExtra(CHAT_UIDS, (ArrayList<String>) chatUids);
             }
 
             startActivity(intent);
-
         });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         cargarChats();
     }
 
     private void cargarChats() {
+        loadingChatsFinished = false;
         dbReference.child(Chat.REFERENCE)
                 .addValueEventListener(new ValueEventListener() {
                     @SuppressLint("NotifyDataSetChanged")
@@ -174,22 +179,18 @@ public class ListarChatsActivity extends AppCompatActivity {
                                                         summary.receiverName = nombre;
                                                         summary.receiverUid = otherUserUid;
 
-
-                                                        Log.d(TAG, "summary: " + summary.receiverName);
-
                                                         chats.add(summary);
 
                                                         chatAdapter.notifyDataSetChanged();
-
-
-                                                        Log.d(TAG, nombre + " -- " + urlFoto);
                                                     }
-
                                                 })
                                                 .addOnFailureListener(e -> {
                                                     Log.d(TAG, "Error al cargar los chats.\n" + e.getMessage());
                                                     e.printStackTrace();
                                                 });
+                                    }else{
+                                        Log.d(TAG, "Num chats: "+ chats.size());
+                                        toogleMessage(chats.isEmpty());
                                     }
                                 }
                             }
@@ -198,8 +199,26 @@ public class ListarChatsActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
+                        //toogleMessage(true);
+                        Log.e(TAG, "Error al cargar chats. " + error.getMessage());
                     }
                 });
+    }
+
+    /**
+     * Si el usuario en sesión no tiene conversaciones, se mostrará el mensaje correspondiente.
+     *
+     * @param show true para mostrar el mensaje y false para ocultarlo.
+     */
+    private void toogleMessage(final boolean show) {
+
+        if (show) {
+            recyclerListadoChats.setVisibility(View.GONE);
+            mensajeNoHayConversaciones.setVisibility(View.VISIBLE);
+        } else {
+            mensajeNoHayConversaciones.setVisibility(View.GONE);
+            recyclerListadoChats.setVisibility(View.VISIBLE);
+        }
+
     }
 }
