@@ -1,6 +1,5 @@
 package com.example.helpme;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -36,6 +35,14 @@ public class AjustesCuentaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ajustes_cuenta);
         setTitle(R.string.account_settings);
         initFields();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(userInSession == null){
+            redirectToLogin();
+        }
     }
 
     /**
@@ -95,7 +102,7 @@ public class AjustesCuentaActivity extends AppCompatActivity {
         });
     }
 
-    private void showDeleteAccountDialog(){
+    private void showDeleteAccountDialog() {
         // Mostrar mensaje de confirmación
         AlertDialog.Builder deleteConfirmationDialog = new AlertDialog.Builder(AjustesCuentaActivity.this);
         deleteConfirmationDialog.setTitle("Eliminar cuenta");
@@ -107,14 +114,16 @@ public class AjustesCuentaActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void deleteAccount(){
+    private void deleteAccount() {
         Authentication.getInstance().deleteAccount(new AlumnoController.DeleteAlumnoCallback() {
             @Override
             public void onSuccess(final AlumnoController.DeleteAlumnoPayload payload) {
                 Toast.makeText(AjustesCuentaActivity.this, "Cuenta eliminada correctamente", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(AjustesCuentaActivity.this, LoginActivity.class));
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    finish();
+                Intent intent = new Intent(AjustesCuentaActivity.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
             }
 
             @Override
@@ -126,6 +135,9 @@ public class AjustesCuentaActivity extends AppCompatActivity {
 
     private void redirectToLogin() {
         Intent intent = new Intent(AjustesCuentaActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
     }
 }
