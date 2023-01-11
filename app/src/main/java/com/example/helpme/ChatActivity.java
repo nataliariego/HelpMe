@@ -224,12 +224,13 @@ public class ChatActivity extends AppCompatActivity {
 
             if (originChatDataDto != null) {
                 ChatService.getInstance().sendMessage(newMsgDto, originChatDataDto, userInSession.getUid(), () -> {
+                    msgAdapter.notifyDataSetChanged();
                     txMensajeAEnviar.setText("");
                     recyclerConversacionChat.smoothScrollToPosition(View.FOCUS_DOWN);
                 });
             }
 
-            msgAdapter.notifyDataSetChanged();
+
         });
 
         /* Accion seleccionar archivo para enviar */
@@ -472,34 +473,5 @@ public class ChatActivity extends AppCompatActivity {
         /* Completar dinámicamente la imagen de perfil y el nombre del alumno receiver */
         txNombreUsuarioReceiver.setText(alumnoB.nombre);
         Picasso.get().load(alumnoB.urlFoto).into(imgPerfilUsuarioReceiver);
-
-
-        txMensajeAEnviar.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (status.equals(ONLINE_STATUS)) {
-                    ChatService.getInstance().changeCurrentUserStatus(AlumnoStatus.ESCRIBIENDO.toString().toLowerCase(), () -> status = TYPING_STATUS);
-                }
-            }
-        });
-
-        txMensajeAEnviar.setOnFocusChangeListener((view, hasFocus) -> {
-            if (!hasFocus) {
-                if (status.equals(TYPING_STATUS) && txMensajeAEnviar.getText().length() > 0) {
-                    ChatService.getInstance().changeCurrentUserStatus(AlumnoStatus.ONLINE.toString().toLowerCase(), () -> status = ONLINE_STATUS);
-
-                }
-            }
-        });
     }
 }
