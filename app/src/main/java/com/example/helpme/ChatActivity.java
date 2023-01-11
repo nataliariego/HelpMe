@@ -115,16 +115,8 @@ public class ChatActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.inicia_sesion, Toast.LENGTH_SHORT).show();
         }
 
-
         initFields();
-
         addListeners();
-
-
-
-
-
-
 
         if (originChatDataDto != null) {
             /* Mostrar img perfil y nombre del alumnoB */
@@ -276,6 +268,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        paintChatMessages();
     }
 
     @Override
