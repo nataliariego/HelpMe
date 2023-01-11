@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:drawable="@drawable/helpme_logo_animation_reset"
+        android:duration="650" />
+
+    <item
+        android:drawable="@drawable/helpme_logo_animation_1"
+        android:duration="200" />
+
+    <item
+        android:drawable="@drawable/helpme_logo_animation_2"
+        android:duration="200" />
+
+    <item
+        android:drawable="@drawable/helpme_logo_animation_3"
+        android:duration="200" />
+
+    <item
+        android:drawable="@drawable/helpme_logo_animation_4"
+        android:duration="200" />
+
+    <item
+        android:drawable="@drawable/helpme_logo_animation_5"
+        android:duration="200" />
+
+    <item
+        android:drawable="@drawable/helpme_logo_animation_6"
+        android:duration="200" />
+
+    <item
+        android:drawable="@drawable/helpme_logo_animation_reset"
+        android:duration="650" />
+</animation-list>
