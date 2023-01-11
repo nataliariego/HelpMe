@@ -12,8 +12,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -135,7 +133,7 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    private Map<String, ActivityResultLauncher> configureLaunchers(){
+    private Map<String, ActivityResultLauncher> configureLaunchers() {
 
         Map<String, ActivityResultLauncher> launchers = new HashMap();
 
@@ -189,7 +187,7 @@ public class ChatActivity extends AppCompatActivity {
 
     @SuppressLint("NotifyDataSetChanged")
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void addListeners(){
+    private void addListeners() {
         Map<String, ActivityResultLauncher> launchers = configureLaunchers();
         ActivityResultLauncher fileLauncher = launchers.get(FILE_LAUNCHER);
         ActivityResultLauncher galleryLauncher = launchers.get(GALLERY_LAUNCHER);
@@ -390,6 +388,18 @@ public class ChatActivity extends AppCompatActivity {
                                 newMessage.createdAt = createdAt;
                                 newMessage.mimeType = Objects.requireNonNull(resData.get(Mensaje.MESSAGE_TYPE)).toString();
                                 newMessage.userUid = Objects.requireNonNull(resData.get(Mensaje.SENDER)).toString();
+
+                                // Si el mensaje ha sido enviado por un alumno que ya se ha dado de baja
+                                try {
+                                    if (resData.get(Mensaje.DELETED) != null
+                                            && resData.get(Mensaje.DELETED_AT) != null) {
+                                        newMessage.deleted = String.valueOf(resData.get(Mensaje.DELETED));
+                                        newMessage.deletedAt = (String) resData.get(Mensaje.DELETED_AT);
+                                    }
+                                } catch (ClassCastException cce) {
+                                    Log.e(TAG, "Error al convertir los datos del mensaje eliminado. " + cce.getMessage());
+                                    cce.printStackTrace();
+                                }
 
                                 Object status = resData.get(Mensaje.STATUS);
 

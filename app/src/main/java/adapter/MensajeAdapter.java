@@ -7,6 +7,9 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
@@ -31,13 +34,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.StorageMetadata;
 
 import java.time.LocalDateTime;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import chat.ChatService;
-import chat.MensajeStatus;
 import dto.MensajeDto;
 import util.DateUtils;
 import util.StringUtils;
@@ -132,7 +136,7 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
             if (mensajes.get(position).userUid.equals(userInSession.getUid())) {
                 return RECEIVER_POSITION;
             } else {
-                return SENDER_POSITION ;
+                return SENDER_POSITION;
             }
         }
     }
@@ -233,43 +237,55 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
                     });
         }
 
-        /**
-         * Establece el icono del estado del mensaje en función del valor
-         * de éste.
-         *
-         * @param --status Estado del mensaje
-         * @see {@link MensajeStatus}
-         */
-//        private void setStatusIcon(final MensajeStatus status) {
-//            Log.d(TAG, "ADAPT. STATUS = " + status.toString());
-//            if (status.equals(MensajeStatus.ENVIADO)) {
-//                iconEstadoMensaje.setImageResource(R.drawable.ic_round_done_24);
-//                iconEstadoMensaje.setVisibility(View.VISIBLE);
-//
-//            } else if (status.equals(MensajeStatus.RECIBIDO)) {
-//                iconEstadoMensaje.setImageResource(R.drawable.ic_icon_recibido_24);
-//                iconEstadoMensaje.setVisibility(View.VISIBLE);
-//
-//            } else if (status.equals(MensajeStatus.LEIDO)) {
-//                iconEstadoMensaje.setImageResource(R.drawable.ic_round_done_all_24);
-//                iconEstadoMensaje.setVisibility(View.VISIBLE);
-//
-//            } else {
-//                iconEstadoMensaje.setVisibility(View.GONE);
-//            }
-//        }
-
         @RequiresApi(api = Build.VERSION_CODES.O)
         public void bindMensaje(final MensajeDto msg) {
 
             LocalDateTime timestamp = DateUtils.convertStringToLocalDateTime(msg.createdAt, 0);
+            String year = String.format("%d", timestamp.getYear());
+            String month = String.format("%s", timestamp.getMonth().getDisplayName(TextStyle.SHORT, new Locale("es", "ES")));
+            String day = String.format("%02d", timestamp.getDayOfMonth());
+
             String hour = String.format("%02d", timestamp.getHour());
             String minutes = String.format("%02d", timestamp.getMinute());
-            String msgDateFormatted = hour.concat(":").concat(minutes);
+            String msgDateFormatted = year.concat(" ").concat(month.toUpperCase(Locale.ROOT)).concat(" ").concat(day)
+                    .concat(" · ").concat(hour).concat(":").concat(minutes);
 
-//            if (msg.status != null && iconEstadoMensaje != null) {
-//                setStatusIcon(msg.status);
-//            }
+            if (msg.deleted != null && msg.deletedAt != null) {
+
+                if (txHoraEnvioDocumento != null) {
+                    txHoraEnvioDocumento.setTextColor(Color.rgb(130, 129, 129));
+                }
+
+                if (txFechaEnvioMensaje != null) {
+                    txHoraEnvioDocumento.setText(txFechaEnvioMensaje.getText().toString().concat(" ( ELIMINADO )"));
+                    txFechaEnvioMensaje.setTextColor(Color.rgb(130, 129, 129));
+                }
+
+                if (txContenidoMensaje != null) {
+                    txContenidoMensaje.setTextColor(Color.rgb(130, 129, 129));
+                }
+
+                if (txMetadatosDocumento != null) {
+                    txMetadatosDocumento.setTextColor(Color.rgb(130, 129, 129));
+                }
+
+                if (txNombreDocumento != null) {
+                    txNombreDocumento.setTextColor(Color.rgb(130, 129, 129));
+                }
+
+                if (txMimeDocumento != null) {
+                    txMimeDocumento.setTextColor(Color.rgb(130, 129, 129));
+                }
+
+                if (imgContenidoImagen != null) {
+                    // Mostrar imagen en blanco y negro
+                    ColorMatrix matrix = new ColorMatrix();
+                    matrix.setSaturation(0);
+                    ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+                    imgContenidoImagen.setColorFilter(filter);
+                }
+            }
+
 
             /* Si el contenido del mensaje a mostrar es una imagen */
             if (msg.mimeType.equals(DEFAULT_MIME_IMG)) {
@@ -305,6 +321,9 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
 
                         if (txHoraEnvioDocumento != null) {
                             txHoraEnvioDocumento.setText(msgDateFormatted);
+                            if(msg.deleted != null){
+                                txHoraEnvioDocumento.setText(txHoraEnvioDocumento.getText().toString().concat(" ( ELIMINADO )"));
+                            }
                         }
                         if (btDescargarDocumento != null) {
                             btDescargarDocumento.setOnClickListener(new View.OnClickListener() {
@@ -335,10 +354,13 @@ public class MensajeAdapter extends RecyclerView.Adapter<MensajeAdapter.MensajeV
                 });
 
             } else {
-
                 txContenidoMensaje.setText(msg.contenido);
-
                 txFechaEnvioMensaje.setText(msgDateFormatted);
+                if(msg.deleted != null){
+                    txContenidoMensaje.setBackgroundResource(R.drawable.button_rounded_gray_light);
+                    txContenidoMensaje.setBackgroundTintList(itemView.getContext().getResources().getColorStateList(R.color.icon_disabled));
+                    txFechaEnvioMensaje.setText(txFechaEnvioMensaje.getText().toString().concat(" ( ELIMINADO )"));
+                }
 
                 if (imgContenidoImagen != null) {
                     imgContenidoImagen.setVisibility(View.GONE);

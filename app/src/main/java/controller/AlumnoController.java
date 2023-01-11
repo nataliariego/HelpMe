@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import chat.ChatService;
 import dto.AlumnoDto;
 
 public class AlumnoController {
@@ -189,6 +190,16 @@ public class AlumnoController {
         });
     }
 
+    /**
+     * Borrar los datos del alumno.
+     * Se borrarán todos los datos salvo las dudas publicadas y los mensajes enviados.
+     */
+    public void delete(final String uid, final DeleteAlumnoCallback callback) {
+
+        // Marcar mensajes y dudas como borrados.
+        ChatService.getInstance().markChatAsDeleteForDeletedUser(uid);
+    }
+
     private Alumno getPayload(final String id, final String uo, final String nombre) {
         return new Alumno(id, uo, nombre);
     }
@@ -199,5 +210,15 @@ public class AlumnoController {
 
     public interface AlumnoCallback {
         void callback(Alumno alumno);
+    }
+
+    public interface DeleteAlumnoCallback {
+        void onSuccess(DeleteAlumnoPayload payload);
+
+        void onFailure(String errorMessage);
+    }
+
+    public static class DeleteAlumnoPayload {
+        String msg;
     }
 }
