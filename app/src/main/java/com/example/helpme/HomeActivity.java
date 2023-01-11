@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.helpme.extras.IntentExtras;
 import com.example.helpme.model.Duda;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -72,6 +73,14 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
         btVerTodasDudas.setOnClickListener(view -> redirectPantallaListadoDudas());
 
         btNuevaDuda.setOnClickListener(view -> redirectPantallaPublicarNuevaDuda());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+            redirectToLogin();
+        }
     }
 
     /**
@@ -159,5 +168,13 @@ public class HomeActivity extends AppCompatActivity implements NetworkStatusHand
             startActivity(new Intent(HomeActivity.this, NoWifiConnectionActivity.class));
             finish();
         }
+    }
+
+    private void redirectToLogin() {
+        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
     }
 }
