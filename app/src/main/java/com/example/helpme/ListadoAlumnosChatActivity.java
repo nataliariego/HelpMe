@@ -60,10 +60,12 @@ public class ListadoAlumnosChatActivity extends AppCompatActivity {
 
         initFields();
 
-        /* Chats del usuario */
-        currentUserChatsUids = getIntent().getStringArrayListExtra(ListarChatsActivity.CHAT_UIDS);
+        /* Chats del usuario, si tiene */
+        currentUserChatsUids = getIntent().hasExtra(ListarChatsActivity.CHAT_UIDS)
+                && getIntent().getStringArrayListExtra(ListarChatsActivity.CHAT_UIDS) != null
+                ? getIntent().getStringArrayListExtra(ListarChatsActivity.CHAT_UIDS)
+                : new ArrayList<>();
 
-        Log.i(TAG, currentUserChatsUids.toString());
     }
 
     @Override
@@ -75,8 +77,6 @@ public class ListadoAlumnosChatActivity extends AppCompatActivity {
         recyclerAlumnosChat.setLayoutManager(layoutManager);
 
         cargarAlumnos();
-
-
     }
 
 
