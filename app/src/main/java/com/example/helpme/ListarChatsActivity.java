@@ -127,7 +127,12 @@ public class ListarChatsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        cargarChats();
+
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+            redirectToLogin();
+        }else {
+            cargarChats();
+        }
     }
 
     private void cargarChats() {
@@ -219,6 +224,13 @@ public class ListarChatsActivity extends AppCompatActivity {
             mensajeNoHayConversaciones.setVisibility(View.GONE);
             recyclerListadoChats.setVisibility(View.VISIBLE);
         }
+    }
 
+    private void redirectToLogin() {
+        Intent intent = new Intent(ListarChatsActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
     }
 }
