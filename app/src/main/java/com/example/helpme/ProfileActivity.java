@@ -53,7 +53,6 @@ import viewmodel.AsignaturaViewModel;
 
 public class ProfileActivity extends AppCompatActivity {
 
-
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private static final String TAG = "profile_activity";
@@ -153,6 +152,15 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+            redirectToLogin();
+        }
     }
 
     private void editarImagenPerfil(View v) {
@@ -350,6 +358,14 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void redirectToLogin() {
+        Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
     }
 
 }

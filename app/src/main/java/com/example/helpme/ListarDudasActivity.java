@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.helpme.extras.IntentExtras;
 import com.example.helpme.model.Duda;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,18 +74,24 @@ public class ListarDudasActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        cargarDudas();
-        dudaAdapter = new DudaAdapter(dudas,
-                new DudaAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(DudaDto duda) {
-                        clikonIntem(duda);
-                    }
-                });
-        ;
-        listaDudaView.setAdapter(dudaAdapter);
 
-        dudaAdapter.notifyDataSetChanged();
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+            redirectToLogin();
+
+        }else{
+            cargarDudas();
+            dudaAdapter = new DudaAdapter(dudas,
+                    new DudaAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(DudaDto duda) {
+                            clikonIntem(duda);
+                        }
+                    });
+            ;
+            listaDudaView.setAdapter(dudaAdapter);
+
+            dudaAdapter.notifyDataSetChanged();
+        }
     }
 
 
@@ -121,5 +128,13 @@ public class ListarDudasActivity extends AppCompatActivity {
             listaDudaView.setAdapter(dudaAdapter);
             dudaAdapter.notifyDataSetChanged();
         });
+    }
+
+    private void redirectToLogin() {
+        Intent intent = new Intent(ListarDudasActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
     }
 }
