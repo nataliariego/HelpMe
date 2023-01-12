@@ -1,5 +1,6 @@
 package com.example.helpme.extras;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 
@@ -35,6 +36,7 @@ public class IntentExtras {
      * @param navegacion     Elemento BottomNavigationView.
      * @param currentContext Contexto del activity origen.
      */
+    @SuppressLint("NonConstantResourceId")
     public void handleNavigationView(BottomNavigationView navegacion, Context currentContext) {
         navegacion.setOnItemSelectedListener(item -> {
 

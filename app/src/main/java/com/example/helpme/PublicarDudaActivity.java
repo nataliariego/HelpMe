@@ -179,7 +179,14 @@ public class PublicarDudaActivity extends AppCompatActivity {
 
         //Navegacion:
         IntentExtras.getInstance().handleNavigationView(navegacion, getBaseContext());
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+            redirectToLogin();
+        }
     }
 
     private void uploadImage(ImageView imageView) {
@@ -315,7 +322,9 @@ public class PublicarDudaActivity extends AppCompatActivity {
                         docData.put(Duda.ASIGNATURA_REF, asignaturaMap);
                         docData.put(Duda.REF_MATERIA, materiaMap);
                         docData.put(Duda.IS_RESUELTA, false);
-                        docData.put(Duda.FECHA, fecha);
+
+                        docData.put(Duda.FECHA, String.format(DateUtils.format(fecha)));
+                        //docData.put(Duda.FECHA, fecha);
                         docData.put(Duda.URL_ADJUNTO, url_imagen);
 
 
@@ -421,5 +430,12 @@ public class PublicarDudaActivity extends AppCompatActivity {
         });
     }
 
+    private void redirectToLogin() {
+        Intent intent = new Intent(PublicarDudaActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
+    }
 
 }

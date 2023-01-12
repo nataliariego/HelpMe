@@ -53,11 +53,29 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
 
+        <TextView
+            android:id="@+id/text_ningun_chat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:fontFamily="@font/roboto"
+            android:padding="30dp"
+            android:text="@string/listado_chats_vacio"
+            android:textAlignment="center"
+            android:textColor="@color/text_gray"
+            android:textSize="20sp"
+            android:visibility="gone"
+            app:drawableTopCompat="@drawable/ic_twotone_sms_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <LinearLayout
             android:id="@+id/layout_listar_chats_wrapper"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="55dp"
+            android:layout_marginTop="80dp"
             android:orientation="vertical"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
@@ -78,7 +96,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_listado_chats"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

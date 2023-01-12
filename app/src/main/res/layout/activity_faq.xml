@@ -69,6 +69,15 @@
 
         </LinearLayout>
 
+        <ImageButton
+            android:id="@+id/button_github_repo_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:contentDescription="@string/button_github_repo"
+            android:scaleType="center"
+            android:src="@drawable/icon_github_64" />
+
         <TextView
             android:id="@+id/tx_version_app"
             android:layout_width="wrap_content"

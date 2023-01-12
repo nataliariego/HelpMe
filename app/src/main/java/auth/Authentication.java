@@ -14,6 +14,8 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 import controller.AlumnoController;
 import controller.callback.GenericCallback;
 import dto.AlumnoDto;
@@ -31,37 +33,28 @@ public class Authentication {
 
     FirebaseUser userInSession = FirebaseAuth.getInstance().getCurrentUser();
 
-    private AlumnoController alumnoController = new AlumnoController();
+    private final AlumnoController alumnoController = new AlumnoController();
 
     /**
      * Crea una cuenta con el email y password indicados.
      *
-     * @param alumno
      */
     public void signUp(AlumnoDto alumno, GenericCallback callback) {
-        Log.i(TAG, "ALUMNO. AUTHENTICATION: " + alumno.toString());
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(alumno.email, alumno.password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            userInSession = FirebaseAuth.getInstance().getCurrentUser();
-                            alumnoController.update(alumno, userInSession.getUid());
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        userInSession = FirebaseAuth.getInstance().getCurrentUser();
+                        assert userInSession != null;
+                        alumnoController.update(alumno, userInSession.getUid());
 
-                            callback.callback(GenericCallback.SUCCESS_CODE);
+                        callback.callback(GenericCallback.SUCCESS_CODE);
 
-                        } else {
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                        }
+                    } else {
+                        Log.w(TAG, "createUserWithEmail:failure", task.getException());
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.i(TAG, "Error al crear la cuenta de usuario.");
-                    }
-                })
+                .addOnFailureListener(e -> Log.i(TAG, "Error al crear la cuenta de usuario."))
         ;
     }
 
@@ -75,57 +68,15 @@ public class Authentication {
     public void signIn(final String email, final String password,
                        LoginActivity.LoginCallback callback) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email.trim(), password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            callback.onSuccess();
-                            Log.d(TAG, "login:success");
-                        } else {
-                            Log.w(TAG, "login:failure. ", task.getException());
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        callback.onSuccess();
+                        Log.d(TAG, "login:success");
+                    } else {
+                        Log.w(TAG, "login:failure. ", task.getException());
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        callback.onFailure();
-                    }
-                });
-    }
-
-    /**
-     * Restablecimiento de la contraseña desde un formulario de la aplicación.
-     *
-     * @param newPassword Nueva contraseña.
-     */
-    public void resetPassword(String newPassword) {
-        userInSession.updatePassword(newPassword)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "User password updated.");
-                        }
-                    }
-                });
-    }
-
-    public void reAuthenticate(String email, String password) {
-        AuthCredential credential = EmailAuthProvider
-                .getCredential(email, password);
-
-        userInSession.reauthenticate(credential)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Log.d(TAG, "User re-authenticated.");
-                    }
-                });
-    }
-
-    public void showStatus() {
-
+                .addOnFailureListener(e -> callback.onFailure());
     }
 
     /**
@@ -145,26 +96,20 @@ public class Authentication {
         auth.setLanguageCode("es");
 
         auth.sendPasswordResetEmail(email)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "Email sent.");
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "Email sent.");
                     }
                 });
     }
 
     public void sendEmailVerification() {
-        FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "Email sent.");
-                            FirebaseUser current = FirebaseAuth.getInstance().getCurrentUser();
-                            current.reload();
-                        }
+        Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).sendEmailVerification()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "Email sent.");
+                        FirebaseUser current = FirebaseAuth.getInstance().getCurrentUser();
+                        current.reload();
                     }
                 });
     }
@@ -172,7 +117,10 @@ public class Authentication {
     /**
      * Elimina la cuenta del usuario en sesión.
      */
-    public void deleteAccount() {
+    public void deleteAccount(final AlumnoController.DeleteAlumnoCallback callback) {
+        // Copia del uid del usuario en sesión
+        String userInSessionUid = FirebaseAuth.getInstance().getUid();
+
         FirebaseAuth.getInstance().getCurrentUser().delete()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -180,7 +128,8 @@ public class Authentication {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "Cuenta de usuario eliminada.");
 
-                            alumnoController.delete();
+                            // Elimina cuenta de firebase del usuario.
+                            alumnoController.delete(userInSessionUid, callback);
 
                         }
                     }
@@ -190,7 +139,6 @@ public class Authentication {
     /**
      * Comprueba si hay un usuario logeado.
      *
-     * @return
      */
     public boolean isSigned() {
         return FirebaseAuth.getInstance().getCurrentUser() != null;

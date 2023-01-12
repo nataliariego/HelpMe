@@ -53,11 +53,9 @@ import viewmodel.AsignaturaViewModel;
 
 public class ProfileActivity extends AppCompatActivity {
 
-
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private static final String TAG = "profile_activity";
-    private List<AsignaturaDto> asignaturaList = new ArrayList<AsignaturaDto>();
     private AsignaturaViewModel asignaturaViewModel = new AsignaturaViewModel();
 
     private List<Map<String, Object>> asignaturasDominadas = new ArrayList<>();
@@ -156,6 +154,15 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+            redirectToLogin();
+        }
+    }
+
     private void editarImagenPerfil(View v) {
         findViewById(R.id.containerView).setBackgroundColor(Color.GRAY);
         findViewById(R.id.constraintLayout).setVisibility(View.INVISIBLE);
@@ -171,10 +178,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Set an EditText view to get user input
         final EditText input = new EditText(this);
-        input.setHint("   https://exampleofanurl.com");
+        input.setHint(R.string.urlexample);
         alert.setView(input);
 
-        alert.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton(R.string.guardar, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 //Encender tdo otra vez
                 findViewById(R.id.containerView).setBackgroundColor(Color.WHITE);
@@ -192,7 +199,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 //Encender tdo otra vez
                 findViewById(R.id.containerView).setBackgroundColor(Color.WHITE);
@@ -214,13 +221,11 @@ public class ProfileActivity extends AppCompatActivity {
         Intent listadoDudasIntent = new Intent(ProfileActivity.this, FriendsActivity.class);
         // Para transiciones
         startActivity(listadoDudasIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
     }
 
 
 
     private void actualizarPerfil() {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             alumnoController.findByUOWithPhoto(userInSession.getEmail(), new AlumnoController.AlumnoCallback() {
                 @Override
@@ -258,9 +263,6 @@ public class ProfileActivity extends AppCompatActivity {
                         }
 
                         docData.put(Alumno.ASIGNATURAS_DOMINADAS, mapAsi);
-
-                        System.out.println(docData.toString());
-
 
                         db.collection(Alumno.COLLECTION).document(alumno.getId()).update(docData)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -356,6 +358,14 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void redirectToLogin() {
+        Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
     }
 
 }

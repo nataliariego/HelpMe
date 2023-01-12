@@ -14,37 +14,23 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link TopToolbarFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Toolbar superior de la aplicación que contiene un botón para volver a la activity
+ * anterior, un botón de ajustes que redirecciona a la vista de ajustes generales de la
+ * aplicación y un botón para redireccionar a la vista de acerca.
+ *
+ * @author UO257239
+ * @version v1.0.1
  */
 public class TopToolbarFragment extends Fragment {
 
     public static final String TAG = "TOP_TOOLBAR_FRAGMENT";
 
-    private ImageButton btFaq;
     private ImageButton btBack;
-
     private ImageButton btSettings;
-
+    private ImageButton btFaq;
     private ImageView toolbarLogo;
 
     public TopToolbarFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment TopToolbarFragment.
-     */
-    public static TopToolbarFragment newInstance() {
-        TopToolbarFragment fragment = new TopToolbarFragment();
-        Bundle args = new Bundle();
-
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -69,43 +55,37 @@ public class TopToolbarFragment extends Fragment {
         btBack = (ImageButton) view.findViewById(R.id.button_toolbar_back);
         btFaq = (ImageButton) view.findViewById(R.id.button_toolbar_faq);
         toolbarLogo = (ImageView) view.findViewById(R.id.toolbar_logo);
-
         btSettings = (ImageButton) view.findViewById(R.id.button_toolbar_settings);
+        String activityName = requireActivity().getClass().getSimpleName();
 
-        String activityName = getActivity().getClass().getSimpleName();
+        if (activityName.equalsIgnoreCase(HomeActivity.class.getSimpleName())) {
+            btBack.setVisibility(View.GONE);
+            toolbarLogo.setVisibility(View.VISIBLE);
+        } else {
+            toolbarLogo.setVisibility(View.GONE);
+            btBack.setVisibility(View.VISIBLE);
+        }
 
+        addListeners();
         Log.i(TAG, "Activity: " + activityName);
-
-        btBack.setVisibility(View.INVISIBLE);
-        toolbarLogo.setVisibility(View.VISIBLE);
-
-        btSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), AjustesCuentaActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        btFaq.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), FaqActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.exit(0);
-            }
-        });
-
-        Log.i(TAG, view.getClass().getName());
     }
 
-    public ImageButton getBackButton() {
-        return btBack;
+    private void addListeners() {
+        /* Redireccion a la activity de ajustes */
+        btSettings.setOnClickListener(view1 -> {
+            Intent intent = new Intent(view1.getContext(), AjustesCuentaActivity.class);
+            startActivity(intent);
+        });
+        /* Redireccion a la activity de acerca-de */
+        btFaq.setOnClickListener(view12 -> {
+            Intent intent = new Intent(view12.getContext(), FaqActivity.class);
+            startActivity(intent);
+        });
+
+        toolbarLogo.setOnClickListener(view -> startActivity(new Intent(view.getContext(), HomeActivity.class)));
+
+        /* Volver a la activity anterior */
+        btBack.setOnClickListener(view13 -> System.exit(0));
     }
+
 }

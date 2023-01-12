@@ -1,14 +1,18 @@
 package util;
 
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
+import android.widget.ImageView;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ContentTypeUtils {
 
-    public static final double MAX_DOCUMENT_SIZE = 1024 * 1; // 1MB
-    public static final double MAX_IMAGE_SIZE = 1024 * 1; // 1MB
+    public static final String TAG = "CONTENT_TYPE_UTILS";
 
     public static final String PDF_TYPE = "pdf";
 
@@ -22,6 +26,9 @@ public class ContentTypeUtils {
 
     /* Imagen */
     public static final String JPEG_TYPE = "jpg";
+
+    /* Tamaño máximo de subida de archivos = ~1MB */
+    public static final int MAX_FILE_SIZE_TO_UPLOAD = 1000000;
 
     public static Map<String, String> availableTypes = new HashMap<>();
 
@@ -51,11 +58,30 @@ public class ContentTypeUtils {
         return availableTypes;
     }
 
-    public static boolean isValidFile(final Uri uri){
-        return isValidFile(uri);
+    /**
+     * Comprueba que el tamaño de la imagen es inferior a {@link #MAX_FILE_SIZE_TO_UPLOAD}
+     *
+     * @return true si es válido y false en caso contrario.
+     */
+    public static boolean isImageSizeValid(final ImageView imageView) {
+        return imageView != null && Objects.requireNonNull(getImageBytes(imageView)).length < MAX_FILE_SIZE_TO_UPLOAD;
     }
 
-    public static boolean validSize(final Uri uri){
-        return uri.getPath().getBytes().length < MAX_DOCUMENT_SIZE;
+    /**
+     * @return Número de bytes de una imagen pasada como parámtro.
+     */
+    public static byte[] getImageBytes(final ImageView imageView) {
+        try {
+            Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] bytesData = stream.toByteArray();
+            stream.close();
+            return bytesData;
+        } catch (Exception e) {
+            Log.e(TAG, "Error al comprobar el tamaño del archivo. " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -13,14 +13,10 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TopToolbarFragmentListado#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class TopToolbarFragmentListado extends Fragment {
 
-    public static final String TAG = "TOP_TOOLBAR_FRAGMENT";
+    public static final String TAG = "TOP_TOOLBAR_FRAGMENT_LIST";
 
     private ImageButton btFaq;
     private ImageButton btSettings;
@@ -29,12 +25,6 @@ public class TopToolbarFragmentListado extends Fragment {
     public TopToolbarFragmentListado() {
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment TopToolbarFragment.
-     */
     public static TopToolbarFragmentListado newInstance() {
         TopToolbarFragmentListado fragment = new TopToolbarFragmentListado();
         Bundle args = new Bundle();
@@ -89,9 +79,5 @@ public class TopToolbarFragmentListado extends Fragment {
                 startActivity(intent);
             }
         });
-
-        Log.i(TAG, view.getClass().getName());
     }
-
-
 }
