@@ -266,7 +266,11 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        paintChatMessages();
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+            redirectToLogin();
+        }else{
+            paintChatMessages();
+        }
     }
 
     @Override
@@ -476,5 +480,13 @@ public class ChatActivity extends AppCompatActivity {
         /* Completar dinámicamente la imagen de perfil y el nombre del alumno receiver */
         txNombreUsuarioReceiver.setText(alumnoB.nombre);
         Picasso.get().load(alumnoB.urlFoto).into(imgPerfilUsuarioReceiver);
+    }
+
+    private void redirectToLogin() {
+        Intent intent = new Intent(ChatActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
     }
 }
