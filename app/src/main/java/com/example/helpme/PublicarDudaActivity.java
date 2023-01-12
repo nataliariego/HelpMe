@@ -364,7 +364,6 @@ public class PublicarDudaActivity extends AppCompatActivity {
         }else{
             hour=""+(c.get(Calendar.HOUR_OF_DAY)+1);
         }
-        System.out.println("hjhjsgfsjjfsd");
         System.out.println(c.get(Calendar.MINUTE));
         if (c.get(Calendar.MINUTE) < 10){
             min = "0"+c.get(Calendar.MINUTE);
